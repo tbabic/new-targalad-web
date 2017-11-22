@@ -1,30 +1,41 @@
-attrBonus = function(value) {
-	return Math.floor((value-10)/2);
-}
-
 function Attributes(strength, dexterity, constitution, intelligence, wisdom, charisma) {
-	this.strength = strength;
-	this.dexterity = dexterity;
-	this.constitution = constitution;
-	this.intelligence = intelligence;
-	this.wisdom = wisdom;
-	this.charisma = charisma;
+	this.strength = new Attribute('STRENGTH', strength);
+	this.dexterity = new Attribute('DEXTERITY', dexterity);
+	this.constitution = new Attribute('CONSTITUTION', constitution);
+	this.intelligence = new Attribute('INTELLIGENCE', intelligence);
+	this.wisdom = new Attribute('WISDOM', wisdom);
+	this.charisma = new Attribute('CHARISMA', charisma);
 	
 	this.getValue = function(attribute) {
-		return this[attribute];
-	}
+		return this[attribute].getValue();
+	};
 	
-	this.getBonus=function(attribute) {
-		return attrBonus(this.getValue(attribute));
-	}
+	this.getModifier=function(attribute) {
+		return this[attribute].getModifier();
+	};
+	
+	this.getAttribute = function(type) {
+		return this[type.toLowerCase()];
+	};
 	
 }
 
 function Attribute(type, value) {
+	this.type = type;
 	this.value = value;
-	this.bonusList = [];
+	this.bonusProcessor = new BonusProcessor();
 	
-	this.addBonus = function(bonus) {
-		this.bonusList.push(bonus);
-	}
+	this.getModifier = function(){
+		return Math.floor((this.getValue()-10)/2);
+	};
+	
+	this.getValue = function(){
+		return this.bonusProcessor.getValue() + this.value;
+	};
+	
+	addModelListener(this.type, (e, bonusEffect) => {
+		this.bonusProcessor.processBonusEffect(bonusEffect);
+		triggerViewChange("ATTRIBUTES");
+	});
+	
 }
