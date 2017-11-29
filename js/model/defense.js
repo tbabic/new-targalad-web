@@ -37,6 +37,22 @@ function Defense(character) {
 		return value;
 	};
 	
+	this.removeDexBonus = function(source) {
+		//remove dex and dodge bonus to AC
+		var penaltyValue = Math.min(this.armor.maxDexBonus, character.attributes.dexterity.getModifier());
+		penaltyValue += this.bonusProcessor.getValueByType(BonusType.DODGE);
+		this.dexPenalty = new BonusEffect(source, new Bonus(BonusCategory.ARMOR_CLASS, BonusType.Penalty, -penaltyValue, "No Dex to AC"));
+		this.bonusProcessor.add(this.dexPenalty.source, this.dexPenalty.bonus);
+		this.touchBonusProcessor.add(this.dexPenalty.source, this.dexPenalty.bonus);
+	};
+	
+	this.applyDexBonus = function() {
+		if (this.dexPenalty !== undefined) {
+			this.bonusProcessor.remove(this.dexPenalty.source, this.dexPenalty.bonus);
+			this.touchBonusProcessor.remove(this.dexPenalty.source, this.dexPenalty.bonus);
+		}
+	};
+	
 	addModelListener("ARMOR", "ADDED", (e, armor) => {
 		this.armor = armor;
 		this.bonusProcessor.add(armor.id, armor.armorBonus);

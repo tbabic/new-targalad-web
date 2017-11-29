@@ -1,13 +1,40 @@
 <div id = "spellBookView" style="display: none;" class="view">
-	<div class="navbar">
-		<a class="navbar-btn spell-level-btn" data-spell-level="0" href="#">0</a>
-		<a class="navbar-btn spell-level-btn" data-spell-level="1" href="#">1</a>
-		<a class="navbar-btn spell-level-btn" data-spell-level="2" href="#">2</a>
-		<a class="navbar-btn spell-level-btn" data-spell-level="3" href="#">3</a>
-		<a class="navbar-btn spell-level-btn" data-spell-level="4" href="#">4</a>
-		<a class="navbar-btn spell-level-btn" data-spell-level="5" href="#">5</a>
-		<a class="navbar-btn spell-level-btn" data-spell-level="6" href="#">6</a>
+	<div class="row spell-level-select"><div class="col-sm">
+		<button class="btn spell-level-btn" data-spell-level="0">0</button>
+		<button class="btn spell-level-btn" data-spell-level="1">1</button>
+		<button class="btn spell-level-btn" data-spell-level="2">2</button>
+		<button class="btn spell-level-btn" data-spell-level="3">3</button>
+		<button class="btn spell-level-btn" data-spell-level="4">4</button>
+		<button class="btn spell-level-btn" data-spell-level="5">5</button>
+		<button class="btn spell-level-btn" data-spell-level="6">6</button>		
+	</div></div>
+	<div class="row">
+		<div class="col-sm-9 spell-toggles">
+			<button id="toggleAllId" disabled type="button" class="btn spellbook-toggle" data-toggle="all">All</button>
+			<button id="toggleKnownId" type="button" class="btn spellbook-toggle"  data-toggle="known">Known</button>
+			<button id="toggleMemorizedId" type="button" class="btn spellbook-toggle"  data-toggle="memorized" >Memorized</button>
+		</div>
 	</div>
-	<div id="spellsListId">
+	<div class="row memorized-configurations">
 	</div>
+	
+	<div id="allSpellsListId" class="toggle-all" data-spell-level=0 data-toggle="all">
+		<c-for-each list="allSpells" data-var="spell">
+			<div data-spell-id="${spell.id}" 
+				class="row spell-row spell-level-${spell.level} all ${spell.isLearned(myCharacter) ? 'known' : ''}  ${spell.isMemorized(myCharacter) ? 'memorized' : ''}" 
+				style="display: none"> 
+				<div class="col-sm-5"> 
+					<a target="_blank" href="http://www.dxcontent.com/SDB_SpellBlock.asp?SDBID=${spell.id}">${spell.name}</a> 
+				</div>
+				<div class ="col-sm">
+					<button type="button" class="btn learn-btn">Learn</button>
+					<button type="button" class="btn memorize-btn">Memorize</button>
+					<button type="button" class="btn cast-btn">Cast</button>
+					<button type="button" class="btn recall-btn">Recall</button>
+				</div>
+
+			</div>
+		</c-for-each>
+	</div>
+	
 </div>

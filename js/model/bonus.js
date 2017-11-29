@@ -311,14 +311,30 @@ function BonusProcessor() {
 			return value;
 		},
 		
+		getValueByType : function(type) {
+			if (_list.hasOwnProperty(type)) {
+				return _list[type].get();
+			}
+			return 0;
+		},
+		
 		processBonusEffect : function(bonusEffect) {
 			if (!(bonusEffect instanceof BonusEffect)) {
 				throw (bonus + " is not a BonusEffect");
 			}
+			var source = "UNKNOWN";
+			if ( typeof bonusEffect.source === 'string' || bonusEffect.source instanceof String) {
+				source = bonusEffect.source;
+			} else if (bonusEffect.source.id !== undefined) {
+				source = bonusEffect.source.id;
+			} else if (bonusEffect.source.name !== undefined) {
+				source = bonusEffect.source.name;
+			}
+			
 			if (bonusEffect.isActive) {
-				this.add(bonusEffect.source.id, bonusEffect.bonus);
+				this.add(source, bonusEffect.bonus);
 			} else {
-				this.remove(bonusEffect.source.id, bonusEffect.bonus);
+				this.remove(source, bonusEffect.bonus);
 			}
 		},
 		

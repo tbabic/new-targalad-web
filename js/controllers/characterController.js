@@ -77,6 +77,10 @@ function setAbilities(character) {
 	}
 }
 
+function setConditions(character) {
+	
+}
+
 function refreshCharacter(character) {
 	if (character === undefined) {
 		character = myCharacter;
@@ -86,6 +90,7 @@ function refreshCharacter(character) {
 	setSaves(character.saves);
 	setOffense(character.offense);
 	setAbilities(character);
+	setConditions(character);
 }
 
 addViewListener("ATTRIBUTES",(e) => {
@@ -114,6 +119,15 @@ addViewListener("OFFENSE",(e, offense) => {
 });
 
 refreshCharacter(myCharacter);
+
+$(".condition").on("click", function(e) {
+	var conditionName = event.target.text.toLowerCase();
+	var condition = ConditionFactory[conditionName];
+	condition.apply(myCharacter);
+	refreshCharacter(myCharacter);
+});
+
+
 
 
 

@@ -18,6 +18,17 @@ function Attributes(strength, dexterity, constitution, intelligence, wisdom, cha
 		return this[type.toLowerCase()];
 	};
 	
+	this.serialize = function() {
+		JSON.stringify({
+			strength:this.strength.serialize(),
+			dexterity:this.dexterity.serialize(),
+			constitution:this.constitution.serialize(),
+			intelligence:this.intelligence.serialize(),
+			wisdom:this.wisdom.serialize(),
+			charisma:this.charisma.serialize(),
+		});
+	};
+	
 }
 
 function Attribute(type, value) {

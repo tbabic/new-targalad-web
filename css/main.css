@@ -1,3 +1,5 @@
+/* ABILITIES*/
+
 .ability {
 	width: 100%;
 	height: 100%;
@@ -6,5 +8,108 @@
     background-color: #337ab7;
     word-wrap: break-word;
     white-space: normal;
+    border-radius: 0.5rem;
 	
+}
+
+.ability.active {
+    background-color: #296596;
+    border-color: #71a9d7;
+    border-width: 3px;
+}
+
+.ability.not-active {
+    background-color: #337ab7;	
+}
+
+.abilities > .row > div{
+	padding: 2px;
+}
+
+/* SPELLS*/
+
+.toggle-all .memorize-div-btn, .toggle-all .cast-div-btn,  .toggle-all .recall-div-btn {
+	display: none;
+}
+
+.toggle-known .learn-div-btn, .toggle-memorized .learn-div-btn {
+	display: none;
+}
+
+.toggle-all .memorize-btn, .toggle-all .cast-btn,  .toggle-all .recall-btn {
+	display: none;
+}
+
+.toggle-known .learn-btn, .toggle-memorized .learn-btn {
+	display: none;
+}
+
+
+.spellbook-toggle {
+	background-color: #337ab7;
+	color: white;
+	border-radius: 0;
+}
+
+.spell-level-btn {
+	background-color: #2fbba6;
+	color: white;
+	border-radius: 2rem;
+}
+
+.learn-btn, .memorize-btn, .cast-btn, .recall-btn {
+	background-color: #337ab7;
+	color: white;
+}
+
+
+/* SKILLS*/
+
+.skill-header {
+
+
+}
+
+.skill-row {
+	border-top-width: 1px;
+	border-bottom-width: 0px;
+	border-right-width: 0px;
+	border-left-width: 0px;
+	border-color: black;
+	border-style: solid;
+	
+
+}
+
+.skill-name {
+	font-size: 1em;
+}
+
+.skill-value {
+	border-top-width: 0px;
+	border-bottom-width: 0px;
+	border-right-width: 0px;
+	border-left-width: 1px;
+	border-color: black;
+	border-style: solid;
+	min-width: 60px;
+	
+}
+
+.skill-rank {
+	border-top-width: 0px;
+	border-bottom-width: 0px;
+	border-right-width: 0px;
+	border-left-width: 1px;
+	border-color: black;
+	border-style: solid;
+	
+}
+
+.skill-class-skill-true {
+	font-weight: bold;
+}
+
+.skill-untrained-false {
+	font-style: italic;
 }

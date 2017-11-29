@@ -2,6 +2,14 @@ function Magus(character) {
 	this.character = character;
 	this.arcanas = [];
 	this.classAbilities = [];
+	this.spellbook = new SpellBook();
+	
+	this.getArcanePool = function() {
+		return this.character.attributes.intelligence.getModifier() + Math.floor(this.character.level/2);
+	};
+	
+	this.currentArcanePool = this.getArcanePool();
+	
 	
 	if (character.level >= 1) {
 		this.classAbilities.push(MagusAbilities.spellCombat(character));
@@ -16,29 +24,79 @@ function Magus(character) {
 		this.classAbilities.push(MagusAbilities.knowledgePool(character));
 	}
 	
-	if (character.level >= 3) {
-		this.arcanas.push(MagusArcanaFactory.arcaneAccuracy(character));
-	}
 	
-	if (character.level >= 6) {
-		this.arcanas.push(MagusArcanaFactory.empoweredMagic(character));
-		this.arcanas.push(MagusArcanaFactory.songOfTheBladeDance(character));
-	}
 	
 	this.addArcana = function(arcana) {
 		this.arcanas.push(arcana);
-	};
-	
-	this.getArcanePool = function() {
-		return this.character.attributes.intelligence.getModifier() + Math.floor(this.character.level/2);
+		character.addAbility(arcana);
 	};
 	
 	this.getAllAbilities = function() {
 		return this.arcanas.concat(this.classAbilities);
 	};
 	
+	this.classSkills = [SkillsEnum.CLIMB, SkillsEnum.CRAFT_ALCHEMY, SkillsEnum.CRAFT_ARMOR, SkillsEnum.CRAFT_WEAPON, 
+		SkillsEnum.FLY, SkillsEnum.INTIMIDATE, 
+		SkillsEnum.KNOWLEDGE_ARCANA, SkillsEnum.KNOWLEDGE_DUNGEONEERING, SkillsEnum.KNOWLEDGE_PLANES, 
+		SkillsEnum.PROFESSION, SkillsEnum.RIDE, SkillsEnum.SPELLCRAFT, SkillsEnum.SWIM, SkillsEnum.USE_MAGIC_DEVICE];
+	
+	this.spellsPerDay = function(spellLevel) {
+		if (spellLevel === 0) {
+			return spells0PerDay();
+		}
+		if (spellLevel > 6) {
+			return;
+		}
+		let baseSpells = this.baseSpellsPerDay(spellLevel);
+		let bonusSpells = this.bonusSpellsPerDay(spellLevel);
+		return baseSpells + bonusSpells;
+	};
+	
+	this.baseSpellsPerDay = function(spellLevel) {
+		let startingLevel = (spellLevel -1)*3 + 1;
+		if (this.character.level > startingLevel) {
+			return undefined;
+		} 
+		if(spellLevel === 6) {
+			return this.character.level - startingLevel + 1;
+		}
+		
+		if (this.character.level === startingLevel) {
+			return 1;
+		} else if (this.character.level === startingLevel+1) {
+			return 2;
+		} else if (this.character.level <= startingLevel+3) {
+			return 3;
+		} else if (this.character.level <= startingLevel+5) {
+			return 4;
+		} else if (this.character.level <= startingLevel+7 && spellLevel < 5) {
+			return 4;
+		} else {
+			return 5;
+		}
+	};
+	
+
+	
+	this.bonusSpellsPerDay = function(spellLevel) {
+		if (spellLevel === 0) {
+			return 0;
+		}
+		let intModifier = this.character.attributes.intelligence.getModifier();
+		let startingModifier = intModifier - spellLevel + 1;
+		return Math.top(startingModifier/4);
+	};
+	
+	let cantrips = spellsDB.getByLevel(0);
+	for (let spellId in cantrips) {
+		let cantrip =  cantrips[spellId];
+		this.spellbook.addSpell(cantrip);
+	}
+
+	
 	
 }
+
 var MagusArcanaFactory = {
 	arcaneAccuracy : function(owner) {
 		var bonusValue = owner.attributes.intelligence.getModifier();
@@ -52,14 +110,15 @@ var MagusArcanaFactory = {
 			new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DODGE, 2, "Song of the Blade Dance"),
 			new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, 1, "Song of the Blade Dance"),
 			new Bonus(BonusCategory.INITIATIVE, BonusType.UNTYPED, 2, "Song of the Blade Dance")]);
-	}
-	
+	},
+	accurateStrike : function(owner) {
+		return new Ability("Accurate Strike", ActionType.SWIFT, owner);
+	},
 };
 
 
 var MagusAbilities = {
 	spellCombat : function(owner) {
-		
 		return new Ability("Spell combat", ActionType.FREE, owner, [], function(extraConcentration) {
 			if (extraConcentration === undefined) {
 				extraConcentration = 0;
@@ -85,6 +144,7 @@ var MagusAbilities = {
 	knowledgePool : function(owner) {
 		return new Ability("Knowledge pool", ActionType.PASSIVE, owner);
 	}
-	
-	
 };
+
+
+

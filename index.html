@@ -3,6 +3,7 @@
 <script src="js/jquery-2.2.0.min.js"></script>
 <script src="js/popper.js"></script>
 <script src="js/bootstrap.js"></script>
+
 <head>
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
 	<link rel="stylesheet" type="text/css" href="css/main.css"/>
@@ -27,6 +28,9 @@
 	</nav>
 	
 	<div id="viewHolder">
+		<c-view view="characterView"></c-view>
+		<c-view view="spellBookView"></c-view>
+		<c-view view="skillsView"></c-view>
 	</div>
 	
 </div>
@@ -34,6 +38,8 @@
 </div>
 
 </body>
+
+<script src="js/framework/utils.js"></script>
 
 <script src="js/model/bonus.js"></script>
 <script src="js/model/character.js"></script>
@@ -43,14 +49,21 @@
 <script src="js/model/offense.js"></script>
 <script src="js/model/saves.js"></script>
 <script src="js/model/spellBook.js"></script>
-
+<script src="js/model/allSpells.js"></script>
 <script src="js/model/skills.js"></script>
 <script src="js/model/abilities.js"></script>
 <script src="js/model/feats.js"></script>
 <script src="js/model/magus.js"></script>
 <script src="js/model/maneuvers.js"></script>
-<script src="js/model/allSpells.js"></script>
+
+
 <script src="js/controllers/initController.js"></script>
+
+<script src="js/framework/view.js"></script>
+<script src="js/framework/for.js"></script>
+<script src="js/framework/template.js"></script>
+
+
 
 <script src="js/controllers/mainController.js"></script>
 <script src="js/controllers/characterController.js"></script>

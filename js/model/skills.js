@@ -86,7 +86,10 @@ SkillsEnum = {
 	listAll : function() {
 		var _list = [];
 		for (var i in this) {
-			_list.push(this[i]);
+			if (Utils.isString(this[i])) {
+				_list.push(this[i]);
+			}
+			
 		}
 		return _list;
 	},
@@ -105,12 +108,17 @@ SkillsEnum = {
 
 
 
-function Skill(skillName, isClassSkill, character) {
-	this.skillName = skillName;
-	this.isClassSkill = isClassSkill;
+function Skill(skillName, character) {
+	this.name = skillName;
+	this.untrained = SkillsEnum.properties[skillName].untrained;
+	this.armorCheckPenalty = SkillsEnum.properties[skillName].armorCheckPenalty;
+	this.isClassSkill = false;
+	if (character !== undefined) {
+		this.isClassSkill = character.characterClass.classSkills.indexOf(skillName) > -1;
+	}
 	this.ranks = 0;
 	this.bonusProcessor = new BonusProcessor();
-	this.attribute = character.attributes[SkillsEnum.properties[skillName].attribute];
+	this.attribute = character.attributes.getAttribute(SkillsEnum.properties[skillName].attribute);
 	this.armor = undefined;
 	if (character !== undefined && character.equipment !== undefined) {
 		this.armor = character.equipment.armor;
@@ -125,23 +133,34 @@ function Skill(skillName, isClassSkill, character) {
 	};
 	
 	this.getArmorCheckPenalty = function() {
-		if (this.appliesArmorCheckPenalty && armor !== undefined) {
-			return armor.armorCheckPenalty;
+		if (this.armor !== undefined) {
+			return this.armor.armorCheckPenalty;
+		} else {
+			return 0;
 		}
 	};
 
 	this.addRank = function(value) {
-		if (value) {
-			ranks += +value;
+		if (value !== undefined) {
+			this.ranks += +value;
 		} else {
-			ranks++;
+			this.ranks++;
 		}
 	};
 	
-	this.getValue = function() {
-		var classSkillBonus = (isClassSkill && ranks) ? 3 : 0; 
-		return classSkillBonus + ranks + this.bonusProcessor.getValue() + this.attribute.getModifier() - this.getArmorCheckPenalty();
+	this.getClassSkillBonus = function() {
+		return (this.isClassSkill && this.ranks) ? 3 : 0;
 	};
+	
+	this.getValue = function() {
+		if (!this.untrained && this.ranks === 0) {
+			return "*";
+		}
+		var classSkillBonus = this.getClassSkillBonus();
+		return classSkillBonus + this.ranks + this.bonusProcessor.getValue() + this.attribute.getModifier() - this.getArmorCheckPenalty();
+	};
+	
+	
 	
 	this.getAttributeModifier = function(){
 		return this.attribute.getModifier();
@@ -160,6 +179,27 @@ function Skill(skillName, isClassSkill, character) {
 			this.armor = undefined;
 		}
 	});
+}
+
+function SkillSet(character) {
+	let classSkills = character.characterClass.classSkills;
+	let skillsEnumAll = SkillsEnum.listAll();
+	this.skills = {};
+	for (let i = 0; i< skillsEnumAll.length; i++) {
+		let skillEnum = skillsEnumAll[i];
+
+		this.skills[skillEnum] = new Skill(skillEnum, character);
+	}
 	
-		
+	this.getSkillsList = function() {
+		let skillList = [];
+		for (let skillName in this.skills) {
+			skillList.push(this.skills[skillName]);
+		}
+		return skillList;
+	};
+	
+	this.getSkill = function(skillName) {
+		return this.skills[skillName];
+	};
 }

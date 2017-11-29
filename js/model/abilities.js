@@ -83,3 +83,16 @@ var AbilityFactory = {
 	}
 };
 
+var AbilityPrerequisiteEnum = {
+	"BAB" : "BAB",
+	"LEVEL" : "LEVEL",
+	"CLASS_LEVEL" : "CLASS_LEVEL",
+	"CASTER_LEVEL" : "CASTER_LEVEL",
+	
+};
+
+
+var AbilityPrerequisite = {
+	
+};
+

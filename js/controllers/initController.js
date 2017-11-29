@@ -9,9 +9,9 @@ idGenerator = new IdGenerator();
 
 function start() {
 	console.log("start");
-	loadViews(["views/characterView.html", "views/spellBookView.html"]);
-	$("#characterView").show();
-	createSpells();
+	//loadViews(["views/characterView.html", "views/spellBookView.html"]);
+	//$("#characterView").show();
+	//createSpells();
 	
 	createTargalad();
 }
@@ -30,18 +30,7 @@ function loadViews(views) {
 	}
 }
 
-function createView(viewHtml){
-	if (typeof viewHtml === 'string' || viewHtml instanceof String) {
-		//var view = $($(viewHtml)[1]).html().trim();
-		$("#viewHolder").append(viewHtml);
-		return;
-	}
-	
-	var view = $(viewHtml).find(".view");
-	var wrap = $("<div></div>").append($(view));
-	$("#viewHolder").append(wrap.html());
-	return;
-}
+
 
 
 function createSpells() {
