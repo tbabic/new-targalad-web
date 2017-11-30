@@ -38,31 +38,50 @@ function SpellBook(character, pages, weight) {
 	this.getMemorizedCount = function(spellLevel) {
 		var count = 0;
 		for (var spellId in this.memorized) {
-			if (this.memorized.getLevel() === spellLevel) {
-				count += this.memorized.count;
+			if (this.memorized[spellId].getLevel() === spellLevel) {
+				count += this.memorized[spellId].count;
 			}
 		}
 		return count;
 	};
 	
+	this.getSpellsPerDay = function(spellLevel) {
+		return this.character.characterClass.spellsPerDay(spellLevel);
+	};
+	
 	this.canBeMemorized = function(spell) {
 		var memorizedCount = this.getMemorizedCount(spell.level);
-		var maximumMemorized = this.character.characterClass.getSpellsPerDay(spell.level);
+		var maximumMemorized = this.getSpellsPerDay(spell.level);
 		if (maximumMemorized === undefined) {
 			return false;
 		}
 		return memorizedCount < maximumMemorized;
 	};
 	
+	this.memorizedSpellCount = function(spell) {
+		return this.isSpellMemorized(spell) ? this.memorized[spell.id].count : 0;
+	};
+
 	this.memorize = function(spell) {
-		if (!this.canBeMemorized()) {
-			return;
+		if (!this.canBeMemorized(spell)) {
+			return this.memorizedSpellCount(spell);
 		}
-		if (isSpellMemorized(spell)) {
+		if (this.isSpellMemorized(spell)) {
 			this.memorized[spell.id].count++;
 		} else {
 			this.memorized[spell.id] = new MemorizedSpell(spell);
 		}
+		return this.memorizedSpellCount(spell);
+	};
+	
+	this.unmemorize = function(spell) {
+		if (this.isSpellMemorized(spell)) {
+			this.memorized[spell.id].count--;
+			if (this.memorized[spell.id].count <= 0) {
+				delete this.memorized[spell.id];
+			}
+		}
+		return this.memorizedSpellCount(spell);
 	};
 	
 	this.isSpellMemorized = function(spell) {

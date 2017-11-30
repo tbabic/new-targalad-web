@@ -2,7 +2,7 @@ function Magus(character) {
 	this.character = character;
 	this.arcanas = [];
 	this.classAbilities = [];
-	this.spellbook = new SpellBook();
+	this.spellbook = new SpellBook(this.character, 210, 3);
 	
 	this.getArcanePool = function() {
 		return this.character.attributes.intelligence.getModifier() + Math.floor(this.character.level/2);
@@ -41,9 +41,6 @@ function Magus(character) {
 		SkillsEnum.PROFESSION, SkillsEnum.RIDE, SkillsEnum.SPELLCRAFT, SkillsEnum.SWIM, SkillsEnum.USE_MAGIC_DEVICE];
 	
 	this.spellsPerDay = function(spellLevel) {
-		if (spellLevel === 0) {
-			return spells0PerDay();
-		}
 		if (spellLevel > 6) {
 			return;
 		}
@@ -54,7 +51,7 @@ function Magus(character) {
 	
 	this.baseSpellsPerDay = function(spellLevel) {
 		let startingLevel = (spellLevel -1)*3 + 1;
-		if (this.character.level > startingLevel) {
+		if (this.character.level < startingLevel) {
 			return undefined;
 		} 
 		if(spellLevel === 6) {
@@ -84,7 +81,7 @@ function Magus(character) {
 		}
 		let intModifier = this.character.attributes.intelligence.getModifier();
 		let startingModifier = intModifier - spellLevel + 1;
-		return Math.top(startingModifier/4);
+		return Math.ceil(startingModifier/4);
 	};
 	
 	let cantrips = spellsDB.getByLevel(0);
@@ -119,7 +116,7 @@ var MagusArcanaFactory = {
 
 var MagusAbilities = {
 	spellCombat : function(owner) {
-		return new Ability("Spell combat", ActionType.FREE, owner, [], function(extraConcentration) {
+		return new Ability("Spell combat", ActionType.FREE, owner, [], function(owner, extraConcentration) {
 			if (extraConcentration === undefined) {
 				extraConcentration = 0;
 			}

@@ -24,6 +24,10 @@
 				<div class="col-1 skill-rank">
 					${skill.ranks}
 				</div>
+				<div class="col-3 skill-mod">
+					<button class="btn skill-add-btn" data-skill-name=${skill.name} >+</button>
+					<button class="btn skill-remove-btn"data-skill-name=${skill.name} >-</button>
+				</div>
 				
 			</div>
 		</c-for-each>

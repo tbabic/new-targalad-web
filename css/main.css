@@ -36,7 +36,7 @@
 	display: none;
 }
 
-.toggle-all .memorize-btn, .toggle-all .cast-btn,  .toggle-all .recall-btn {
+.toggle-all .memorize-btn, .toggle-all .unmemorize-btn, .toggle-all .cast-btn,  .toggle-all .recall-btn {
 	display: none;
 }
 
@@ -57,7 +57,7 @@
 	border-radius: 2rem;
 }
 
-.learn-btn, .memorize-btn, .cast-btn, .recall-btn {
+.learn-btn, .memorize-btn, .unmemorize-btn, .cast-btn, .recall-btn {
 	background-color: #337ab7;
 	color: white;
 }
