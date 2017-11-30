@@ -1,105 +1,87 @@
-attrBonus = function(value) {
-	return Math.floor((value-10)/2);
-}
-
-function defense (character) {
-	var dex = character.attributes.getBonus('dexterity');
-	var dexAc = dex;
-	var str = character.attributes.getBonus('strength')
-	if (character.equipment.armor) {
-		if (dexAc > armor.maxDexBonus) {
-			dexAc = armor.maxDexBonus;
-		}
-	}
+function Defense(character) {
 	
+	this.character = character;
+	this.maxDexBonus = 1000;
     this.character = character;
-	this.armorClass = 10 + dexAc;
-    this.touchAC = 10 + dexAc;
-    this.flatfooted = 10;
-    this.baseCmd = 10 + character.getBab() + str + dex;
-    this.baseCmdFlat = 10 + character.getBab() + str;
+	this.armor = undefined;
+
+	this.bonusProcessor = new BonusProcessor();
+	this.touchBonusProcessor = new BonusProcessor();
+	this.flatFootedBonusProcessor = new BonusProcessor();
 	
-	this.bonusList = {
-		deflection: acBonus(nonstackingBonus, true, true, true),
-		armor:  acBonus(nonstackingBonus,false, true, false),
-		natural:  acBonus(nonstackingBonus,false, true, false),
-		shield:  acBonus(nonstackingBonus,true, true, false),
-		luck:  acBonus(nonstackingBonus,true, true, true),
-		insight:  acBonus(nonstackingBonus,true, true, true),
-		morale:  acBonus(nonstackingBonus,true, true, true),
-		profane:  acBonus(nonstackingBonus,true, true, true),
-		sacred:  acBonus(nonstackingBonus,true, true, true),
-		dodge:  acBonus(stackingBonus,true, false, true),
-		untyped:  acBonus(stackingBonus,true, true, true)
-	}
-
-
-	this.calculate = function() {
-
-		for (var slot in character.equipment) {
-			var item = character.equipment[slot];
-			for (var property in item) {
-				if (property.category == 'defense' || property.category == 'armorClass') {
-					if(this.bonusList.hasOwnProperty(property.bonusType)) {
-						this.bonusList[property.bonusType].add(property.value);
-					}
-				}
-			}
+	this.getArmorClass = function() {
+		value = 10;
+		if (this.armor !== undefined) {
+			value += Math.min(this.armor.maxDexBonus, character.attributes.dexterity.getModifier());
+		} else {
+			value += character.attributes.dexterity.getModifier();
 		}
-		
-		for (var bonus in bonusList) {
-			this.armorClass += bonus.get();
-			if (bonus.isTouch) {
-				this.touchAC += bonus.get();
-			}
-			if(bonus.isFlatfooted) {
-				this.flatfooted += bonus.get();
-			}
-			if (bonus.isCmd) {
-				this.baseCmd += bonus.get();
-			}
-			if (bonus.isCmd && bonus.isFlatfooted) {
-				this.baseCmdFlat += bonus.get();
-			}
-		}
-		
-	}
-	
-	this.calculate();
-    
-
-
-};
-
-function stackingBonus() {
-	this.value = 0;
-	this.add = function(bonus) {
-		value += bonus;
-	}
-	this.remove = function(bonus) {
-		value -= bonus;
-	}
-	this.get = function() {
+		value += this.bonusProcessor.getValue();
 		return value;
-	}
+	};
 	
+	this.getTouchAc = function() {
+		value = 10;
+		if (this.armor !== undefined) {
+			value += Math.min(this.armor.maxDexBonus, character.attributes.dexterity.getModifier());
+		} else {
+			value += character.attributes.dexterity.getModifier();
+		}
+		value += this.touchBonusProcessor.getValue();
+		return value;
+	};
+	
+	this.getFlatFootedAc = function() {
+		value = 10;
+		value += this.flatFootedBonusProcessor.getValue();
+		return value;
+	};
+	
+	this.removeDexBonus = function(source) {
+		//remove dex and dodge bonus to AC
+		var penaltyValue = Math.min(this.armor.maxDexBonus, character.attributes.dexterity.getModifier());
+		penaltyValue += this.bonusProcessor.getValueByType(BonusType.DODGE);
+		this.dexPenalty = new BonusEffect(source, new Bonus(BonusCategory.ARMOR_CLASS, BonusType.Penalty, -penaltyValue, "No Dex to AC"));
+		this.bonusProcessor.add(this.dexPenalty.source, this.dexPenalty.bonus);
+		this.touchBonusProcessor.add(this.dexPenalty.source, this.dexPenalty.bonus);
+	};
+	
+	this.applyDexBonus = function() {
+		if (this.dexPenalty !== undefined) {
+			this.bonusProcessor.remove(this.dexPenalty.source, this.dexPenalty.bonus);
+			this.touchBonusProcessor.remove(this.dexPenalty.source, this.dexPenalty.bonus);
+		}
+	};
+	
+	addModelListener("ARMOR", "ADDED", (e, armor) => {
+		this.armor = armor;
+		this.bonusProcessor.add(armor.id, armor.armorBonus);
+		this.flatFootedBonusProcessor.add(armor.id, armor.armorBonus);
+		triggerViewChange("DEFENSE", this);
+	});
+	
+	addModelListener("ARMOR", "REMOVED", (e, armor) => {
+		if(this.armor !== undefined && this.armor.id == armor.id) {
+			this.armor = undefined;
+		}
+		this.bonusProcessor.remove(armor.id, armor.armorBonus);
+		this.flatFootedBonusProcessor.remove(armor.id, armor.armorBonus);
+		triggerViewChange("DEFENSE", this);
+	});
+	
+	addModelListener("ARMOR_CLASS", (e, bonusEffect) => {
+		var bonusType = bonusEffect.bonus.type;
+		this.bonusProcessor.processBonusEffect(bonusEffect);
+		if([BonusType.SHIELD, BonusType.ARMOR, BonusType.NATURAL_ARMOR].indexOf(bonusType) == -1) {
+			this.touchBonusProcessor.processBonusEffect(bonusEffect);
+		}
+		if(bonusType != BonusType.DODGE) {
+			this.flatFootedBonusProcessor.processBonusEffect(bonusEffect);
+		}
+		triggerViewChange("DEFENSE", this);
+		
+	});
 }
 
-function acBonus(bonus, touch, flatfooted, cmd) {
-	this.bonus = bonus;
-	this.isTouch = touch;
-	this.isFlatfooted = flatfooted;
-	this.isCmd = cmd;
-	this.value = [0];
-	this.add = function(value) {
-		this.bonus.add(value);
-	}
-	this.remove = function(value) {
-		this.bonus.remove(value);
-	}
-	this.get = function() {
-		return this.bonus.get();
-	}
-}
 
 

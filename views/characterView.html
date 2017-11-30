@@ -1,0 +1,130 @@
+<div id ="characterView" class="view" style="display: true;">
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">Strength</th>
+				<th scope="col">Dexterity</th>
+				<th scope="col">Constitution</th>
+				<th scope="col">Intelligence</th>
+				<th scope="col">Wisdom</th>
+				<th scope="col">Charisma</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td id="strengthId">0</td>
+				<td id="dexterityId">0</td>
+				<td id="constitutionId">0</td>
+				<td id="intelligenceId">0</td>
+				<td id="wisdomId">0</td>
+				<td id="charismaId">0</td>
+			</tr>			
+		</tbody>
+	</table>
+	
+	<div class="row">
+	
+		<!-- OFFENSE-->
+		<div id="offenseId" class="col">
+			<div id="attack0Id" class="row">
+				<div class ="col-3">
+					To hit:
+				</div>
+				<span id="toHitId" class ="col-2">0</span>
+				<div class ="col-4">
+					Dmg bonus:
+				</div>
+				<span id="dmgBonusId" class ="col-1">0</span>
+			</div>
+		</div>
+	
+		<!-- DEFENSE-->
+		<div id="defenseId" class="col">
+			<div class="row">
+				<div class ="col">
+					Armor class:
+				</div>
+				<span class ="col" id="armorClassId">10</span>
+			</div>
+			<div class="row">
+				<div class ="col">
+					Touch:
+				</div>
+				<span class ="col" id="touchAcId">10</span>
+			</div>
+			<div class="row">
+				<div class ="col">
+					FlatFooted:
+				</div>
+				<span class ="col" id="flatFootedId">10</span>
+			</div>
+		</div>
+		
+		<!-- SAVES-->
+		<div id="saves" class="col">
+			<div class="row">
+				<div class ="col">
+					Fortitude:
+				</div>
+				<span class ="col" id="fortitudeId">0</span>
+			</div>
+			<div class="row">
+				<div class ="col">
+					Reflex:
+				</div>
+				<span class ="col" id="reflexId">0</span>
+			</div>
+			<div class="row">
+				<div class ="col">
+					Will:
+				</div>
+				<span class ="col" id="willId">0</span>
+			</div>
+		</div>
+		
+	</div>
+	
+	<div class="row">		
+		<div id="abilitiesId" class="col-8 abilities">
+			
+		</div>
+
+		<div id="statusEffectsId" class="col-4">
+			<div class="dropdown">
+			<button class="btn dropdown-toggle" type="button" data-toggle="dropdown">Choose effect<span class="caret"></span></button>
+			<ul class="dropdown-menu">
+				<li><a class="condition" href="#">Blinded</a></li>
+				<li><a class="condition" href="#">Confused</a></li>
+				<li><a class="condition" href="#">Cowering</a></li>
+				<li><a class="condition" href="#">Dazed</a></li>
+				<li><a class="condition" href="#">Dazzled</a></li>
+				<li><a class="condition" href="#">Entangled</a></li>
+				<li><a class="condition" href="#">Exhausted</a></li>
+				<li><a class="condition" href="#">Fascinated</a></li>
+				<li><a class="condition" href="#">Fatigued</a></li>
+				<li><a class="condition" href="#">Flat-Footed</a></li>
+				<li><a class="condition" href="#">Frightened</a></li>
+				<li><a class="condition" href="#">Grappled</a></li>
+				<li><a class="condition" href="#">Invisible</a></li>
+				<li><a class="condition" href="#">Nauseated</a></li>
+				<li><a class="condition" href="#">Panicked</a></li>
+				<li><a class="condition" href="#">Paralyzed</a></li>
+				<li><a class="condition" href="#">Petrified</a></li>
+				<li><a class="condition" href="#">Pinned</a></li>
+				<li><a class="condition" href="#">Prone</a></li>
+				<li><a class="condition" href="#">Shaken</a></li>
+				<li><a class="condition" href="#">Sickened</a></li>
+				<li><a class="condition" href="#">Staggered</a></li>
+				<li><a class="condition" href="#">Stunned</a></li>				
+			</ul>
+			</div>
+			
+			<div id="conditionEffectsId">
+			</div>
+			
+		</div>
+	
+	</div>
+	
+</div>
+

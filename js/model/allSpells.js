@@ -303,3 +303,32 @@ new Spell(1810,"Magnetic Field",6),
 new Spell(1410,"Walk Through Space",6)
 
 ];
+
+var SpellsDB = function(spellsList) {
+	this.byId = {};
+	this.byLevel = {};
+	
+	for(let i = 0; i< spellsList.length; i++) {
+		let spell = spellsList[i];
+		this.byId[spell.id] = spell;
+		if(this.byLevel[spell.level] === undefined) {
+			this.byLevel[spell.level] = {};
+		}
+		let byLevel = this.byLevel[spell.level];
+		byLevel[spell.id] = spell;
+	}
+	
+	this.getById=function(id) {
+		return this.byId[id];
+	};
+	
+	this.getByLevelAndId=function(level, id) {
+		return this.byLevel[level][id];
+	};
+	
+	this.getByLevel = function(level) {
+		return this.byLevel[level];
+	};
+};
+
+var spellsDB = new SpellsDB(allSpells);
