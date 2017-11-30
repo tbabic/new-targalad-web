@@ -58,12 +58,13 @@ function triggerAbility(event) {
 
 function setAbilities(character) {
 	$("#abilitiesId").empty();
-	for (var i = 0; i < character.nonPassiveAbilities.length; i+=3) {
+	var step = character.nonPassiveAbilities.length;
+	for (var i = 0; i < character.nonPassiveAbilities.length; i+=step) {
 		var divHtml = $('<div class="row"></div>').clone();
-		for (var j = 0; j < 3 && (j+i) < character.nonPassiveAbilities.length ; j++) {
+		for (var j = 0; j < step && (j+i) < character.nonPassiveAbilities.length ; j++) {
 			
 			var ability = character.nonPassiveAbilities[i+j];
-			var spanHtml = $('<div class="col-sm-4"></div>').clone();
+			var spanHtml = $('<div class="col-4"></div>').clone();
 			var abilityTemplate = '<button class="btn ability not-active"></button>';
 			var abilityHtml = $(abilityTemplate).clone();
 			$(abilityHtml).attr("id", ability.id);

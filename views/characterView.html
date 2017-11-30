@@ -2,12 +2,12 @@
 	<table class="table">
 		<thead>
 			<tr>
-				<th scope="col">Strength</th>
-				<th scope="col">Dexterity</th>
-				<th scope="col">Constitution</th>
-				<th scope="col">Intelligence</th>
-				<th scope="col">Wisdom</th>
-				<th scope="col">Charisma</th>
+				<th scope="col">STR</th>
+				<th scope="col">DEX</th>
+				<th scope="col">CON</th>
+				<th scope="col">INT</th>
+				<th scope="col">WIS</th>
+				<th scope="col">CHA</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -27,33 +27,33 @@
 		<!-- OFFENSE-->
 		<div id="offenseId" class="col">
 			<div id="attack0Id" class="row">
-				<div class ="col-3">
-					To hit:
+				<div class ="col-6">
+					Hit: <span id="toHitId">0</span>
 				</div>
-				<span id="toHitId" class ="col-2">0</span>
-				<div class ="col-4">
-					Dmg bonus:
+				
+				<div class ="col-6">
+					Dmg: <span id="dmgBonusId" >0</span>
 				</div>
-				<span id="dmgBonusId" class ="col-1">0</span>
+				
 			</div>
 		</div>
 	
 		<!-- DEFENSE-->
 		<div id="defenseId" class="col">
 			<div class="row">
-				<div class ="col">
-					Armor class:
+				<div class ="col-6">
+					AC:
 				</div>
 				<span class ="col" id="armorClassId">10</span>
 			</div>
 			<div class="row">
-				<div class ="col">
+				<div class ="col-6">
 					Touch:
 				</div>
 				<span class ="col" id="touchAcId">10</span>
 			</div>
 			<div class="row">
-				<div class ="col">
+				<div class ="col-6">
 					FlatFooted:
 				</div>
 				<span class ="col" id="flatFootedId">10</span>
@@ -63,19 +63,19 @@
 		<!-- SAVES-->
 		<div id="saves" class="col">
 			<div class="row">
-				<div class ="col">
+				<div class ="col-5">
 					Fortitude:
 				</div>
 				<span class ="col" id="fortitudeId">0</span>
 			</div>
 			<div class="row">
-				<div class ="col">
+				<div class ="col-5">
 					Reflex:
 				</div>
 				<span class ="col" id="reflexId">0</span>
 			</div>
 			<div class="row">
-				<div class ="col">
+				<div class ="col-5">
 					Will:
 				</div>
 				<span class ="col" id="willId">0</span>

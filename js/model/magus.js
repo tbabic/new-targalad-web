@@ -126,7 +126,7 @@ var MagusAbilities = {
 				improved = 2;
 			}
 			bonusList.push(new Bonus([BonusCategory.CONCENTRATION,BonusCategory.DEFENSIVE_CASTING], BonusType.CIRCUMSTANCE, improved+extraConcentration, "Spell Combat"));
-			this.bonusList = new BonusEffectList(bonusList);
+			this.bonusList = new BonusEffectList(this, bonusList);
 			this.bonusList.activate();
 		}, function(){
 			this.bonusList.deactivate();

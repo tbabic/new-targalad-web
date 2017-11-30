@@ -29,15 +29,15 @@
 			<div id="spell-${spell.id}" data-spell-id="${spell.id}" 
 				class="row spell-row spell-level-${spell.level} all ${spell.isLearned(myCharacter) ? 'known' : ''}  ${spell.isMemorized(myCharacter) ? 'memorized' : ''}" 
 				style="display: none"> 
-				<div class="col-sm-4"> 
+				<div class="col-4"> 
 					<a target="_blank" href="http://www.dxcontent.com/SDB_SpellBlock.asp?SDBID=${spell.id}">${spell.name}</a> 
 				</div>
-				<div class ="col-sm">
+				<div class ="col">
 					<button type="button" class="btn learn-btn">Learn</button>
-					<button type="button" class="btn memorize-btn">Memorize</button>
-					<button type="button" class="btn unmemorize-btn">Forget</button>
-					<button type="button" class="btn cast-btn">Cast</button>
-					<button type="button" class="btn recall-btn">Recall</button>
+					<button type="button" class="btn memorize-btn">+</button>
+					<button type="button" class="btn unmemorize-btn">-</button>
+					<button type="button" class="btn cast-btn">C</button>
+					<button type="button" class="btn recall-btn">R</button>
 				</div>
 
 			</div>
