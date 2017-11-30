@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<script src="js/jquery-2.2.0.min.js"></script>
+<script src="js/popper.js"></script>
+<script src="js/bootstrap.js"></script>
+<head>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.css"/>
+    <title></title>
+    <!-- Main scripts-->
+    
+
+</head>
+<body>
+<div class="container">
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+		  <a class="navbar-brand navbar-header-btn" data-ref-view="mainView" href="#">Main</a>
+		  <a class="navbar-brand navbar-header-btn" data-ref-view="spellBookView" href="#">Spellbook</a>
+		  <a class="navbar-brand navbar-header-btn" data-ref-view="skillsView" href="#">Skills</a>
+		  <a class="navbar-brand navbar-header-btn" data-ref-view="equipmentView" href="#">Equipment</a>
+		</div>
+	  </div><!-- /.container-fluid -->
+	</nav>
+	<div id = "mainView" class="view">
+		<table class="table">
+			<thead>
+				<tr>
+					<th scope="col">Strength</th>
+					<th scope="col">Dexterity</th>
+					<th scope="col">Constitution</th>
+					<th scope="col">Intelligence</th>
+					<th scope="col">Wisdom</th>
+					<th scope="col">Charisma</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td id="strId">0</td>
+					<td id="dexId">0</td>
+					<td id="conId">0</td>
+					<td id="intId">0</td>
+					<td id="wisId">0</td>
+					<td id="chaId">0</td>
+				</tr>			
+			</tbody>
+		</table>
+	</div>
+	<div id = "spellBookView" style="display: none;" class="view">
+		<div class="navbar">
+			<a class="navbar-btn spell-level-btn" data-spell-level="0" href="#">0</a>
+			<a class="navbar-btn spell-level-btn" data-spell-level="1" href="#">1</a>
+			<a class="navbar-btn spell-level-btn" data-spell-level="2" href="#">2</a>
+			<a class="navbar-btn spell-level-btn" data-spell-level="3" href="#">3</a>
+			<a class="navbar-btn spell-level-btn" data-spell-level="4" href="#">4</a>
+			<a class="navbar-btn spell-level-btn" data-spell-level="5" href="#">5</a>
+			<a class="navbar-btn spell-level-btn" data-spell-level="6" href="#">6</a>
+		</div>
+		<div id="spellsListId">
+		</div>
+	</div>	
+	<div id = "skillsView" style="display: none;" class="view">
+		
+	</div>
+	<div id = "equipmentView" style="display: none;" class="view">
+		
+	</div>
+</div>
+</body>
+</html>
+
+
+<script src="js/model/bonus.js"></script>
+<script src="js/model/character.js"></script>
+<script src="js/model/attributes.js"></script>
+<script src="js/model/equipment.js"></script>
+<script src="js/model/defense.js"></script>
+<script src="js/model/saves.js"></script>
+<script src="js/model/spellBook.js"></script>
+<script src="js/model/allSpells.js"></script>
+
+<script src="js/controllers/mainController.js"></script>
+
+
+
+
+
+<script type="text/javascript">
+	
+	function init() {
+		start();		
+	}
+    window.onload = init();
+	
+</script>
