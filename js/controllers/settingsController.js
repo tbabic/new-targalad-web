@@ -1,13 +1,13 @@
-console.log("mainController");
-
-$(".navbar-header-btn").on("click", function(event) {
-	$(".view").hide();
-	var viewName = event.target.dataset.refView;
-	$("#"+viewName).show();
-});
+console.log("settingController");
 
 
+function setViewportInfo() {
+	
+	$("#widthId").text($(window).width());
+	$("#heightId").text($(window).height());
+	
+}
 
-
+setViewportInfo();
 
 
