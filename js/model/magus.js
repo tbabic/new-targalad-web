@@ -96,52 +96,140 @@ function Magus(character) {
 
 var MagusArcanaFactory = {
 	arcaneAccuracy : function(owner) {
-		var bonusValue = owner.attributes.intelligence.getModifier();
-		return new Ability("Arcane accuracy", ActionType.SWIFT, owner, new Bonus(BonusCategory.TO_HIT, BonusType.INSIGHT, bonusValue, "Arcane accuracy"));
+		return getAbilityBuilder()
+			.name("Arcane accuracy")
+			.actionType(ActionType.SWIFT)
+			.activate(function() {
+				let bonusValue = this.owner.attributes.intelligence.getModifier();
+				this.bonusEffectList = new BonusEffectList(this, new Bonus(BonusCategory.TO_HIT, BonusType.INSIGHT, bonusValue, this.name));
+				this.bonusEffectList.activate();
+			})
+			.deactivate(function() {
+				if (this.bonusEffectList !== undefined) {
+					this.bonusEfectList.deactivate();
+				}
+			})
+			.owner(owner)
+			.get();
 	},
+	
 	empoweredMagic : function(owner) {
-		return new Ability("Empowered Magic", ActionType.FREE, owner);
+		return getAbilityBuilder()
+			.name("Empowered Magic")
+			.actionType(ActionType.SWIFT)
+			.owner(owner)
+			.get();
 	},
+	
 	songOfTheBladeDance : function(owner) {
-		return new Ability("Song of the Blade Dance", ActionType.SWIFT, owner, [
-			new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DODGE, 2, "Song of the Blade Dance"),
-			new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, 1, "Song of the Blade Dance"),
-			new Bonus(BonusCategory.INITIATIVE, BonusType.UNTYPED, 2, "Song of the Blade Dance")]);
+		return getAbilityBuilder()
+			.name("Song of the Blade Dance")
+			.actionType(ActionType.SWIFT)
+			.properties(new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DODGE, 2, "Song of the Blade Dance"))
+			.properties(new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, 1, "Song of the Blade Dance"))
+			.properties(new Bonus(BonusCategory.INITIATIVE, BonusType.UNTYPED, 2, "Song of the Blade Dance"))
+			.owner(owner)
+			.get();
+		
 	},
-	accurateStrike : function(owner) {
-		return new Ability("Accurate Strike", ActionType.SWIFT, owner);
+	
+	overcomeCircumstances : function(owner) {
+		return getAbilityBuilder()
+			.name("Overcome Circumstances")
+			.actionType(ActionType.FREE)
+			.owner(owner)
+			.get();
 	},
+	
 };
-
 
 var MagusAbilities = {
+		
 	spellCombat : function(owner) {
-		return new Ability("Spell combat", ActionType.FREE, owner, [], function(owner, extraConcentration) {
-			if (extraConcentration === undefined) {
-				extraConcentration = 0;
-			}
-			var bonusList = [new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, -2-extraConcentration, "Spell Combat")];
-			var improved = 0;
-			if (owner.level >= 8) {
-				improved = 2;
-			}
-			bonusList.push(new Bonus([BonusCategory.CONCENTRATION,BonusCategory.DEFENSIVE_CASTING], BonusType.CIRCUMSTANCE, improved+extraConcentration, "Spell Combat"));
-			this.bonusList = new BonusEffectList(this, bonusList);
-			this.bonusList.activate();
-		}, function(){
-			this.bonusList.deactivate();
-		});
+		
+		return getAbilityBuilder()
+			.name("Spell combat")
+			.actionType(ActionType.FREE)
+			.activationOptions(new AbilityOption("Defensive casting bonus", "range", () => {
+				let intModifier = owner.attributes.intelligence.getModifier();
+				return "0-"+intModifier;
+			}))
+			.activate(function(activationOption) {
+				let extraConcentration = (activationOption.value !== undefined) ? +activationOption.value : 0;
+				
+				this.bonusEffectList = new BonusEffectList(this, new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, -2-extraConcentration, this.name));
+				let improved = 0;
+				if (this.owner.level >= 8) {
+					improved = 2;
+				}
+				this.bonusEffectList.add(new Bonus([BonusCategory.CONCENTRATION,BonusCategory.DEFENSIVE_CASTING], BonusType.CIRCUMSTANCE, improved+extraConcentration, this.name));
+				this.bonusEffectList.activate();
+			})
+			.deactivate(function(){
+				if (this.bonusEffectList !== undefined) {
+					this.bonusEffectList.deactivate();
+				}
+				
+			})
+			.owner(owner)
+			.get();
 	},
+		
+
 	spellStrike : function(owner) {
-		return new Ability("Spellstrike", ActionType.PASSIVE, owner);
+		return getAbilityBuilder()
+			.name("Spellstrike")
+			.actionType(ActionType.PASSIVE)
+			.owner(owner)
+			.get();
 	},
 	spellRecall : function(owner) {
-		return new Ability("Spell recall", ActionType.PASSIVE, owner);
+		return getAbilityBuilder()
+			.name("Empowered Magic")
+			.actionType(ActionType.SWIFT)
+			.owner(owner)
+			.get();
 	},
 	knowledgePool : function(owner) {
-		return new Ability("Knowledge pool", ActionType.PASSIVE, owner);
+		return getAbilityBuilder()
+			.name("Knowledge pool")
+			.actionType(ActionType.PASSIVE)
+			.owner(owner)
+			.get();
 	}
+		
 };
+
+
+//
+//var MagusAbilities = {
+//	spellCombat : function(owner) {
+//		return new Ability("Spell combat", ActionType.FREE, owner, [], function(owner, extraConcentration) {
+//			if (extraConcentration === undefined) {
+//				extraConcentration = 0;
+//			}
+//			var bonusList = [new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, -2-extraConcentration, "Spell Combat")];
+//			var improved = 0;
+//			if (owner.level >= 8) {
+//				improved = 2;
+//			}
+//			bonusList.push(new Bonus([BonusCategory.CONCENTRATION,BonusCategory.DEFENSIVE_CASTING], BonusType.CIRCUMSTANCE, improved+extraConcentration, "Spell Combat"));
+//			this.bonusList = new BonusEffectList(this, bonusList);
+//			this.bonusList.activate();
+//		}, function(){
+//			this.bonusList.deactivate();
+//		});
+//	},
+//	spellStrike : function(owner) {
+//		return new Ability("Spellstrike", ActionType.PASSIVE, owner);
+//	},
+//	spellRecall : function(owner) {
+//		return new Ability("Spell recall", ActionType.PASSIVE, owner);
+//	},
+//	knowledgePool : function(owner) {
+//		return new Ability("Knowledge pool", ActionType.PASSIVE, owner);
+//	}
+//};
 
 
 

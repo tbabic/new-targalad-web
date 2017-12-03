@@ -4,6 +4,10 @@ function getSelectedSpellLevel() {
 	return $("#allSpellsListId").data("spellLevel");
 }
 
+function serializeSpellbook() {
+	
+}
+
 
 function updateMemorizedCount() {
 	let spellLevel = getSelectedSpellLevel();

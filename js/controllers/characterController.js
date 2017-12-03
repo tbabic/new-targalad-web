@@ -42,6 +42,47 @@ function setOffense(offense) {
 	}
 }
 
+
+
+function showAbilityOptions(ability) {
+	let templateHtml = $("#abilityOptionTemplateId").html();
+	templateHtml = $(templateHtml);
+	$('#chooseAbilityOptionModal').find(".modal-body").empty();
+	for (let i = 0; i<ability.activationOptions.options.length; i++) {
+		let abilityOption = ability.activationOptions.options[i];
+		let optionHtml = $(templateHtml).clone();
+		let inputHtml = optionHtml.find(".ability-option-input");
+		optionHtml.find(".ability-option-name").text(abilityOption.name);
+		inputHtml.prop("type", abilityOption.type);
+		if (abilityOption.type === "text") {
+			inputHtml.val(abilityOption.defaultValue);
+		}
+		if (abilityOption.type === "range") {
+			let rangeString = abilityOption.possibleValues;
+			if (Utils.isFunction(rangeString)) {
+				rangeString = rangeString();
+			}
+			
+			let range = rangeString.split("-");
+			let min = + range[0].replace(/\D/g,'');
+			let max = + range[1].replace(/\D/g,'');
+			inputHtml.prop("min", min);
+			inputHtml.prop("max", max);
+			inputHtml.val(abilityOption.defaultValue);
+			
+			$('#chooseAbilityOptionModal').find(".modal-body").append(optionHtml);
+		}
+	}
+}
+
+function activateAbility(event) {
+	var abilityId = event.target.id;
+	var abilityElement = $("#"+abilityId);
+	abilityElement.removeClass("not-active");
+	abilityElement.addClass("active");
+	triggerModelChange("ABILITY"+abilityId, [], "ACTIVATED");
+}
+
 function triggerAbility(event) {
 	var abilityId = event.target.id;
 	var abilityElement = $("#"+abilityId);
@@ -50,11 +91,24 @@ function triggerAbility(event) {
 		abilityElement.addClass("not-active");
 		triggerModelChange("ABILITY"+abilityId, [], "DEACTIVATED");
 	} else if (abilityElement.hasClass("not-active")) {
-		abilityElement.removeClass("not-active");
-		abilityElement.addClass("active");
-		triggerModelChange("ABILITY"+abilityId, [], "ACTIVATED");
+		let ability = $(event.target).data("ability");
+		if(!ability.activationOptions.isEmpty()) {
+			//show modal
+			console.log("showing ability modal");
+			
+			showAbilityOptions(ability);
+			$('#chooseAbilityOptionModal').modal('show');
+			
+		}
+		else {
+			activateAbility(event);
+		}
 	}
 }
+
+$("#confirmAbilityOptionId").on("click", function(event) {
+	activateAbility(event);
+});
 
 function setAbilities(character) {
 	$("#abilitiesId").empty();
@@ -72,7 +126,7 @@ function setAbilities(character) {
 			$(spanHtml).append(abilityHtml);
 			$(divHtml).append(spanHtml);
 			$("#abilitiesId").append(divHtml);
-			
+			$("#" + ability.id).data("ability", ability);
 			$("#" + ability.id).on("click", triggerAbility);
 		}
 	}

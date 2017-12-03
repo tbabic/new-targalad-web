@@ -1,85 +1,106 @@
-function Feat(name, actionType, owner, propertiesOrActivate, activateOrDeactivate, deactivate) {
-	Ability.call(this, name, actionType, owner, propertiesOrActivate, activateOrDeactivate, deactivate);
-}
-
 var FeatFactory = {
 	weaponFinesse : function(owner) {
-		return new Feat("Weapon Finesse", ActionType.PASSIVE, owner, function(character) {
-			function apply(character) {
-				if (character.attributes.dexterity.getModifier() <= character.attributes.strength.getModifier()) {
-					return;
-				}
-				
-				var attacks = character.offense.getAttacks();
-				for(var i = 0; i < attacks.length; i++) {
-					var attack = attacks[i];
-					var attackWeapon = attack.getWeapon();
-					if (attackWeapon.category == WeaponCategory.MELEE_LIGHT || 
-						attackWeapon.type == WeaponType.RAPIER) {
-						attack.attrToHit = character.attributes.dexterity;
+		return getAbilityBuilder()
+			.name("Weapon finesse")
+			.actionType(ActionType.PASSIVE)
+			.activate(function() {
+				function apply(owner) {
+					if (owner.attributes.dexterity.getModifier() <= owner.attributes.strength.getModifier()) {
+						return;
+					}
+					
+					var attacks = owner.offense.getAttacks();
+					for(var i = 0; i < attacks.length; i++) {
+						var attack = attacks[i];
+						var attackWeapon = attack.getWeapon();
+						if (attackWeapon.category == WeaponCategory.MELEE_LIGHT || 
+							attackWeapon.type == WeaponType.RAPIER) {
+							attack.attrToHit = owner.attributes.dexterity;
+						}
 					}
 				}
-			}
-			
-			apply(character);
-			
-			addModelListener("WEAPON", "ADDED", (e, weapon) => {
-				apply(character);
-			});
-			
-			addModelListener("WEAPON", "REMOVED", (e, weapon) => {
-				apply(character);
-			});
-			
-		});
+				
+				apply(this.owner);
+				
+				addModelListener("WEAPON", "ADDED", (e, weapon) => {
+					apply(this.owner);
+				});
+				
+				addModelListener("WEAPON", "REMOVED", (e, weapon) => {
+					apply(this.owner);
+				});
+			})
+			.owner(owner)
+			.get();
 	},
 	
 	dervishDance : function(owner) {
-		return new Feat("Dervish dance", ActionType.PASSIVE, owner, function(character) {
-			function apply(character) {
-				if (character.attributes.dexterity.getModifier() <= character.attributes.strength.getModifier()) {
-					return;
-				}
-				
-				var attacks = character.offense.getAttacks();
-				for(var i = 0; i < attacks.length; i++) {
-					var attack = attacks[i];
-					var attackWeapon = attack.getWeapon();
-					if (attackWeapon.type == WeaponType.SCIMITAR) {
-						attack.attrToHit = character.attributes.dexterity;
-						attack.attrDmg = character.attributes.dexterity;
+		return getAbilityBuilder()
+			.name("Dervish Dance")
+			.actionType(ActionType.PASSIVE)
+			.activate(function() {
+				function apply(owner) {
+					if (owner.attributes.dexterity.getModifier() <= owner.attributes.strength.getModifier()) {
+						return;
+					}
+					
+					var attacks = owner.offense.getAttacks();
+					for(var i = 0; i < attacks.length; i++) {
+						var attack = attacks[i];
+						var attackWeapon = attack.getWeapon();
+						if (attackWeapon.type == WeaponType.SCIMITAR) {
+							attack.attrToHit = owner.attributes.dexterity;
+							attack.attrDmg = owner.attributes.dexterity;
+						}
 					}
 				}
-			}
-			
-			apply(character);
-			
-			addModelListener("WEAPON", "ADDED", (e, weapon) => {
-				apply(character);
-			});
-			
-			addModelListener("WEAPON", "REMOVED", (e, weapon) => {
-				apply(character);
-			});
-			
-		});
+				
+				apply(this.owner);
+				
+				addModelListener("WEAPON", "ADDED", (e, weapon) => {
+					apply(this.owner);
+				});
+				
+				addModelListener("WEAPON", "REMOVED", (e, weapon) => {
+					apply(this.owner);
+				});
+			})
+			.owner(owner)
+			.get();
 	},
-	
 	
 	toughness : function(owner) {
-		return new Feat("Toughness", ActionType.PASSIVE, owner, function(character) {
-			
-		});
-	},
-	
-	arcaneStrike : function(owner) {
-		var extraDmg = 1 + Math.floor(owner.level/5);
-		return new Feat("Arcane Strike", ActionType.SWIFT, owner, new Bonus(BonusCategory.DAMAGE, BonusType.UNTYPED, extraDmg, "Arcane strike"));
+		return getAbilityBuilder()
+			.name("Toughness")
+			.actionType(ActionType.PASSIVE)
+			.owner(owner)
+			.get();
 	},
 	
 	intensifySpell : function(owner) {
-		return new Feat("Intensify spell", ActionType.SWIFT, owner, function(character) {
-			
-		});
+		return getAbilityBuilder()
+			.name("Intensify spell")
+			.actionType(ActionType.PASSIVE)
+			.owner(owner)
+			.get();
 	},
+	
+	arcaneStrike : function(owner) {
+		return getAbilityBuilder()
+			.name("Arcane Strike")
+			.actionType(ActionType.SWIFT)
+			.activate(function() {
+				var extraDmg = 1 + Math.floor(owner.level/5);
+				this.bonusEffectList = new BonusEffectList(this, new Bonus(BonusCategory.DAMAGE, BonusType.UNTYPED, extraDmg, this.name));
+				this.bonusEffectList.activate();
+			})
+			.deactivate(function() {
+				if (this.bonusEffectList !== undefined) {
+					this.bonusEfectList.deactivate();
+				}
+			})
+			.owner(owner)
+			.get();
+	}
 };
+

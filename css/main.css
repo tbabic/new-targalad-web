@@ -1,5 +1,19 @@
 /* ABILITIES*/
 
+html {
+	font-size:16px;
+}
+
+@media screen and (max-width: 530px) {
+	html {
+		font-size:3vw;
+	}
+	
+	.col, .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12 {
+		padding-right:0px
+	}
+}
+
 .ability {
 	width: 100%;
 	height: 100%;
@@ -36,11 +50,11 @@
 	display: none;
 }
 
-.toggle-all .memorize-btn, .toggle-all .unmemorize-btn, .toggle-all .cast-btn,  .toggle-all .recall-btn {
+.toggle-all .memorize-btn, .toggle-all .unmemorize-btn, .toggle-all .cast-btn, .toggle-all .recall-btn, .toggle-all .memorize-count, {
 	display: none;
 }
 
-.toggle-known .learn-btn, .toggle-memorized .learn-btn {
+.toggle-known .learn-btn, .toggle-memorized .learn-btn, .toggle-known .delete-btn, .toggle-memorized .delete-btn {
 	display: none;
 }
 
@@ -57,9 +71,17 @@
 	border-radius: 2rem;
 }
 
-.learn-btn, .memorize-btn, .unmemorize-btn, .cast-btn, .recall-btn {
+.learn-btn, .delete-btn, .memorize-btn, .unmemorize-btn, .cast-btn, .recall-btn {
 	background-color: #337ab7;
 	color: white;
+	min-height:35px;
+	min-width:35px;
+}
+
+.spell-name {
+	display: inline-flex;
+	align-items: center;
+	
 }
 
 

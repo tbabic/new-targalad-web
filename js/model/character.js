@@ -46,7 +46,7 @@ function createTargalad() {
 	}
 	
 	if (targalad.level >= 9) {
-		targalad.characterClass.addArcana(MagusArcanaFactory.accurateStrike(targalad));
+		targalad.characterClass.addArcana(MagusArcanaFactory.overcomeCircumstances(targalad));
 	}
 	
 	targalad.skillSet.getSkill(SkillsEnum.ACROBATICS).addRank(3);

@@ -9,17 +9,18 @@
 		<button class="btn spell-level-btn" data-spell-level="6">6</button>		
 	</div></div>
 	<div class="row">
-		<div class="col-sm-4 spell-toggles">
+		<div class="col-6 spell-toggles">
 			<button id="toggleAllId" type="button" class="btn spellbook-toggle" data-toggle="all">All</button>
 			<button id="toggleKnownId" disabled type="button" class="btn spellbook-toggle"  data-toggle="known">Known</button>
 			<button id="toggleMemorizedId" type="button" class="btn spellbook-toggle"  data-toggle="memorized" >Memorized</button>
 		</div>
-		<div id="memorized-count" class="col-sm-1 memorized-count">
-		</div>
-		<div class="col-sm-3 memorized-configurations">
+		
+		<div class="col memorized-configurations">
 			<button type="button" class="btn save-memorized" data-toggle="modal" data-target="#saveMemorizedModalId">Save</button>
 			<button type="button" class="btn load-memorized" data-toggle="modal" data-target="#loadMemorizedModalId">Load</button>
 			<button type="button" class="btn reset-memorized" id="resetMemorizedId">Reset</button>
+		</div>
+		<div id="memorized-count" class="col-12 memorized-count">
 		</div>
 	</div>
 	
@@ -29,8 +30,11 @@
 			<div id="spell-${spell.id}" data-spell-id="${spell.id}" 
 				class="row spell-row spell-level-${spell.level} all ${spell.isLearned(myCharacter) ? 'known' : ''}  ${spell.isMemorized(myCharacter) ? 'memorized' : ''}" 
 				style="display: none"> 
-				<div class="col-4"> 
+				<div class="col-6 spell-name"> 
 					<a target="_blank" href="http://www.dxcontent.com/SDB_SpellBlock.asp?SDBID=${spell.id}">${spell.name}</a> 
+				</div>
+				<div class="col-1">
+					<span class="memorized-count">0</span>
 				</div>
 				<div class ="col">
 					<button type="button" class="btn learn-btn">Learn</button>
