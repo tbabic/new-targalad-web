@@ -3,7 +3,7 @@ var FeatFactory = {
 		return getAbilityBuilder()
 			.name("Weapon finesse")
 			.actionType(ActionType.PASSIVE)
-			.activate(function() {
+			.activate(function() {				
 				function apply(owner) {
 					if (owner.attributes.dexterity.getModifier() <= owner.attributes.strength.getModifier()) {
 						return;
@@ -27,6 +27,10 @@ var FeatFactory = {
 				});
 				
 				addModelListener("WEAPON", "REMOVED", (e, weapon) => {
+					apply(this.owner);
+				});
+				
+				addModelListener("EXTRA_ATTACK", (e, extraAttackBonus) => {
 					apply(this.owner);
 				});
 			})
@@ -64,6 +68,11 @@ var FeatFactory = {
 				addModelListener("WEAPON", "REMOVED", (e, weapon) => {
 					apply(this.owner);
 				});
+				
+				addModelListener("EXTRA_ATTACK", (e, extraAttackBonus) => {
+					apply(this.owner);
+				});
+				
 			})
 			.owner(owner)
 			.get();
@@ -96,7 +105,7 @@ var FeatFactory = {
 			})
 			.deactivate(function() {
 				if (this.bonusEffectList !== undefined) {
-					this.bonusEfectList.deactivate();
+					this.bonusEffectList.deactivate();
 				}
 			})
 			.owner(owner)

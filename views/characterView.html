@@ -85,13 +85,13 @@
 	</div>
 	
 	<div class="row">		
-		<div id="abilitiesId" class="col-8 abilities">
-			
+		<div class="col-8 abilities">
+			<c-view view="abilitiesView"></c-view>
 		</div>
 
 		<div id="statusEffectsId" class="col-4">
 			<div class="dropdown">
-			<button class="btn dropdown-toggle" type="button" data-toggle="dropdown">Choose effect<span class="caret"></span></button>
+			<button class="btn dropdown-toggle dropdown-condition" type="button" data-toggle="dropdown">Choose effect<span class="caret"></span></button>
 			<ul class="dropdown-menu">
 				<li><a class="condition" href="#">Blinded</a></li>
 				<li><a class="condition" href="#">Confused</a></li>
@@ -127,38 +127,7 @@
 	</div>
 	
 	
-	<!--Ability options modal -->
-	<div class="modal fade" id="chooseAbilityOptionModal" tabindex="-1" role="dialog" aria-labelledby="chooseAbilityOption">
-		<div class="modal-dialog" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-					<h4 class="modal-title" id="myModalLabel">Choose option</h4>
-				</div>
-				<div class="modal-body">
-<!-- 					<div class="form-group"> -->
-<!-- 						<label for="recipient-name" class="control-label">Name:</label> -->
-<!-- 						<input type="text" class="form-control" id="memorizedConfigNameId"> -->
-<!-- 					</div> -->
-					
-					
-				</div>
-				<div class="modal-footer">
-					<button id="confirmAbilityOptionId" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
-					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-				</div>
-			</div>
-		</div>
-	</div>
 	
-	<div id="abilityOptionTemplateId" style="display:none">
-		<div class="row ability-option-row">
-			<div class="col-4"><span class="ability-option-name"></span></div>
-			<div class="col"><input type="text" class="ability-option-input"></div>
-		</div>
-	</div>
 	
 </div>
 

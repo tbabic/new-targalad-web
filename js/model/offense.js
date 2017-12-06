@@ -5,6 +5,7 @@ function Attack(offense, extraAttackBonus) {
 	this.weaponSlot = (extraAttackBonus.weaponSlot !== undefined) ? extraAttackBonus.weaponSlot : "mainHand";
 	this.attrToHit = "STRENGTH";
 	this.attrDmg = "STRENGTH";
+	this.source = extraAttackBonus.source;
 	
 	this.getWeapon = function() {
 		return this.offense[this.weaponSlot];
@@ -105,8 +106,15 @@ function Offense(character) {
 		} else {
 			this.attacks[extraAttackBonus.source] = new Attack(this, extraAttackBonus);
 		}
+		triggerViewChange("OFFENSE", this);
 		return this.attacks[source];
 	};
+	
+	this.removeAttack = function(source) {
+		delete this.attacks[source];
+		triggerViewChange("OFFENSE", this);
+	}
+	
 	var bab = this.getBab();
 	this.toHitBonusProcessor.add("BAB", new Bonus(BonusCategory.TO_HIT, BonusType.BAB, bab, "BAB"));
 	
@@ -119,7 +127,7 @@ function Offense(character) {
 		var source = "BAB-"+babPenalty;
 		extraAttackBonus.source = source;
 		var attack = this.addAttack(extraAttackBonus);
-		attack.addBonus(source, new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, bab, source));
+		attack.addBonus(source, new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, -babPenalty, source));
 		babPenalty += 5;
 	}
 	

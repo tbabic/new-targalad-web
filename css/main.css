@@ -1,20 +1,58 @@
-/* ABILITIES*/
-
 html {
-	font-size:16px;
+	font-size: 16px;
+}
+@media (max-height: 900px) {
+	html { font-size: 1.5vh; }
 }
 
-@media screen and (max-width: 530px) {
-	html {
-		font-size:3vw;
+@media (max-height: 540px) {
+	html { font-size: 2vh; }
+}
+
+@media (max-width: 400px) {
+	html { 
+		font-size: 3vw; 
 	}
 	
-	.col, .col-1, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12 {
-		padding-right:0px
+	.col, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12 {
+		padding-right: 0px;
 	}
+	
 }
 
-.ability {
+.row .row {
+	margin-right: 0px;
+}
+
+.hamburger {
+	display: inline-block;
+    width: 1.3em;
+    height: 1.3em;
+    vertical-align: middle;
+    content: "";
+    background: no-repeat center center;
+    background-size: 100% 100%;
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+
+.glyphicon {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ABILITIES*/
+
+
+
+.btn-ability {
 	width: 100%;
 	height: 100%;
     font-size: 1em;
@@ -23,22 +61,97 @@ html {
     word-wrap: break-word;
     white-space: normal;
     border-radius: 0.5rem;
+    border-width: 2px;
+    border-color: #337ab7;
 	
 }
 
-.ability.active {
-    background-color: #296596;
-    border-color: #71a9d7;
-    border-width: 3px;
+.ability-options .btn-ability {
+	width: 80%;
+	
 }
 
-.ability.not-active {
-    background-color: #337ab7;	
+.btn-ability-options {
+	width: 20%;
+	height: 100%;
+    font-size: 1em;
+    color: white;
+    background-color: #543eac;
+    word-wrap: break-word;
+    white-space: normal;
+    border-radius: 0.5rem;
+    padding: 0px;
+}
+
+
+
+.btn-ability.active {
+    background-color: #296596;
+    border-color: #71a9d7;
+    border-width: 2px;
+}
+
+.btn-ability.not-active {
 }
 
 .abilities > .row > div{
 	padding: 2px;
 }
+
+.ability-option-row {
+	align-items: center;
+	padding: 2px;
+}
+
+.ability-option-row .range-min{
+	padding-right:15px
+}
+
+.ability-option-row .range-max{
+	padding-left:15px
+}
+
+.ability-option-row .slider.slider-horizontal {
+	width: 70%;
+}
+
+.ability-option-row .tooltip.in {
+	opacity: 0.9
+}
+
+.ability-option-row .toggle-on  {
+
+    background-color: #337ab7;
+
+}
+
+.ability-option-row .toggle-off  {
+    background-color: #c0c0c0;
+    border-top-width: 1px;
+	border-bottom-width: 1px;
+	border-right-width: 1px;
+	border-left-width: 1px;;
+
+}
+
+.ability-option-row .toggle.btn-primary  {
+    background-color: #337ab7;
+}
+
+.ability-option-row .toggle.btn-default  {
+    background-color: #c0c0c0;
+}
+
+.ability-option-row .toggle-handle  {
+    background-color: white;
+}
+
+
+
+
+
+
+
 
 /* SPELLS*/
 
@@ -50,7 +163,7 @@ html {
 	display: none;
 }
 
-.toggle-all .memorize-btn, .toggle-all .unmemorize-btn, .toggle-all .cast-btn, .toggle-all .recall-btn, .toggle-all .memorize-count, {
+.toggle-all .memorize-btn, .toggle-all .unmemorize-btn, .toggle-all .cast-btn, .toggle-all .recall-btn, .toggle-all .memorize-count {
 	display: none;
 }
 

@@ -17,6 +17,12 @@ function SpellBook(character, pages, weight) {
 		this.spells[spell.id] = spell;
 	};
 	
+	this.deleteSpell = function(spell) {
+		if (containsSpell(spell)) {
+			delete this.spells[spell.id];
+		}
+	};
+	
 	this.getAvailablePages = function() {
 		var minPagePerSpell = 1;
 		var takenPages = 0;

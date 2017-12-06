@@ -36,6 +36,11 @@ function AbilityBuilder() {
 			return this;
 		},
 		
+		validateActivation : function(value) {
+			abilityConstr.validateActivation = value;
+			return this;
+		},
+		
 		get : function(owner) {
 			if (owner !== undefined) {
 				owner(owner);
@@ -57,12 +62,23 @@ function Ability(constr) {
 		this.deactivateCallback = constr.deactivateCallback;
 		this.owner = constr.owner;
 		this.activationOptions.add(constr.activationOptions);
+		if (constr.validateActivation !== undefined) {
+			this.activationOptions.validate = constr.validateActivation;
+		}
 	}
 	this.active = false;
 	
-	
+	this.validateActivation = function(...params) {
+		return this.activationOptions.validate(...params);
+	};
 	
 	this.activate = function(...params){
+		
+		let isValid = this.validateActivation(...params);
+		if (!isValid) {
+			return;
+		}
+		
 		if (this.owner === undefined) {
 			return;
 		}
@@ -95,6 +111,13 @@ function Ability(constr) {
 		}
 	};
 	
+	this.hasActivationOptions = function() {
+		if (this.activationOptions === undefined || this.activationOptions.isEmpty()) {
+			return false;
+		}
+		return true;
+	}
+	
 	addModelListener("ABILITY"+this.id, "ACTIVATED", (e) => {
 		this.activate();
 	});
@@ -105,14 +128,17 @@ function Ability(constr) {
 }
 
 
-function AbilityOption(name, type, possibleValues, defaultValue) {
+function AbilityOption(name, type, possibleValues, defaultValue, other) {
 	this.name = name;
 	this.possibleValues = possibleValues;
+	this.value = defaultValue;
+	
+	this.other = other;
 	//valid type options
 	switch (type.toLowerCase()) {
 		case "string" :
 		case "text" :
-			this.type = "text";
+			this.type = "string";
 			break;
 		case "range" :
 			this.type = "range";
@@ -120,7 +146,8 @@ function AbilityOption(name, type, possibleValues, defaultValue) {
 		case "boolean" :
 		case "check" :
 		case "checkbox" :
-			this.type = "checkbox";
+		case "true/false":
+			this.type = "boolean";
 			break;
 		case "number" :
 		case "int" :
@@ -128,17 +155,29 @@ function AbilityOption(name, type, possibleValues, defaultValue) {
 			this.type = "number";
 			break;
 		default :
-			this.type = "text";
+			this.type = "string";
 			break;
 	}
-	this.value = defaultValue;
+	
+
 }
 
-function AbilityOptions(ability, options) {
+
+function AbilityOptions(ability, options, validate) {
 	this.ability = ability;
-	this.options = undefined;
+	this.options = options;
+	this.validate = validate;
+	if (this.validate === undefined) {
+		this.validate = function() {
+			return true;
+		};
+	}
+	
 	
 	this.add = function(options) {
+		if (options instanceof AbilityOptions) {
+			options = options.options;
+		}
 		this.options = Utils.arrayAppend(this.options, options);
 	};
 	
@@ -150,7 +189,21 @@ function AbilityOptions(ability, options) {
 		}
 		return false;
 	};
+	
+	this.getOptions = function() {
+		let options = [];
+		for (let i = 0; i < this.options.length; i++) {
+			if (Utils.isFunction(this.options[i])) {
+				this.optionsFunc = this.options[i];
+				Utils.arrayAppend(options, this.optionsFunc());
+			} else {
+				Utils.arrayAppend(options, this.options[i]);
+			}
+		}
+		return options;
+	};
 }
+
 function getAbilityBuilder() {
 	return new AbilityBuilder();
 }
@@ -172,7 +225,7 @@ var AbilityFactory = {
 			})
 			.deactivate(function() {
 				if (this.bonusEffectList !== undefined) {
-					this.bonusEfectList.deactivate();
+					this.bonusEffectList.deactivate();
 				}
 			})
 			.owner(owner)

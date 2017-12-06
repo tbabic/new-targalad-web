@@ -13,6 +13,7 @@ function Magus(character) {
 	
 	if (character.level >= 1) {
 		this.classAbilities.push(MagusAbilities.spellCombat(character));
+		this.classAbilities.push(MagusAbilities.arcanePool(character));
 	}
 	if (character.level >= 2) {
 		this.classAbilities.push(MagusAbilities.spellStrike(character));
@@ -106,7 +107,7 @@ var MagusArcanaFactory = {
 			})
 			.deactivate(function() {
 				if (this.bonusEffectList !== undefined) {
-					this.bonusEfectList.deactivate();
+					this.bonusEffectList.deactivate();
 				}
 			})
 			.owner(owner)
@@ -145,17 +146,110 @@ var MagusArcanaFactory = {
 
 var MagusAbilities = {
 		
+	arcanePool : function(owner) {
+		return getAbilityBuilder()
+			.name("Enhance Weapon")
+			.actionType(ActionType.FREE)
+			.activationOptions(function () {
+				let level = this.ability.owner.level;
+				let options = [];
+				let enhancement = 0;
+				let maxEnhancement = Math.floor((level -1) / 4) +1; 
+				options.push(new AbilityOption("Enhancement", "range", "0-"+maxEnhancement));
+				
+				if (level >= 5) {
+					options.push(new AbilityOption("Flaming", "boolean", "[0,1]" ));
+					options.push(new AbilityOption("Flaming burst", "boolean", "[0,2]" ));
+					options.push(new AbilityOption("Shocking", "boolean", "[0,1]"));
+					options.push(new AbilityOption("Shocking burst", "boolean","[0,2]"));
+					options.push(new AbilityOption("Frost", "boolean","[0,1]"));
+					options.push(new AbilityOption("Icy burst", "boolean", "[0,2]"));
+					options.push(new AbilityOption("Keen", "boolean", "[0,1]"));
+				}
+				if (level >= 9) {
+					options.push(new AbilityOption("Speed", "boolean", "[0,3]"));
+				}
+				if (level >= 13) {
+					options.push(new AbilityOption("Dancing", "boolean", "[0,4]"));
+				}
+				if (level >= 17) {
+					options.push(new AbilityOption("Vorpal", "boolean", "[0,5]"));
+				}
+				return options;
+				
+			})
+			.validateActivation(function(activationOptions) {
+				let totalEnhancement = 0;
+				for(let i = 0; i< activationOptions.length; i++) {
+					let selected = activationOptions[i];			
+					totalEnhancement += +selected.value;
+				}
+				let maxEnhancement = Math.floor((this.ability.owner.level -1) / 4) +1; 
+				return totalEnhancement <= maxEnhancement;
+			})
+			.activate(function(...activationOptions) {
+				if (activationOptions === undefined) {
+					return;
+				}
+				this.bonusEffectList = new BonusEffectList(this);
+				let poolCost = 1;
+				for(let i = 0; i< activationOptions.length; i++) {
+					let selected = activationOptions[i];
+					if (selected.name === "Enhancement") {
+						let bonus = new Bonus([BonusCategory.TO_HIT, BonusCategory.DAMAGE], BonusType.UNTPYED, +selected.value, "Weapon bonus");
+						this.bonusEffectList.add(bonus);
+					} else if (selected.value !== true) {
+						continue;
+					}
+					if (selected.other === undefined) {
+						continue;
+					}
+					if (selected.other instanceof Bonus) {
+						this.bonusEffectList.add(selected.other);
+					}
+					else if (selected.other.bonus instanceof Bonus) {
+						this.bonusEffectList.add(selected.other.bonus);
+						if (selected.other.cost !== undefined) {
+							poolCost += selected.other.cost;
+						}
+					}
+					
+				}
+				this.bonusEffectList.activate();
+				//TODO: reduce arcane pool cost
+			})
+			.deactivate( function() {
+				if (this.bonusEffectList !== undefined) {
+					this.bonusEffectList.deactivate();
+					delete this.bonusEffectList;
+				}
+				
+			})
+			.owner(owner)
+			.get();
+	},
+		
 	spellCombat : function(owner) {
 		
 		return getAbilityBuilder()
 			.name("Spell combat")
 			.actionType(ActionType.FREE)
-			.activationOptions(new AbilityOption("Defensive casting bonus", "range", () => {
+			.activationOptions(new AbilityOption("Concentration", "range", () => {
 				let intModifier = owner.attributes.intelligence.getModifier();
 				return "0-"+intModifier;
 			}))
-			.activate(function(activationOption) {
-				let extraConcentration = (activationOption.value !== undefined) ? +activationOption.value : 0;
+			.activationOptions(new AbilityOption("Touch spell", "boolean", "off/on", "on"))
+			.activate(function(concentrationOption, touchSpellOption) {
+				
+				if (touchSpellOption !== undefined && touchSpellOption.value === "on") {
+					this.extraAttackBonus = new ExtraAttackBonus(this.name, "mainHand");
+					triggerModelChange("EXTRA_ATTACK", this.extraAttackBonus);
+				}
+				
+				let extraConcentration = 0;
+				if(concentrationOption !== undefined && concentrationOption.value !== undefined)  {
+					extraConcentration = +concentrationOption.value;
+				}
 				
 				this.bonusEffectList = new BonusEffectList(this, new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, -2-extraConcentration, this.name));
 				let improved = 0;
@@ -163,11 +257,19 @@ var MagusAbilities = {
 					improved = 2;
 				}
 				this.bonusEffectList.add(new Bonus([BonusCategory.CONCENTRATION,BonusCategory.DEFENSIVE_CASTING], BonusType.CIRCUMSTANCE, improved+extraConcentration, this.name));
+				
+				
 				this.bonusEffectList.activate();
+				
 			})
 			.deactivate(function(){
 				if (this.bonusEffectList !== undefined) {
 					this.bonusEffectList.deactivate();
+					delete this.bonusEffectList;
+				}
+				if (this.extraAttackBonus !== undefined) {
+					this.owner.offense.removeAttack(this.name);
+					delete this.extraAttackBonus;
 				}
 				
 			})
@@ -185,7 +287,7 @@ var MagusAbilities = {
 	},
 	spellRecall : function(owner) {
 		return getAbilityBuilder()
-			.name("Empowered Magic")
+			.name("Spell recall")
 			.actionType(ActionType.SWIFT)
 			.owner(owner)
 			.get();

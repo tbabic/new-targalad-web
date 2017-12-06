@@ -340,16 +340,17 @@ function BonusProcessor() {
 		
 		copy : function() {
 			var copied = new BonusProcessor();
-			for (var i in _list) {
-				var bonusTypeGroup = _list[i];
+			for (let i in _list) {
+				let bonusTypeGroup = _list[i];
 				if (!(bonusTypeGroup instanceof BonusTypeGroup)) {
 					continue;
 				}
-				for (var source in bonusTypeGroup.sourceList) {
+				for (let source in bonusTypeGroup.sourceList) {
+					let bonus = bonusTypeGroup.sourceList[source];
 					if (!(bonus instanceof Bonus)) {
 						continue;
 					}
-					var bonus = bonusTypeGroup.sourceList[source];
+					
 					copied.add(source,bonus);
 				}
 			}
