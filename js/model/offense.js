@@ -106,6 +106,7 @@ function Offense(character) {
 		} else {
 			this.attacks[extraAttackBonus.source] = new Attack(this, extraAttackBonus);
 		}
+		triggerModelChange("EXTRA_ATTACK", this.attacks[extraAttackBonus.source], "ADDED")
 		triggerViewChange("OFFENSE", this);
 		return this.attacks[source];
 	};

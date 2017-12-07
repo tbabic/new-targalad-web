@@ -170,6 +170,10 @@ function Skill(skillName, character) {
 		this.bonusProcessor.processBonusEffect(bonusEffect);
 	});
 	
+	addModelListener(BonusCategory.SKILLS, (e, bonusEffect) => {
+		this.bonusProcessor.processBonusEffect(bonusEffect);
+	});
+	
 	addModelListener("ARMOR", "ADDED", (e, armor) => {
 		this.armor = armor;
 	});

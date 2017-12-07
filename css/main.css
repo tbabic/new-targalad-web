@@ -32,21 +32,9 @@ html {
     content: "";
     background: no-repeat center center;
     background-size: 100% 100%;
-	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 0.5)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }
 
-
-.glyphicon {
-    position: relative;
-    top: 1px;
-    display: inline-block;
-    font-family: 'Glyphicons Halflings';
-    font-style: normal;
-    font-weight: 400;
-    line-height: 1;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-}
 
 /* ABILITIES*/
 
@@ -148,9 +136,57 @@ html {
 
 
 
+/* CONDITIONS */
 
+.dropdown-condition {
+	width: 100%;
+	height: 100%;
+	min-height: 30px;
+	background-color: #bf4002;
+	color: white;
+	margin-bottom: 10px;
+}
 
+.condition-row {
+	padding: 2px;
+}
 
+.btn-condition-effect {
+	width: 100%;
+	height: 100%;
+	min-height: 30px;
+    font-size: 1em;
+    color: white;
+    background-color: #bf4002;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+/* BUFFS */
+
+.dropdown-buff {
+	width: 100%;
+	height: 100%;
+	min-height: 30px;
+	background-color: #008000;
+	color: white;
+	margin-bottom: 10px;
+}
+
+.buff-row {
+	padding: 2px;
+}
+
+.btn-buff-effect {
+	width: 100%;
+	height: 100%;
+	min-height: 30px;
+    font-size: 1em;
+    color: white;
+    background-color: #008000;
+    word-wrap: break-word;
+    white-space: normal;
+}
 
 
 /* SPELLS*/

@@ -248,9 +248,7 @@ $(document.body).on('click', '.btn-ability-options', function(event) {
 	showAbilityOptions(ability);
 });
 
-function setConditions(character) {
-	
-}
+
 
 function refreshCharacter(character) {
 	if (character === undefined) {
@@ -291,12 +289,7 @@ addViewListener("OFFENSE",(e, offense) => {
 
 refreshCharacter(myCharacter);
 
-$(".condition").on("click", function(e) {
-	var conditionName = event.target.text.toLowerCase();
-	var condition = ConditionFactory[conditionName];
-	condition.apply(myCharacter);
-	refreshCharacter(myCharacter);
-});
+
 
 
 

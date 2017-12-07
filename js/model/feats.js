@@ -30,7 +30,7 @@ var FeatFactory = {
 					apply(this.owner);
 				});
 				
-				addModelListener("EXTRA_ATTACK", (e, extraAttackBonus) => {
+				addModelListener("EXTRA_ATTACK", "ADDED", (e, attack) => {
 					apply(this.owner);
 				});
 			})
@@ -69,7 +69,7 @@ var FeatFactory = {
 					apply(this.owner);
 				});
 				
-				addModelListener("EXTRA_ATTACK", (e, extraAttackBonus) => {
+				addModelListener("EXTRA_ATTACK", "ADDED", (e, attack) => {
 					apply(this.owner);
 				});
 				

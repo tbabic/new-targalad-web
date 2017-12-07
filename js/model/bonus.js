@@ -33,7 +33,7 @@ BonusType = {
 
 BonusCategory = {
 	ARMOR_CLASS : "ARMOR_CLASS",
-	SKILL : "SKILL",
+	SKILLS : "SKILLS",
 	SAVES : "SAVES",
 	TO_HIT : "TO_HIT",
 	EXTRA_ATTACK: "EXTRA_ATTACK",

@@ -20,6 +20,14 @@ var Utils = {
 			array.push(list[i]);
 		}
 		return array;
+	},
+	
+	mapToArray : function(map) {
+		let array = [];
+		for (var key in map) {
+			array.push(map[key]);
+		}
+		return array;
 	}
 	
 };

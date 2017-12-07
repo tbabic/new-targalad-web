@@ -108,7 +108,7 @@ function Character(characterClass, attributes, level, equipment) {
 	this.saves = new Saves(true, false, true, this);
 	this.nonPassiveAbilities = [];
 	this.passiveAbilities = [];
-	this.conditions = {};
+	this.conditionEffects = {};
 	
 	
 	
@@ -162,13 +162,25 @@ function Character(characterClass, attributes, level, equipment) {
 		
 	};
 	
-	this.addCondition = function(condition) {
-		this.conditions[condition.name] = condition;
+	this.addCondition = function(conditionEffect) {
+		this.conditionEffects[conditionEffect.name] = conditionEffect;
 	};
 	
-	this.removeCondition = function(condition) {
-		delete this.condition[condition.name];
+	this.removeCondition = function(conditionEffect) {
+		delete this.conditionEffects[conditionEffect.name];
 	};
+	
+	this.getConditions = function() {
+		return Utils.mapToArray(this.conditionEffects);
+	}
+	
+	this.getCondition = function(conditionName) {
+		for (let conditionEffectId in this.conditionEffects) {
+			if (this.conditionEffects[conditionEffectId].name === conditionName) {
+				return this.conditionEffects[conditionEffectId];
+			}
+		}
+	}
 	
 	
 	for (var i in AbilityFactory) {
