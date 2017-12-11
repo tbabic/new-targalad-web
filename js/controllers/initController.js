@@ -1,11 +1,11 @@
 console.log("iniController");
 
-function IdGenerator() {
-	var seed = 100000;
+function IdGenerator(seed) {
+	var seed = seed === undefined ? 0: seed;
 	return {generate : function() {return seed++;}};
 }
 
-idGenerator = new IdGenerator();
+idGenerator = new IdGenerator(100000);
 
 function start() {
 	console.log("start");

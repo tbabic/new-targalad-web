@@ -4,6 +4,9 @@ class View extends HTMLElement {
 		super();
 	
 		var path = "views/"+this.getAttribute("view") + ".html";
+		var model = $(this).data("model");
+		var modelValue = eval(model);
+		$(this).data(model, modelValue);
 		console.log(path);
 		this.viewHtml="";
 		
@@ -37,6 +40,16 @@ class View extends HTMLElement {
 		
 	}
 }
+
+
+
+$(document.body).on("click", "c-view", function(event) {
+	let view = event.currentTarget;
+	console.log("clicked + " + view.getAttribute("view"));
+	var model = $(this).data("model");
+	$
+});
+
 
 
 customElements.define('c-view', View);

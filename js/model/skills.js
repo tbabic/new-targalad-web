@@ -189,6 +189,7 @@ function SkillSet(character) {
 	let classSkills = character.characterClass.classSkills;
 	let skillsEnumAll = SkillsEnum.listAll();
 	this.skills = {};
+	this.skillsList = undefined;
 	for (let i = 0; i< skillsEnumAll.length; i++) {
 		let skillEnum = skillsEnumAll[i];
 
@@ -196,11 +197,13 @@ function SkillSet(character) {
 	}
 	
 	this.getSkillsList = function() {
-		let skillList = [];
-		for (let skillName in this.skills) {
-			skillList.push(this.skills[skillName]);
+		if (this.skillsList === undefined) {
+			this.skillsList = [];
+			for (let skillName in this.skills) {
+				this.skillsList.push(this.skills[skillName]);
+			}
 		}
-		return skillList;
+		return this.skillsList;
 	};
 	
 	this.getSkill = function(skillName) {

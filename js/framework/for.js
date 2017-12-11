@@ -6,15 +6,14 @@ class forEach extends HTMLElement {
 		let dataset = this.dataset;
 		let innerHtml = $(this).html().trim();
 		let listName = this.getAttribute("list");
+		
 		let list = eval(listName);
 		if (!Array.isArray(list)) {
 			console.error(listName + " is not a list");
 		}
-		let elementName = dataset["var"];
-		this[elementName] = {};
-		//eval("let " + elementName + "=elementName");
+
 		
-		
+		$(this).data("listValues", list);
 		
 		$(this).empty();
 		
@@ -31,24 +30,29 @@ class forEach extends HTMLElement {
 		for(let i = 0; i<list.length; i++) {
 			let elementHtml = innerHtml;
 			var listElement = list[i];
+			
+			let elementName = listName + "["+i+"]";
+			
 			if (Array.isArray(matched)) {
 				for (let j = 0; j < matched.length; j++) {
+					
 					let patternVariable = matched[j].replace(new RegExp("\\$|{|}", "g"), "");
-					let value = patternVariable + " no eval!";
-					try {
-						let expression = patternVariable.split(elementName).join("listElement");
-						value = eval(expression);
-					} catch(e) {
-						console.error(e);
+					let expressionParts = patternVariable.split(".");
+					if (expressionParts[0] === dataset["var"]) {
+						expressionParts[0] = elementName;
 					}
+					let expression = "${"+expressionParts.join(".")+"}";
 					let matcher = replaceMap[patternVariable];
-					elementHtml = elementHtml.replace(matcher, value);
+					elementHtml = elementHtml.replace(matcher, expression);
+					
+		
 				}
 			}
 			
 			$(this).append(elementHtml);
 
 		}
+		
 		
 	}
 }
