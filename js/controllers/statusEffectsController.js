@@ -2,24 +2,24 @@ $(".condition").on("click", function(e) {
 	var conditionName = event.target.text.toLowerCase();
 	var condition = ConditionsFactory[conditionName];
 	condition.apply(myCharacter);
-	refreshCharacter(myCharacter);
+//	refreshCharacter(myCharacter);
 });
 
 function setConditions(character) {
-	if (character === undefined) {
-		character = myCharacter;
-	}
-	let conditionEffects = character.getConditions();
-	$("#conditionEffectsId").empty();
-	for (let i = 0; i < conditionEffects.length; i++) {
-		let conditionEffect = conditionEffects[i];
-		let conditionEffectHtml = $("#conditionEffectTemplateId").html();	
-		conditionEffectHtml = $(conditionEffectHtml).clone();
-		
-		conditionEffectHtml.find(".btn-condition-effect").text(conditionEffect.name);
-		conditionEffectHtml.find(".btn-condition-effect").data("conditionEffect", conditionEffect);
-		$("#conditionEffectsId").append(conditionEffectHtml);
-	}
+//	if (character === undefined) {
+//		character = myCharacter;
+//	}
+//	let conditionEffects = character.getConditions();
+//	$("#conditionEffectsId").empty();
+//	for (let i = 0; i < conditionEffects.length; i++) {
+//		let conditionEffect = conditionEffects[i];
+//		let conditionEffectHtml = $("#conditionEffectTemplateId").html();	
+//		conditionEffectHtml = $(conditionEffectHtml).clone();
+//		
+//		conditionEffectHtml.find(".btn-condition-effect").text(conditionEffect.name);
+//		conditionEffectHtml.find(".btn-condition-effect").data("conditionEffect", conditionEffect);
+//		$("#conditionEffectsId").append(conditionEffectHtml);
+//	}
 }
 
 

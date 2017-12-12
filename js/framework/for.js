@@ -3,14 +3,14 @@ class forEach extends HTMLElement {
 	// Always call super first in constructor
 		super();
 		
+		
+		
 		let dataset = this.dataset;
 		let innerHtml = $(this).html().trim();
 		let listName = this.getAttribute("list");
 		
 		let list = eval(listName);
-		if (!Array.isArray(list)) {
-			console.error(listName + " is not a list");
-		}
+		
 
 		
 		$(this).data("listValues", list);
@@ -26,8 +26,7 @@ class forEach extends HTMLElement {
 			}
 		}
 		
-		
-		for(let i = 0; i<list.length; i++) {
+		this.addElement = function(i) {
 			let elementHtml = innerHtml;
 			var listElement = list[i];
 			
@@ -50,8 +49,19 @@ class forEach extends HTMLElement {
 			}
 			
 			$(this).append(elementHtml);
-
 		}
+		
+		if (Array.isArray(list)) {
+			for(let i = 0; i<list.length; i++) {
+				this.addElement(i);
+			}
+		} else {
+			for (let i in list) {
+				this.addElement("'"+i+"'");
+			}
+		}
+		
+		
 		
 		
 	}

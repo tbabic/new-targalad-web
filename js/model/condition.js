@@ -102,5 +102,9 @@ ConditionsFactory = {
 		stunned: new Condition("Stunned", [])
 };
 
+var allConditions = [];
+for (let prop in ConditionsFactory ) {
+	allConditions.push(ConditionsFactory[prop]);
+}
 
 
