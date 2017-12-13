@@ -43,60 +43,127 @@ function ManagedValue(matchedString) {
 	
 }
 
+function ManagedNode(id, source, element) {
+	this.id = id;
+	this.source = source;
+	this.element = element;
+	this.managedValues = [];
+	
+	let matched = this.source.match(new RegExp("\\${[^}]*}", "g"));
+	if (matched != null) {
+		for (let i = 0; i< matched.length; i++) {
+			this.managedValues.push(new ManagedValue(matched[i]));
+		}
+	}
+	
+	this.isManaged= function() {
+		return this.managedValues.length > 0;
+	}
+	
+	this.detectChange = function() {
+		if (!this.isManaged()) {
+			return false;
+		}
+		let changed = false;
+		for (let i = 0; i<this.managedValues.length; i++) {
+			if (this.managedValues[i].detectChange()) {
+				changed = true;
+			}
+		}
+		return changed;
+	}
+	
+	this.refreshValue = function() {
+		let value = this.source;
+		for (let i = 0; i<this.managedValues.length; i++) {
+			value = this.managedValues[i].update(value);
+		}
+		return value;
+	}
+	
+	this.updateElement = function() {
+		if (!this.detectChange()) {
+			return;
+		}
+		let value = this.refreshValue();
+		this.setNodeValue(value);
+	}
+	
+	this.setNodeValue = function() {
+		console.error("This function is not implemented");
+	}
+}
+
+function ManagedAttribute(id, element) {
+	let source = element.getAttribute(id);
+	ManagedNode.call(this, id, source, element);
+	
+	this.setNodeValue = function(value) {
+		this.element.setAttribute(this.id, value);
+	}
+
+}
+
+function ManagedDataAttribute(id, element) {
+	let source = $(element).data(id);
+	if (typeof source !== "string") {
+		ManagedNode.call(this, id, "", element);
+	} else {
+		ManagedNode.call(this, id, source, element);
+	}
+	
+	
+	this.setNodeValue = function(value) {
+		$(this.element).data(this.id, value);
+	}
+	
+}
+
+function ManagedTextNode(id, element) {
+	let source = element.childNodes[id].nodeValue;
+	ManagedNode.call(this, id, source, element);
+	
+	this.setNodeValue = function(value) {
+		this.element.childNodes[id].nodeValue = value;
+	}
+	
+}
+
 
 function ManagedDomElement(element) {
 	this.element = element;
 	this.parent = $(element).parent();
 	$(element).data("cManagedElement", this);
-	this.sourceContent = element.textContent;
-	this.managedContentValues = [];
-	this.managedAttributes = [];
-	this.managedDataset = [];
+	this.managedNodes = [];
 	this.managedId = framework.idGenerator.generate();
 	$(element).data("cManagedId", this.managedId);
 	
 	for (let i = 0; i < this.element.attributes.length; i++) {
-		if(this.element.attributes[i].nodeName.startsWith("data-")) {
-			continue;
-		}
-		let matched = this.element.attributes[i].nodeValue.match(new RegExp("\\${[^}]*}", "g"));
-		if (matched !== null) {
-			for (let j = 0; j< matched.length; j++) {
-				this.managedAttributes.push({
-					name : this.element.attributes[i].name,
-					managedValue : new ManagedValue(matched[j])
-				});
-			}
-			
+		let managedNode = new ManagedAttribute(this.element.attributes[i].name, this.element)
+		if (managedNode.isManaged()) {
+			this.managedNodes.push(managedNode);
 		}
 	}
 	
 	for (let i in this.element.dataset) {
-		let type = typeof this.element.dataset[i];
-		if (type !== "string") {
-			continue;
-		}
-		let matched = this.element.dataset[i].match(new RegExp("\\${[^}]*}", "g"));
-		if (matched !== null) {
-			for (let j = 0; j< matched.length; j++) {
-				this.managedDataset.push({
-					name : i,
-					managedValue : new ManagedValue(matched[j])
-				});
-			}
-			
+		let managedNode = new ManagedDataAttribute(i, this.element)
+		if (managedNode.isManaged()) {
+			this.managedNodes.push(managedNode);
 		}
 	}
 	
-	let matchedStrings = this.sourceContent.match(new RegExp("\\${[^}]*}", "g"));
-	if (Array.isArray(matchedStrings)) {
-		for (let i = 0; i < matchedStrings.length; i++) {
-			this.managedContentValues.push(new ManagedValue(matchedStrings[i]));
+	for (let i = 0; i < this.element.childNodes.length; i++) {
+		if (this.element.childNodes[i].nodeType != Node.TEXT_NODE) {
+			continue;
+		}
+		let managedNode = new ManagedTextNode(i, this.element)
+		if (managedNode.isManaged()) {
+			this.managedNodes.push(managedNode);
 		}
 	}
 	
 	this.isManaged = function() {
-		return this.managedAttributes.length > 0 || this.managedContentValues.length > 0;
+		return this.managedNodes.length > 0;
 	};
 	
 	
@@ -104,36 +171,8 @@ function ManagedDomElement(element) {
 		if (!this.isManaged()) {
 			return;
 		}
-		
-		let updatedContent = this.sourceContent;
-		let htmlChanged = false;
-		for (let i = 0; i< this.managedContentValues.length; i++) {
-			let managedValue = this.managedContentValues[i];
-			if (managedValue.detectChange()) {
-				htmlChanged = true;
-			}
-			updatedContent = managedValue.update(updatedContent);
-		}
-		if (htmlChanged) {
-			this.element.textContent = updatedContent;
-		}
-		
-		for (let i = 0; i < this.managedAttributes.length; i++) {
-			let attribute = this.element.getAttribute(this.managedAttributes[i].name)
-			let managedValue = this.managedAttributes[i].managedValue;
-			managedValue.detectChange();
-			attribute = managedValue.update(attribute);
-			
-			this.element.setAttribute(this.managedAttributes[i].name, attribute);
-		}
-		
-		for (let i = 0; i < this.managedDataset.length; i++) {
-			let attribute = this.element.dataset[this.managedDataset[i].name];
-			let managedValue = this.managedDataset[i].managedValue;
-			managedValue.detectChange();
-			attribute = managedValue.update(attribute);
-			
-			$(this.element).data(this.managedDataset[i].name, attribute);
+		for (let i = 0; i < this.managedNodes.length; i++) {
+			this.managedNodes[i].updateElement();
 		}
 	};
 	
