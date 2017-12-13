@@ -3,41 +3,20 @@ class forEach extends HTMLElement {
 	// Always call super first in constructor
 		super();
 		
+		this._innerHtml = $(this).html().trim();
 		
-		
-		let dataset = this.dataset;
-		let innerHtml = $(this).html().trim();
-		let listName = this.getAttribute("list");
-		
-		let list = eval(listName);
-		
-
-		
-		$(this).data("listValues", list);
-		
-		$(this).empty();
-		
-		let replaceMap = {};
-		let matched = innerHtml.match(new RegExp("\\${[^}]*}", "g"));
-		if (Array.isArray(matched)) {
-			for (let i = 0; i <matched.length; i++) {
-				let patternVariable = matched[i].replace(new RegExp("\\$|{|}", "g"), "");
-				replaceMap[patternVariable] = matched[i];
-			}
-		}
-		
-		this.addElement = function(i) {
-			let elementHtml = innerHtml;
-			var listElement = list[i];
+		this._addElement = function(i, matched, replaceMap) {
+			let elementHtml = this._innerHtml;
+			var listElement = this.list[i];
 			
-			let elementName = listName + "["+i+"]";
+			let elementName = this.listName + "["+i+"]";
 			
 			if (Array.isArray(matched)) {
 				for (let j = 0; j < matched.length; j++) {
 					
 					let patternVariable = matched[j].replace(new RegExp("\\$|{|}", "g"), "");
 					let expressionParts = patternVariable.split(".");
-					if (expressionParts[0] === dataset["var"]) {
+					if (expressionParts[0] === this.dataset["var"]) {
 						expressionParts[0] = elementName;
 					}
 					let expression = "${"+expressionParts.join(".")+"}";
@@ -47,19 +26,74 @@ class forEach extends HTMLElement {
 		
 				}
 			}
-			
+//			let elementToAppend = $(elementHtml).wrap("<c-element></c-element>").parent();
 			$(this).append(elementHtml);
+			return elementHtml;
 		}
 		
-		if (Array.isArray(list)) {
-			for(let i = 0; i<list.length; i++) {
-				this.addElement(i);
+		this._update = function() {
+			
+			this.listName = this.getAttribute("list");
+			let list = undefined;
+			try {
+				list = eval(this.listName);
+			} catch (e) {
+				list = [];
 			}
-		} else {
-			for (let i in list) {
-				this.addElement("'"+i+"'");
+			if (list === undefined) {
+				list = [];
 			}
+		
+			
+			if (Array.isArray(list) && list.length === this.lastLength) {
+				return;
+			} else if (Object.keys(list).length === this.lastLength) {
+				return;
+			}
+			
+			this.list = list;
+			if (Array.isArray(list)) {
+				this.lastLength = this.list.length;
+			} else {
+				this.lastLength = Object.keys(list).length;
+			}
+			
+
+			
+			$(this).empty();
+			
+			let replaceMap = {};
+			let matched = this._innerHtml.match(new RegExp("\\${[^}]*}", "g"));
+			if (Array.isArray(matched)) {
+				for (let i = 0; i <matched.length; i++) {
+					let patternVariable = matched[i].replace(new RegExp("\\$|{|}", "g"), "");
+					replaceMap[patternVariable] = matched[i];
+				}
+			}
+			
+			if (Array.isArray(list)) {
+				for(let i = 0; i<list.length; i++) {
+					this._addElement(i, matched, replaceMap);
+				}
+			} else {
+				for (let i in list) {
+					this._addElement("'"+i+"'", matched, replaceMap);
+				}
+			}
+			
+			if (window.framework !== undefined) {
+				framework.createDom(this);
+			}
+			
+			
 		}
+		
+		this._update();
+		
+		
+		
+		
+		
 		
 		
 		

@@ -22,9 +22,12 @@
 	<div class="dropdown">
 		<button class="btn dropdown-toggle dropdown-buff" type="button" data-toggle="dropdown">Choose buff<span class="caret"></span></button>
 		<ul class="dropdown-menu">
-			<li><a class="buff" data-buff="haste" href="#">Haste</a></li>
-			<li><a class="buff" data-buff="heroism" href="#">Heroism</a></li>
-			<li><a class="buff" data-buff="goodHope" href="#">Good Hope</a></li>
+			<c-for-each list="BuffsFactory" data-var="buff">
+				<li><a class="buff" data-buff="${buff}" href="#">${buff.name}</a></li>
+			</c-for>
+<!-- 			<li><a class="buff" data-buff="haste" href="#">Haste</a></li> -->
+<!-- 			<li><a class="buff" data-buff="heroism" href="#">Heroism</a></li> -->
+<!-- 			<li><a class="buff" data-buff="goodHope" href="#">Good Hope</a></li> -->
 
 		</ul>
 		
@@ -32,6 +35,13 @@
 	</div>
 	
 	<div id="buffEffectsId">
+		<c-for-each list="characterBuffs" data-var="buff">
+			<div class="row condition-row">
+				<div class="col">
+					<button class="btn btn-buff-effect" data-buff="${buff}" >${buff.name}</button>
+				</div>
+			</div>
+		</c-for-each>
 	
 	</div>
 </div>

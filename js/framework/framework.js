@@ -31,28 +31,56 @@ function ManagedValue(matchedString) {
 	this.update = function(html) {
 		//this.detectChange();
 		this.lastValue = this.newValue;
+		if (typeof this.newValue === "object") {
+			if(html === this.matchedString) {
+				return this.newValue;
+			} else {
+				html.replace(this.matchedString, JSON.stringify(this.newValue));
+			}
+		}
 		return html.replace(this.matchedString, this.newValue);
 	};
 	
 }
 
 
-
 function ManagedDomElement(element) {
 	this.element = element;
 	this.parent = $(element).parent();
+	$(element).data("cManagedElement", this);
 	this.sourceContent = element.textContent;
 	this.managedContentValues = [];
 	this.managedAttributes = [];
-//	this.managedId = idGenerator.generate();
-//	$(element).data("cManagedId", this.managedId);
+	this.managedDataset = [];
+	this.managedId = framework.idGenerator.generate();
+	$(element).data("cManagedId", this.managedId);
 	
 	for (let i = 0; i < this.element.attributes.length; i++) {
+		if(this.element.attributes[i].nodeName.startsWith("data-")) {
+			continue;
+		}
 		let matched = this.element.attributes[i].nodeValue.match(new RegExp("\\${[^}]*}", "g"));
 		if (matched !== null) {
 			for (let j = 0; j< matched.length; j++) {
 				this.managedAttributes.push({
 					name : this.element.attributes[i].name,
+					managedValue : new ManagedValue(matched[j])
+				});
+			}
+			
+		}
+	}
+	
+	for (let i in this.element.dataset) {
+		let type = typeof this.element.dataset[i];
+		if (type !== "string") {
+			continue;
+		}
+		let matched = this.element.dataset[i].match(new RegExp("\\${[^}]*}", "g"));
+		if (matched !== null) {
+			for (let j = 0; j< matched.length; j++) {
+				this.managedDataset.push({
+					name : i,
 					managedValue : new ManagedValue(matched[j])
 				});
 			}
@@ -76,6 +104,7 @@ function ManagedDomElement(element) {
 		if (!this.isManaged()) {
 			return;
 		}
+		
 		let updatedContent = this.sourceContent;
 		let htmlChanged = false;
 		for (let i = 0; i< this.managedContentValues.length; i++) {
@@ -97,6 +126,15 @@ function ManagedDomElement(element) {
 			
 			this.element.setAttribute(this.managedAttributes[i].name, attribute);
 		}
+		
+		for (let i = 0; i < this.managedDataset.length; i++) {
+			let attribute = this.element.dataset[this.managedDataset[i].name];
+			let managedValue = this.managedDataset[i].managedValue;
+			managedValue.detectChange();
+			attribute = managedValue.update(attribute);
+			
+			$(this.element).data(this.managedDataset[i].name, attribute);
+		}
 	};
 	
 	this.update();
@@ -108,22 +146,24 @@ function ManagedDomElement(element) {
 function Framework() {
 	
 	this.idGenerator = new FrameworkIdGenerator();
-	this.managedElements = [];
+	this.managedElements = {};
 	this.renderEventsCount = 0;
 
 	this.createDom = function(element) {
 		for(let i = 0; i < element.children.length; i++) {
 			this.createDom(element.children[i]);
 		}
-		let managedElement = new ManagedDomElement(element);
-		if (managedElement.isManaged()) {
-			//this.managedElements[managedElement.managedId] = managedElement
-			Utils.arrayAppend(this.managedElements, managedElement);
-		}	
 		
+		if($(element).data("cManagedElement") === undefined) {
+			let managedElement = new ManagedDomElement(element);
+			if (managedElement.isManaged()) {
+				this.managedElements[managedElement.managedId] = managedElement
+				//Utils.arrayAppend(this.managedElements, managedElement);
+			}
+		}
 	};
 
-	this.createDom(document.body);
+	
 	
 	this.render = function() {
 		this.renderEventsCount++;
@@ -132,12 +172,23 @@ function Framework() {
 			return;
 		}
 		var t0 = performance.now();
-		for (let i = 0; i < this.managedElements.length; i++) {
-			let element = this.managedElements[i].element;
+		$("c-for-each").each(function(index, element){
 			if ($(element).is(":visible")) {
-				this.managedElements[i].update();
+				element._update();
+			}
+		})
+		
+		
+		for (var id in this.managedElements) {
+			let element = this.managedElements[id].element;
+			if(!jQuery.contains(document.documentElement, element)) {
+				delete this.managedElements[id];
+			} else if ($(element).is(":visible")) {
+				this.managedElements[id].update();
 			}
 		}
+		
+		
 		var t1 = performance.now();
 		this.renderEventsCount = 0;
 		console.log("Call took " + (t1 - t0) + " milliseconds.");
@@ -157,3 +208,4 @@ function Framework() {
 }
 
 var framework = new Framework();
+framework.createDom(document.body);

@@ -259,7 +259,6 @@ function refreshCharacter(character) {
 	setSaves(character.saves);
 	setOffense(character.offense);
 	setAbilities(character);
-	setConditions(character);
 }
 
 addViewListener("ATTRIBUTES",(e) => {
