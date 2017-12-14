@@ -203,6 +203,12 @@ html {
     white-space: normal;
 }
 
+.condition {
+	background-color: white;
+	color: #bf4002;
+	background-clip: content-box;
+}
+
 /* BUFFS */
 
 .dropdown-buff {
@@ -227,6 +233,12 @@ html {
     background-color: #008000;
     word-wrap: break-word;
     white-space: normal;
+}
+
+.buff {
+	background-color: white;
+	color: #008000;
+	background-clip: content-box;
 }
 
 

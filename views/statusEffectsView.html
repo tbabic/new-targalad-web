@@ -1,11 +1,11 @@
 <div id="statusEffectsViewId">
 	<div class="dropdown">
 		<button class="btn dropdown-toggle dropdown-condition" type="button" data-toggle="dropdown">Choose effect<span class="caret"></span></button>
-		<ul class="dropdown-menu">
+		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 			<c-for-each list="ConditionsFactory" data-var="condition">
-				<li><a class="condition" href="#">${condition.name}</a></li>
+				<a class="dropdown-item condition" href="#">${condition.name}</a>
 			</c-for>
-		</ul>
+		</div>
 	</div>
 	
 	<div id="conditionEffectsId">
@@ -21,15 +21,11 @@
 	
 	<div class="dropdown">
 		<button class="btn dropdown-toggle dropdown-buff" type="button" data-toggle="dropdown">Choose buff<span class="caret"></span></button>
-		<ul class="dropdown-menu">
+		<div class="dropdown-menu">
 			<c-for-each list="BuffsFactory" data-var="buff">
-				<li><a class="buff" data-buff="${buff}" href="#">${buff.name}</a></li>
+				<a class="dropdown-item buff" data-buff="${buff}" href="#">${buff.name}</a>
 			</c-for>
-<!-- 			<li><a class="buff" data-buff="haste" href="#">Haste</a></li> -->
-<!-- 			<li><a class="buff" data-buff="heroism" href="#">Heroism</a></li> -->
-<!-- 			<li><a class="buff" data-buff="goodHope" href="#">Good Hope</a></li> -->
-
-		</ul>
+		</div>
 		
 		
 	</div>
