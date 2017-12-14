@@ -215,6 +215,23 @@ function Framework() {
 		return managedElements[managedId];
 	};
 	
+	this.forceRender = function(rootElements) {
+		$(rootElements).each(function(index, rootElement){
+			$(rootElement).find("c-for-each").each(function(index, element){
+				element._update();
+			})
+			
+			
+			for (var id in this.managedElements) {
+				let element = this.managedElements[id].element;
+				if(jQuery.contains(rootElement, element)) {
+					this.managedElements[id].update();
+				}
+			}
+		})
+		
+		
+	}
 	
 	this.render = function() {
 		
@@ -276,15 +293,21 @@ function Framework() {
 	$("*").on("click", (event) => {
 		console.log("click");
 		_this.startRender();
-		$(document.body).trigger("render");
 	});
 	
 	$(document.body).on("show", "*", (event) => {
 		event.stopPropagation();
 		console.log("showing: ", event.currentTarget);
 		_this.startRender();
-		$(document.body).trigger("render");
 	});
+	
+	$(document.body).on("hide", "*", (event) => {
+		event.stopPropagation();
+		console.log("hiding: ", event.currentTarget);
+		_this.startRender();
+	});
+	
+	
 	
 }
 
