@@ -57,7 +57,6 @@ function Defense(character) {
 		this.armor = armor;
 		this.bonusProcessor.add(armor.id, armor.armorBonus);
 		this.flatFootedBonusProcessor.add(armor.id, armor.armorBonus);
-		triggerViewChange("DEFENSE", this);
 	});
 	
 	addModelListener("ARMOR", "REMOVED", (e, armor) => {
@@ -66,7 +65,6 @@ function Defense(character) {
 		}
 		this.bonusProcessor.remove(armor.id, armor.armorBonus);
 		this.flatFootedBonusProcessor.remove(armor.id, armor.armorBonus);
-		triggerViewChange("DEFENSE", this);
 	});
 	
 	addModelListener("ARMOR_CLASS", (e, bonusEffect) => {
@@ -78,7 +76,6 @@ function Defense(character) {
 		if(bonusType != BonusType.DODGE) {
 			this.flatFootedBonusProcessor.processBonusEffect(bonusEffect);
 		}
-		triggerViewChange("DEFENSE", this);
 		
 	});
 }

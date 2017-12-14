@@ -28,12 +28,10 @@ function Save(type, isHigh, attribute, character) {
 	
 	addModelListener(type, (e, bonusEffect) => {
 		this.bonusProcessor.processBonusEffect(bonusEffect);
-		triggerViewChange("SAVES");
 	});
 	
 	addModelListener("SAVES", (e, bonusEffect) => {
 		this.bonusProcessor.processBonusEffect(bonusEffect);
-		triggerViewChange("SAVES");
 	});
 	
 }

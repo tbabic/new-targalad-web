@@ -160,7 +160,7 @@ function BonusEffectList(source, bonusList) {
 	_apply = function(callback, _list) {
 		for (var i = 0; i < _list.length; i++) {
 			var element = _list[i];
-			if (isFunction(element[callback])) {
+			if (Utils.isFunction(element[callback])) {
 				element[callback](_source);
 			}
 		}

@@ -43,7 +43,7 @@ function Equipment() {
 	};
 	
 	this.addArmor = function(armor) {
-		if (this.armor !== undefined && isFunction(this.armor.unequip)) {
+		if (this.armor !== undefined && Utils.isFunction(this.armor.unequip)) {
 			this.armor.unequip();
 		}
 		this.armor = armor;
@@ -51,7 +51,7 @@ function Equipment() {
 	};
 	
 	this.addWeapon = function(weapon) {
-		if (this.weapon !== undefined && isFunction(this.weapon.unequip)) {
+		if (this.weapon !== undefined && Utils.isFunction(this.weapon.unequip)) {
 			this.weapon.unequip();
 		}
 		this.weapon = weapon;
@@ -64,7 +64,7 @@ function Equipment() {
 	};
 	
 	this.addShield = function(shield) {
-		if (this.shield !== undefined && isFunction(this.shield.unequip)) {
+		if (this.shield !== undefined && Utils.isFunction(this.shield.unequip)) {
 			this.shield.unequip();
 		}
 		this.shield = shield;
@@ -82,7 +82,7 @@ function Equipment() {
 	};
 	
 	this.addLeftRing = function(item) {
-		if (this.leftRing !== undefined && isFunction(this.item.unequip)) {
+		if (this.leftRing !== undefined && Utils.isFunction(this.item.unequip)) {
 			this.leftRing.unequip();
 		}
 		this.leftRing = item;
@@ -103,7 +103,7 @@ function Equipment() {
 			equipItem(item);
 		}
 		else if (slot in this) {
-			if (this[slot] !== undefined && isFunction(this[slot].unequip)) {
+			if (this[slot] !== undefined && Utils.isFunction(this[slot].unequip)) {
 				this[slot].unequip();
 			}
 			this[slot] = item;

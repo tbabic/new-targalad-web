@@ -234,7 +234,7 @@ function Framework() {
 	}
 	
 	this.render = function() {
-		
+		$(document.body).trigger("update-start");
 		if (this.renderEventsCount > 1 ) {
 			this.renderEventsCount--;
 			return;
@@ -278,6 +278,8 @@ function Framework() {
 		console.log("Checking visibility took " + (t3 - t2) + " milliseconds.");
 		console.log("Updating elements took " + (t4 - t3) + " milliseconds.");
 		console.log("Call took " + (t4 - t0) + " milliseconds.");
+		
+		$(document.body).trigger("update-end");
 	}
 	
 	
@@ -297,13 +299,11 @@ function Framework() {
 	
 	$(document.body).on("show", "*", (event) => {
 		event.stopPropagation();
-		console.log("showing: ", event.currentTarget);
 		_this.startRender();
 	});
 	
 	$(document.body).on("hide", "*", (event) => {
 		event.stopPropagation();
-		console.log("hiding: ", event.currentTarget);
 		_this.startRender();
 	});
 	

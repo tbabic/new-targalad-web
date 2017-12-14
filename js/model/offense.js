@@ -59,12 +59,10 @@ function Attack(offense, extraAttackBonus) {
 	
 	addModelListener("TO_HIT", (e, bonusEffect) => {
 		this.toHitBonusProcessor.processBonusEffect(bonusEffect);
-		triggerViewChange("OFFENSE");
 	});
 	
 	addModelListener("DAMAGE", (e, bonusEffect) => {
 		this.dmgBonusProcessor.processBonusEffect(bonusEffect);
-		triggerViewChange("OFFENSE");
 	});
 	
 }
@@ -107,13 +105,11 @@ function Offense(character) {
 			this.attacks[extraAttackBonus.source] = new Attack(this, extraAttackBonus);
 		}
 		triggerModelChange("EXTRA_ATTACK", this.attacks[extraAttackBonus.source], "ADDED")
-		triggerViewChange("OFFENSE", this);
 		return this.attacks[source];
 	};
 	
 	this.removeAttack = function(source) {
 		delete this.attacks[source];
-		triggerViewChange("OFFENSE", this);
 	}
 	
 	var bab = this.getBab();
@@ -156,7 +152,6 @@ function Offense(character) {
 		if (this.character.equipment.shield instanceof Weapon ) {
 			this.offHand = this.equipment.shield;
 		}
-		triggerViewChange("OFFENSE", this);
 	});
 	
 	addModelListener("WEAPON", "REMOVED", (e, weapon) => {
@@ -164,22 +159,18 @@ function Offense(character) {
 		if (this.character.equipment.shield instanceof Weapon ) {
 			this.offHand = this.equipment.shield;
 		}
-		triggerViewChange("OFFENSE", this);
 	});
 	
 	addModelListener("TO_HIT", (e, bonusEffect) => {
 		this.toHitBonusProcessor.processBonusEffect(bonusEffect);
-		triggerViewChange("OFFENSE", this);
 	});
 	
 	addModelListener("DAMAGE", (e, bonusEffect) => {
 		this.dmgBonusProcessor.processBonusEffect(bonusEffect);
-		triggerViewChange("OFFENSE", this);
 	});
 	
 	addModelListener("EXTRA_ATTACK", (e, extraAttackBonus) => {
 		this.addAttack(extraAttackBonus);
-		triggerViewChange("OFFENSE", this);
 	});
 	
 }

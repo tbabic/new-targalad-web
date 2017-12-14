@@ -46,7 +46,6 @@ function Attribute(type, value) {
 	
 	addModelListener(this.type, (e, bonusEffect) => {
 		this.bonusProcessor.processBonusEffect(bonusEffect);
-		triggerViewChange("ATTRIBUTES");
 	});
 	
 }
