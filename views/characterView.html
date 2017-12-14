@@ -12,12 +12,12 @@
 		</thead>
 		<tbody>
 			<tr>
-				<td id="strengthId">0</td>
-				<td id="dexterityId">0</td>
-				<td id="constitutionId">0</td>
-				<td id="intelligenceId">0</td>
-				<td id="wisdomId">0</td>
-				<td id="charismaId">0</td>
+				<td id="strengthId">${myCharacter.attributes.strength.getValue()}</td>
+				<td id="dexterityId">${myCharacter.attributes.dexterity.getValue()}</td>
+				<td id="constitutionId">${myCharacter.attributes.constitution.getValue()}</td>
+				<td id="intelligenceId">${myCharacter.attributes.intelligence.getValue()}</td>
+				<td id="wisdomId">${myCharacter.attributes.wisdom.getValue()}</td>
+				<td id="charismaId">${myCharacter.attributes.charisma.getValue()}</td>
 			</tr>			
 		</tbody>
 	</table>
@@ -26,16 +26,18 @@
 	
 		<!-- OFFENSE-->
 		<div id="offenseId" class="col">
-			<div id="attack0Id" class="row">
-				<div class ="col-6">
-					Hit: <span id="toHitId">0</span>
+			<c-for-each list="myCharacter.offense.getAttacksSorted()" data-var="attack">
+				<div class="row">
+					<div class ="col-6">
+						Hit: <span id="toHitId">${attack.getToHit()}</span>
+					</div>
+					
+					<div class ="col-6">
+						Dmg: <span id="dmgBonusId" >${attack.getDmg()}</span>
+					</div>
+					
 				</div>
-				
-				<div class ="col-6">
-					Dmg: <span id="dmgBonusId" >0</span>
-				</div>
-				
-			</div>
+			</c-for-each>
 		</div>
 	
 		<!-- DEFENSE-->
@@ -44,19 +46,19 @@
 				<div class ="col-6">
 					AC:
 				</div>
-				<span class ="col" id="armorClassId">10</span>
+				<span class ="col" id="armorClassId">${myCharacter.defense.getArmorClass()}</span>
 			</div>
 			<div class="row">
 				<div class ="col-6">
 					Touch:
 				</div>
-				<span class ="col" id="touchAcId">10</span>
+				<span class ="col" id="touchAcId">${myCharacter.defense.getTouchAc()}</span>
 			</div>
 			<div class="row">
 				<div class ="col-6">
 					FlatFooted:
 				</div>
-				<span class ="col" id="flatFootedId">10</span>
+				<span class ="col" id="flatFootedId">${myCharacter.defense.getFlatFootedAc()}</span>
 			</div>
 		</div>
 		
@@ -66,19 +68,19 @@
 				<div class ="col-5">
 					Fortitude:
 				</div>
-				<span class ="col" id="fortitudeId">0</span>
+				<span class ="col" id="fortitudeId">${myCharacter.saves.fort.getValue()}</span>
 			</div>
 			<div class="row">
 				<div class ="col-5">
 					Reflex:
 				</div>
-				<span class ="col" id="reflexId">0</span>
+				<span class ="col" id="reflexId">${myCharacter.saves.reflex.getValue()}</span>
 			</div>
 			<div class="row">
 				<div class ="col-5">
 					Will:
 				</div>
-				<span class ="col" id="willId">0</span>
+				<span class ="col" id="willId">${myCharacter.saves.will.getValue()}</span>
 			</div>
 		</div>
 		

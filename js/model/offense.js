@@ -141,6 +141,14 @@ function Offense(character) {
 		}
 		return attacks;
 	};
+	
+	this.getAttacksSorted = function() {
+		var attacks = this.getAttacks();
+		attacks.sort(function(attack1, attack2) {
+			return attack2.getToHit() - attack1.getToHit();
+		});
+		return attacks;
+	};
 
 	
 	addModelListener("WEAPON", "ADDED", (e, weapon) => {

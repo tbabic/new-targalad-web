@@ -1,7 +1,11 @@
 <div id="abilitiesViewId" class="abilities">
 
-	<div id="abilitiesId" class="row">
-	</div>
+	<c-for-each list=myCharacter.nonPassiveAbilities data-var="ability" class="row">
+		<div class="col-4 btn-group has-activation-options-${ability.hasActivationOptions()}">
+			<button id="${ability.id}" class="btn btn-ability not-active" data-ability="${ability}" >${ability.name}</button>
+			<button class="btn btn-ability-options" data-ability="${ability}" ><span class="hamburger"></span></button>
+		</div>
+	</c-for-each>
 
 
 
@@ -17,10 +21,7 @@
 					<h4 class="modal-title" id="myModalLabel">Choose option</h4>
 				</div>
 				<div class="modal-body">
-<!-- 					<div class="form-group"> -->
-<!-- 						<label for="recipient-name" class="control-label">Name:</label> -->
-<!-- 						<input type="text" class="form-control" id="memorizedConfigNameId"> -->
-<!-- 					</div> -->
+
 					
 					
 				</div>
@@ -32,21 +33,11 @@
 		</div>
 	</div>
 	
+	
 	<div id="abilityOptionTemplateId" style="display:none">
 		<div class="row ability-option-row">
 			<div class="col-4"><span class="ability-option-name"></span></div>
 			<div class="col-8"><input type="text" class="ability-option-input"></div>
-		</div>
-	</div>
-
-	<div id="abilityButtonTemplateId" style="display:none">
-		<div class="col-4 btn-group"><button class="btn btn-ability not-active"></button></div>
-	</div>
-	
-	<div id="abilityWithOptionsButtonTemplateId" style="display:none">
-		<div class="col-4 btn-group ability-options">
-			<button class="btn btn-ability not-active"></button>
-			<button class="btn btn-ability-options"><span class="hamburger"></span></button>
 		</div>
 	</div>
 

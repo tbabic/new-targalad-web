@@ -35,6 +35,9 @@ html {
 	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
 }
 
+.hide {
+	display:none;
+}
 
 /* ABILITIES*/
 
@@ -54,10 +57,21 @@ html {
 	
 }
 
-.ability-options .btn-ability {
-	width: 80%;
-	
+.has-activation-options-false > .btn-ability {
+	border-top-right-radius: 0.5rem !important;
+	border-bottom-right-radius: 0.5rem !important;
 }
+
+.has-activation-options-false > .btn-ability-options {
+	display:none;
+}
+
+.has-activation-options-true > .btn-ability {
+	width: 80%;
+}
+
+
+
 
 .btn-ability-options {
 	width: 20%;
@@ -68,6 +82,7 @@ html {
     word-wrap: break-word;
     white-space: normal;
     border-radius: 0.5rem;
+   	
     padding: 0px;
 }
 
@@ -82,7 +97,7 @@ html {
 .btn-ability.not-active {
 }
 
-.abilities > .row > div{
+.abilities > .row  .btn-group {
 	padding: 2px;
 }
 
@@ -133,6 +148,9 @@ html {
 .ability-option-row .toggle-handle  {
     background-color: white;
 }
+
+
+
 
 
 

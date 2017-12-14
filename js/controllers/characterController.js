@@ -1,48 +1,5 @@
 console.log("characterController");
 
-function setAttributes(attributes) {
-	for (var attrName in attributes) {
-		var attrId = attrName + "Id";
-		attribute = myCharacter.attributes[attrName];
-		if (attribute instanceof Attribute) {
-			$("#"+attrId).text(attribute.getValue());
-		}
-	}
-}
-
-function setDefense(defense) {
-	$("#armorClassId").text(defense.getArmorClass());
-	$("#touchAcId").text(defense.getTouchAc());
-	$("#flatFootedId").text(defense.getFlatFootedAc());
-}
-
-
-
-function setSaves(saves) {
-	$("#fortitudeId").text(saves.fort.getValue());
-	$("#reflexId").text(saves.reflex.getValue());
-	$("#willId").text(saves.will.getValue());
-}
-
-function setOffense(offense) {
-	var attacks = offense.getAttacks();
-	attacks.sort(function(attack1, attack2) {
-		return attack2.getToHit() - attack1.getToHit();
-	});
-	var nextAttackHtml = $("#attack0Id").clone();
-	$("#offenseId").empty();
-	
-	for (var i = 0; i < attacks.length; i++) {
-		var attackId = "attack" + i + "Id";
-		nextAttackHtml = nextAttackHtml.clone();
-		nextAttackHtml.attr("id", attackId);
-		$(nextAttackHtml).find("#toHitId").text(attacks[i].getToHit());
-		$(nextAttackHtml).find("#dmgBonusId").text(attacks[i].getDmg());
-		$("#offenseId").append(nextAttackHtml);
-	}
-}
-
-
 
 function showAbilityOptions(ability) {
 	$('#chooseAbilityOptionModal').find(".modal-body").empty();
@@ -207,7 +164,6 @@ function triggerAbility(event) {
 }
 
 
-
 $("#confirmAbilityOptionId").on("click", function(event) {
 	let inputs = $('#chooseAbilityOptionModal').find(".modal-body").find(".ability-option-input");
 	let activationOptions = [];
@@ -221,25 +177,6 @@ $("#confirmAbilityOptionId").on("click", function(event) {
 	activateAbility(event, activationOptions);
 });
 
-function setAbilities(character) {
-	$("#abilitiesId").empty();
-	var step = character.nonPassiveAbilities.length;
-	for (var i = 0; i < character.nonPassiveAbilities.length; i+=1) {
-		
-		let ability = character.nonPassiveAbilities[i];
-		let abilityHtml = $("#abilityButtonTemplateId").html();
-		if (ability.hasActivationOptions()) {
-			abilityHtml = $("#abilityWithOptionsButtonTemplateId").html();
-		}
-		
-		abilityHtml = $(abilityHtml).clone();
-		abilityHtml.find(".btn-ability").text(ability.name);
-		abilityHtml.find(".btn-ability").attr("id", ability.id);
-		abilityHtml.find(".btn-ability").data("ability", ability);
-		abilityHtml.find(".btn-ability-options").data("ability", ability);
-		$("#abilitiesId").append(abilityHtml);
-	}
-}
 
 $(document.body).on('click', '.btn-ability', triggerAbility);
 
@@ -248,45 +185,6 @@ $(document.body).on('click', '.btn-ability-options', function(event) {
 	showAbilityOptions(ability);
 });
 
-
-
-function refreshCharacter(character) {
-	if (character === undefined) {
-		character = myCharacter;
-	}
-	setAttributes(character.attributes);
-	setDefense(character.defense);
-	setSaves(character.saves);
-	setOffense(character.offense);
-	setAbilities(character);
-}
-
-addViewListener("ATTRIBUTES",(e) => {
-	refreshCharacter(myCharacter);
-});
-
-addViewListener("SAVES",(e) => {
-	setSaves(myCharacter.saves);
-});
-
-addViewListener("DEFENSE",(e, defense) => {
-	setDefense(defense);
-});
-
-addViewListener("STRENGTH DEXTERITY CONSTITUTION INTELLIGENCE WISDOM CHARISMA",(e, attribute) => {
-	attrId = attribute.type.toLowerCase() + "Id";
-	$(attrId).text(attribute.getValue());
-	refreshCharacter(myCharacter);
-});
-
-addViewListener("OFFENSE",(e, offense) => {
-	if (offense === undefined) {
-		offense = myCharacter.offense;
-	}
-	setOffense(offense);
-});
-
-refreshCharacter(myCharacter);
 
 
 

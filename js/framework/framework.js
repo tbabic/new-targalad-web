@@ -202,10 +202,22 @@ function Framework() {
 		}
 	};
 
+	this.isManagedElement = function(element) {
+		let managedId = $(element).data("cManagedId");
+		if(managedElements.hasOwnProperty(managedId)){
+			return true;
+		}
+		return false;
+	};
+	
+	this.getManagedElement = function(element) {
+		let managedId = $(element).data("cManagedId");
+		return managedElements[managedId];
+	};
 	
 	
 	this.render = function() {
-		this.renderEventsCount++;
+		
 		if (this.renderEventsCount > 1 ) {
 			this.renderEventsCount--;
 			return;
@@ -217,30 +229,60 @@ function Framework() {
 			}
 		})
 		
+		var t1 = performance.now();
 		
 		for (var id in this.managedElements) {
 			let element = this.managedElements[id].element;
 			if(!jQuery.contains(document.documentElement, element)) {
 				delete this.managedElements[id];
-			} else if ($(element).is(":visible")) {
-				this.managedElements[id].update();
 			}
 		}
 		
+		var t2 = performance.now();
+		let visibleElements = [];
 		
-		var t1 = performance.now();
+		for (var id in this.managedElements) {
+			let element = this.managedElements[id].element;
+			if ($(element).is(":visible")) {
+				visibleElements.push(this.managedElements[id]);
+			}
+		}
+		
+		var t3 = performance.now();
+		for (let i = 0; i < visibleElements.length; i++) {
+			visibleElements[i].update();
+		}
+		
+		
+		var t4 = performance.now();
 		this.renderEventsCount = 0;
-		console.log("Call took " + (t1 - t0) + " milliseconds.");
+		console.log("Updating c-for-each elements took " + (t1 - t0) + " milliseconds.");
+		console.log("Deleting non-managed elements took " + (t2 - t1) + " milliseconds.");
+		console.log("Checking visibility took " + (t3 - t2) + " milliseconds.");
+		console.log("Updating elements took " + (t4 - t3) + " milliseconds.");
+		console.log("Call took " + (t4 - t0) + " milliseconds.");
 	}
 	
-	let _this = this;
 	
-	$(document.body).on("render", () => {
-		_this.render();
+	
+	this.startRender= function() {
+		this.renderEventsCount++;
+		setTimeout(()=>{
+			_this.render()
+		}, 0);
+	};
+	
+	let _this = this;
+	$("*").on("click", (event) => {
+		console.log("click");
+		_this.startRender();
+		$(document.body).trigger("render");
 	});
 	
-	$(document.body).on("click", (event) => {
-		console.log(event.currentTarget);
+	$(document.body).on("show", "*", (event) => {
+		event.stopPropagation();
+		console.log("showing: ", event.currentTarget);
+		_this.startRender();
 		$(document.body).trigger("render");
 	});
 	
