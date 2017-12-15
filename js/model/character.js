@@ -172,7 +172,7 @@ function Character(characterClass, attributes, level, equipment) {
 	
 	this.getConditions = function() {
 		return Utils.mapToArray(this.conditionEffects);
-	}
+	};
 	
 	this.getCondition = function(conditionName) {
 		for (let conditionEffectId in this.conditionEffects) {
@@ -180,7 +180,7 @@ function Character(characterClass, attributes, level, equipment) {
 				return this.conditionEffects[conditionEffectId];
 			}
 		}
-	}
+	};
 	
 	
 	for (var i in AbilityFactory) {

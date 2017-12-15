@@ -116,7 +116,7 @@ function Ability(constr) {
 			return false;
 		}
 		return true;
-	}
+	};
 	
 	addModelListener("ABILITY"+this.id, "ACTIVATED", (e) => {
 		this.activate();

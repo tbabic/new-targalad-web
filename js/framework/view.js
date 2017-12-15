@@ -45,9 +45,8 @@ class View extends HTMLElement {
 
 $(document.body).on("click", "c-view", function(event) {
 	let view = event.currentTarget;
-	console.log("clicked + " + view.getAttribute("view"));
+	console.log("clicked: " + view.getAttribute("view"));
 	var model = $(this).data("model");
-	$
 });
 
 

@@ -1,7 +1,7 @@
 console.log("iniController");
 
 function IdGenerator(seed) {
-	var seed = seed === undefined ? 0: seed;
+	seed = seed === undefined ? 0: seed;
 	return {generate : function() {return seed++;}};
 }
 

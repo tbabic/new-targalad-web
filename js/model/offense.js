@@ -104,13 +104,13 @@ function Offense(character) {
 		} else {
 			this.attacks[extraAttackBonus.source] = new Attack(this, extraAttackBonus);
 		}
-		triggerModelChange("EXTRA_ATTACK", this.attacks[extraAttackBonus.source], "ADDED")
+		triggerModelChange("EXTRA_ATTACK", this.attacks[extraAttackBonus.source], "ADDED");
 		return this.attacks[source];
 	};
 	
 	this.removeAttack = function(source) {
 		delete this.attacks[source];
-	}
+	};
 	
 	var bab = this.getBab();
 	this.toHitBonusProcessor.add("BAB", new Bonus(BonusCategory.TO_HIT, BonusType.BAB, bab, "BAB"));

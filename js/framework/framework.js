@@ -50,7 +50,7 @@ function ManagedNode(id, source, element) {
 	this.managedValues = [];
 	
 	let matched = this.source.match(new RegExp("\\${[^}]*}", "g"));
-	if (matched != null) {
+	if (matched !== null) {
 		for (let i = 0; i< matched.length; i++) {
 			this.managedValues.push(new ManagedValue(matched[i]));
 		}
@@ -58,7 +58,7 @@ function ManagedNode(id, source, element) {
 	
 	this.isManaged= function() {
 		return this.managedValues.length > 0;
-	}
+	};
 	
 	this.detectChange = function() {
 		if (!this.isManaged()) {
@@ -71,7 +71,7 @@ function ManagedNode(id, source, element) {
 			}
 		}
 		return changed;
-	}
+	};
 	
 	this.refreshValue = function() {
 		let value = this.source;
@@ -79,7 +79,7 @@ function ManagedNode(id, source, element) {
 			value = this.managedValues[i].update(value);
 		}
 		return value;
-	}
+	};
 	
 	this.updateElement = function() {
 		if (!this.detectChange()) {
@@ -87,11 +87,11 @@ function ManagedNode(id, source, element) {
 		}
 		let value = this.refreshValue();
 		this.setNodeValue(value);
-	}
+	};
 	
 	this.setNodeValue = function() {
 		console.error("This function is not implemented");
-	}
+	};
 }
 
 function ManagedAttribute(id, element) {
@@ -100,7 +100,7 @@ function ManagedAttribute(id, element) {
 	
 	this.setNodeValue = function(value) {
 		this.element.setAttribute(this.id, value);
-	}
+	};
 
 }
 
@@ -115,7 +115,7 @@ function ManagedDataAttribute(id, element) {
 	
 	this.setNodeValue = function(value) {
 		$(this.element).data(this.id, value);
-	}
+	};
 	
 }
 
@@ -125,7 +125,7 @@ function ManagedTextNode(id, element) {
 	
 	this.setNodeValue = function(value) {
 		this.element.childNodes[id].nodeValue = value;
-	}
+	};
 	
 }
 
@@ -139,14 +139,14 @@ function ManagedDomElement(element) {
 	$(element).data("cManagedId", this.managedId);
 	
 	for (let i = 0; i < this.element.attributes.length; i++) {
-		let managedNode = new ManagedAttribute(this.element.attributes[i].name, this.element)
+		let managedNode = new ManagedAttribute(this.element.attributes[i].name, this.element);
 		if (managedNode.isManaged()) {
 			this.managedNodes.push(managedNode);
 		}
 	}
 	
 	for (let i in this.element.dataset) {
-		let managedNode = new ManagedDataAttribute(i, this.element)
+		let managedNode = new ManagedDataAttribute(i, this.element);
 		if (managedNode.isManaged()) {
 			this.managedNodes.push(managedNode);
 		}
@@ -156,7 +156,7 @@ function ManagedDomElement(element) {
 		if (this.element.childNodes[i].nodeType != Node.TEXT_NODE) {
 			continue;
 		}
-		let managedNode = new ManagedTextNode(i, this.element)
+		let managedNode = new ManagedTextNode(i, this.element);
 		if (managedNode.isManaged()) {
 			this.managedNodes.push(managedNode);
 		}
@@ -196,7 +196,7 @@ function Framework() {
 		if($(element).data("cManagedElement") === undefined) {
 			let managedElement = new ManagedDomElement(element);
 			if (managedElement.isManaged()) {
-				this.managedElements[managedElement.managedId] = managedElement
+				this.managedElements[managedElement.managedId] = managedElement;
 				//Utils.arrayAppend(this.managedElements, managedElement);
 			}
 		}
@@ -219,7 +219,7 @@ function Framework() {
 		$(rootElements).each(function(index, rootElement){
 			$(rootElement).find("c-for-each").each(function(index, element){
 				element._update();
-			})
+			});
 			
 			
 			for (var id in this.managedElements) {
@@ -228,10 +228,10 @@ function Framework() {
 					this.managedElements[id].update();
 				}
 			}
-		})
+		});
 		
 		
-	}
+	};
 	
 	this.render = function() {
 		$(document.body).trigger("update-start");
@@ -244,7 +244,7 @@ function Framework() {
 			if ($(element).is(":visible")) {
 				element._update();
 			}
-		})
+		});
 		
 		var t1 = performance.now();
 		
@@ -258,7 +258,7 @@ function Framework() {
 		var t2 = performance.now();
 		let visibleElements = [];
 		
-		for (var id in this.managedElements) {
+		for (let id in this.managedElements) {
 			let element = this.managedElements[id].element;
 			if ($(element).is(":visible")) {
 				visibleElements.push(this.managedElements[id]);
@@ -280,14 +280,14 @@ function Framework() {
 		console.log("Call took " + (t4 - t0) + " milliseconds.");
 		
 		$(document.body).trigger("update-end");
-	}
+	};
 	
 	
 	
 	this.startRender= function() {
 		this.renderEventsCount++;
 		setTimeout(()=>{
-			_this.render()
+			_this.render();
 		}, 0);
 	};
 	

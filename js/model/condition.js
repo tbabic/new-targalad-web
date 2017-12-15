@@ -33,7 +33,7 @@ function ConditionEffect(character, condition) {
 		}
 		this.character.addCondition(this);
 		
-	}
+	};
 	
 	this.remove = function() {
 		
@@ -42,7 +42,7 @@ function ConditionEffect(character, condition) {
 			this.deactivate(character);
 		}
 		this.character.removeCondition(this);
-	}
+	};
 }
 
 

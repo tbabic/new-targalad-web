@@ -29,12 +29,12 @@ class forEach extends HTMLElement {
 //			let elementToAppend = $(elementHtml).wrap("<c-element></c-element>").parent();
 			$(this).append(elementHtml);
 			return elementHtml;
-		}
+		};
 		
 		this._update = function() {
 			
 			this.listName = this.getAttribute("list");
-			let list = undefined;
+			let list;
 			try {
 				list = eval(this.listName);
 			} catch (e) {
@@ -86,7 +86,7 @@ class forEach extends HTMLElement {
 			}
 			
 			
-		}
+		};
 		
 		this._update();
 		
