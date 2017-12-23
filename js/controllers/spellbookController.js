@@ -9,9 +9,6 @@ function serializeSpellBook() {
 	for(let spellId in spellbook.spells) {
 		serialize.spells[spellId] = spellbook.spells[spellId].name;
 	}
-	for(let spellId in spellbook.memorized) {
-		serialize.memorized[spellId] = spellbook.memorized[spellId].count;
-	}
 	window.localStorage.setItem("spellbook", JSON.stringify(serialize));
 	
 }
@@ -25,14 +22,6 @@ function deserializeSpellBook() {
 	for(let spellId in serialize.spells) {
 		let spell = spellsDB.getById(spellId);
 		learnSpell(spell);
-		
-	}
-	for(let spellId in serialize.memorized) {
-		let spell = spellsDB.getById(spellId);
-		let count = serialize.memorized[spellId];
-		for (let i = 0; i < count; i++) {
-			memorizeSpell(spell);
-		}
 		
 	}
 }
@@ -49,27 +38,10 @@ function getSelectedSpellLevel() {
 }
 
 
-
-function updateMemorizedCount() {
-	let spellLevel = getSelectedSpellLevel();
-	var current = myCharacter.getSpellBook().getMemorizedCount(spellLevel);
-	var maximum = myCharacter.getSpellBook().getSpellsPerDay(spellLevel);
-	
-	if (current === maximum) {
-		$(".spell-row.spell-level-" + spellLevel).find(".memorize-btn").attr("disabled", true);
-	} else {
-		$(".spell-row.spell-level-" + spellLevel).find(".memorize-btn").attr("disabled", false);
-	}
-	
-	var text = "" + current + "/" + maximum;
-	$("#memorized-count").text(text);
-}
-
 function showSpells() {
 	let div = $("#allSpellsListId");
 	let toggle = div.data("toggle");
 	let spellLevel = getSelectedSpellLevel();
-	updateMemorizedCount();
 	$(".spell-row").hide();
 	$(".spell-row.spell-level-" + spellLevel+"."+toggle).show();
 }
@@ -122,25 +94,13 @@ $(".delete-btn").on("click", function(event) {
 });
 
 function memorizeSpell(spell) {
-	let spellBook = myCharacter.getSpellBook();
-	spellBook.memorize(spell);
-	let parent = $("#spell-"+spell.id);
-	parent.addClass("memorized");
-	
-	
-	updateMemorizedCount();
+	let memorizedSpells = myCharacter.getMemorizedSpells()
+	memorizedSpells.add(spell);
 }
 
 function unmemorizeSpell(spell) {
-	let spellBook = myCharacter.getSpellBook();
-	var memorizedCount = spellBook.unmemorize(spell);
-	let parent = $("#spell-"+spell.id);
-	if (memorizedCount === 0) {
-		parent.removeClass("memorized");
-		showSpells();
-	}
-	
-	updateMemorizedCount();
+	let memorizedSpells = myCharacter.getMemorizedSpells()
+	memorizedSpells.remove(spell);
 }
 
 $(".memorize-btn").on("click", function(event) {
@@ -155,13 +115,13 @@ $(".unmemorize-btn").on("click", function(event) {
 
 $(".cast-btn").on("click", function(event) {
 	let spell = getSpellFromButton(event.target);
-	let spellBook = myCharacter.getSpellBook();
-	spellBook.castSpell(spell);
+	let memorizedSpells = myCharacter.memorizedSpells();
+	memorizedSpells.castSpell(spell);
 });
 $(".recall-btn").on("click", function(event) {
 	let spell = getSpellFromButton(event.target);
-	let spellBook = myCharacter.getSpellBook();
-	spellBook.recallSpell(spell);
+	let memorizedSpells = myCharacter.memorizedSpells();
+	memorizedSpells.recallSpell(spell);
 });
 
 $(".spellbook-toggle").on("click", function(event) {
@@ -288,7 +248,7 @@ $(document.body).on('click', '.btn-delete-memorized-config' ,function(event){
 });
 
 $("#resetMemorizedId").on('click', function(event) {
-	myCharacter.getSpellBook().resetMemorized();
+	myCharacter.getMemorizedSpells().reset();
 	showSpells();
 });
 

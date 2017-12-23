@@ -195,4 +195,8 @@ function Character(characterClass, attributes, level, equipment) {
 	this.getSpellBook = function() {
 		return this.characterClass.spellbook;
 	};
+	
+	this.getMemorizedSpells = function() {
+		return this.characterClass.memorizedSpells;
+	};
 }
