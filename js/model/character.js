@@ -25,13 +25,14 @@ function createTargalad() {
 	
 	
 	targalad.addItem(new Armor('Mithral Chainshirt +1', 'light', 4, 6, 1, 0, 15, 10));
-	targalad.addItem(new Weapon('Scimitar +1, Ghost touch', WeaponType.SCIMITAR, +1, 4));
-	targalad.addItem(new Item('Gloves of Dex +1', 'hands', new Bonus('DEXTERITY', BonusType.ENHANCEMENT, +1), 1));
-	targalad.addItem(new Item('Belt of Str +1', 'belt',new Bonus('STRENGTH', BonusType.ENHANCEMENT, +1), 1));
+	targalad.addItem(new Weapon('Scimitar +2, Keen', WeaponType.SCIMITAR, +2, 4));
+	targalad.addItem(new Item('Belt of Dex +2', 'belt',new Bonus('DEXTERITY', BonusType.ENHANCEMENT, +2), 1));
 	targalad.addItem(new Item('Headband of Int +2', 'headband',new Bonus('INTELLIGENCE', BonusType.ENHANCEMENT, +2), 1));
 	targalad.addItem(new Item('Ring of Deflection +1', 'ring', new Bonus('ARMOR_CLASS', BonusType.DEFLECTION, +1), 0));
 	targalad.addItem(new Item('Cloak of Resistance +1', 'shoulders', new Bonus('SAVES', BonusType.RESISTANCE, +1), 1));
-		
+	targalad.addItem(new Item('Pink Blue Ioun Stone', '', new Bonus(['CONSTITUTION', 'WISDOM'], BonusType.ENHANCEMENT, +2), 1));
+	targalad.addItem(new Item('Wayfinder', '', new Bonus([SkillsEnum.RIDE, SkillsEnum.KNOWLEDGE_PLANES], BonusType.COMPETENCE, +2), 1));
+	
 	targalad.addAbility(FeatFactory.weaponFinesse(targalad));
 	targalad.addAbility(FeatFactory.dervishDance(targalad));
 	targalad.addAbility(FeatFactory.arcaneStrike(targalad));
@@ -64,7 +65,7 @@ function createTargalad() {
 	targalad.skillSet.getSkill(SkillsEnum.HANDLE_ANIMAL).addRank(0);
 	targalad.skillSet.getSkill(SkillsEnum.HEAL).addRank(0);
 	targalad.skillSet.getSkill(SkillsEnum.INTIMIDATE).addRank(0);
-	targalad.skillSet.getSkill(SkillsEnum.KNOWLEDGE_ARCANA).addRank(8);
+	targalad.skillSet.getSkill(SkillsEnum.KNOWLEDGE_ARCANA).addRank(9);
 	targalad.skillSet.getSkill(SkillsEnum.KNOWLEDGE_DUNGEONEERING).addRank(1);
 	targalad.skillSet.getSkill(SkillsEnum.KNOWLEDGE_ENGINEERING).addRank(0);
 	targalad.skillSet.getSkill(SkillsEnum.KNOWLEDGE_GEOGRAPHY).addRank(0);
@@ -72,11 +73,11 @@ function createTargalad() {
 	targalad.skillSet.getSkill(SkillsEnum.KNOWLEDGE_LOCAL).addRank(0);
 	targalad.skillSet.getSkill(SkillsEnum.KNOWLEDGE_NATURE).addRank(1);
 	targalad.skillSet.getSkill(SkillsEnum.KNOWLEDGE_NOBILITY).addRank(0);
-	targalad.skillSet.getSkill(SkillsEnum.KNOWLEDGE_PLANES).addRank(7);
+	targalad.skillSet.getSkill(SkillsEnum.KNOWLEDGE_PLANES).addRank(9);
 	targalad.skillSet.getSkill(SkillsEnum.KNOWLEDGE_RELIGION).addRank(0);
 	targalad.skillSet.getSkill(SkillsEnum.KNOWLEDGE_MARTIAL).addRank(0);
 	targalad.skillSet.getSkill(SkillsEnum.LINGUISTICS).addRank(1);
-	targalad.skillSet.getSkill(SkillsEnum.PERCEPTION).addRank(8);
+	targalad.skillSet.getSkill(SkillsEnum.PERCEPTION).addRank(9);
 	targalad.skillSet.getSkill(SkillsEnum.PERFORM_DANCE).addRank(2);
 	targalad.skillSet.getSkill(SkillsEnum.PERFORM_SING).addRank(0);
 	targalad.skillSet.getSkill(SkillsEnum.PERFORM_ORATORY).addRank(0);
@@ -84,7 +85,7 @@ function createTargalad() {
 	targalad.skillSet.getSkill(SkillsEnum.RIDE).addRank(1);
 	targalad.skillSet.getSkill(SkillsEnum.SENSE_MOTIVE).addRank(0);
 	targalad.skillSet.getSkill(SkillsEnum.SLEIGHT_OF_HAND).addRank(0);
-	targalad.skillSet.getSkill(SkillsEnum.SPELLCRAFT).addRank(7);
+	targalad.skillSet.getSkill(SkillsEnum.SPELLCRAFT).addRank(9);
 	targalad.skillSet.getSkill(SkillsEnum.STEALTH).addRank(0);
 	targalad.skillSet.getSkill(SkillsEnum.SURVIVAL).addRank(0);
 	targalad.skillSet.getSkill(SkillsEnum.SWIM).addRank(1);
