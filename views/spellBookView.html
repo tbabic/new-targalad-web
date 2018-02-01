@@ -1,6 +1,6 @@
 <div id = "spellBookView" style="display: none;" class="view">
 	<div class="row spell-level-select"><div class="col">
-		<button class="btn spell-level-btn" data-spell-level="0">0</button>
+		<button class="btn spell-level-btn" data-spell-level="0" disabled>0</button>
 		<button class="btn spell-level-btn" data-spell-level="1">1</button>
 		<button class="btn spell-level-btn" data-spell-level="2">2</button>
 		<button class="btn spell-level-btn" data-spell-level="3">3</button>
@@ -20,13 +20,20 @@
 			<button type="button" class="btn reset-memorized" id="resetMemorizedId">Reset</button>
 		</div>
 		<div id="memorized-count" class="memorized-count col-12">
+				${myCharacter.getMemorizedSpells().size(0)}
+				/
+				${myCharacter.getMemorizedSpells().capacity(0)}
 		</div>
 		
 		
 		
 	</div>
-
 	
+
+<!-- 	<div id="allSpellsListId" class="toggle-known" data-spell-level=${spellbookController.getSelectedSpellLevel()}> -->
+<!-- 		<c-for-each list="allSpells" data-var="spell"> -->
+<!-- 		</c-for-each> -->
+<!-- 	</div> -->
 	
 	<div id="allSpellsListId" class="toggle-known" data-spell-level=0 data-toggle="known">
 		<c-for-each list="allSpells" data-var="spell">
@@ -36,7 +43,7 @@
 				<div class="col-6 col-sm-4 spell-name align-middle"> <span class="align-middle">
 					<a class="align-middle" target="_blank" href="http://www.dxcontent.com/SDB_SpellBlock.asp?SDBID=${spell.id}">
 						${spell.name}
-					</a> </span>
+					</a> (${spell.memorizedCount(myCharacter)})</span>
 				</div>
 
 				<div class ="col-6 col-sm">

@@ -3,6 +3,7 @@ function Magus(character) {
 	this.arcanas = [];
 	this.classAbilities = [];
 	this.spellbook = new SpellBook(this.character, 210, 3);
+	this.memorizedSpells = new MemorizedSpells(this.character);
 	
 	this.getArcanePool = function() {
 		return this.character.attributes.intelligence.getModifier() + Math.floor(this.character.level/2);

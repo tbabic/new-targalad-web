@@ -3,7 +3,6 @@ function SpellBook(character, pages, weight) {
 	this.pages = pages;
 	this.weight = weight;
 	this.spells={};
-	this.memorized={};
 	
 	this.extendSpellbook = function(pages, weight) {
 		this.pages += pages;
@@ -18,7 +17,7 @@ function SpellBook(character, pages, weight) {
 	};
 	
 	this.deleteSpell = function(spell) {
-		if (containsSpell(spell)) {
+		if (this.containsSpell(spell)) {
 			delete this.spells[spell.id];
 		}
 	};
@@ -41,81 +40,6 @@ function SpellBook(character, pages, weight) {
 		return this.spells[spell.id] !== undefined;
 	};
 	
-	this.getMemorizedCount = function(spellLevel) {
-		var count = 0;
-		for (var spellId in this.memorized) {
-			if (this.memorized[spellId].getLevel() === spellLevel) {
-				count += this.memorized[spellId].count;
-			}
-		}
-		return count;
-	};
-	
-	this.getSpellsPerDay = function(spellLevel) {
-		return this.character.characterClass.spellsPerDay(spellLevel);
-	};
-	
-	this.canBeMemorized = function(spell) {
-		var memorizedCount = this.getMemorizedCount(spell.level);
-		var maximumMemorized = this.getSpellsPerDay(spell.level);
-		if (maximumMemorized === undefined) {
-			return false;
-		}
-		return memorizedCount < maximumMemorized;
-	};
-	
-	this.memorizedSpellCount = function(spell) {
-		return this.isSpellMemorized(spell) ? this.memorized[spell.id].count : 0;
-	};
-
-	this.memorize = function(spell) {
-		if (!this.canBeMemorized(spell)) {
-			return this.memorizedSpellCount(spell);
-		}
-		if (this.isSpellMemorized(spell)) {
-			this.memorized[spell.id].count++;
-		} else {
-			this.memorized[spell.id] = new MemorizedSpell(spell);
-		}
-		return this.memorizedSpellCount(spell);
-	};
-	
-	this.unmemorize = function(spell) {
-		if (this.isSpellMemorized(spell)) {
-			this.memorized[spell.id].count--;
-			if (this.memorized[spell.id].count <= 0) {
-				delete this.memorized[spell.id];
-			}
-		}
-		return this.memorizedSpellCount(spell);
-	};
-	
-	this.isSpellMemorized = function(spell) {
-		return this.memorized[spell.id] !== undefined;
-	};
-	
-	this.canBeCast = function(spell) {
-		return this.isSpellMemorized(spell) && this.memorized[spell.id].canBeCast();
-	};
-	
-	this.castSpell = function(spell) {
-		if (this.canBeCast(spell)) {
-			this.memorized[spell.id].cast();
-		}
-	};
-	
-	this.recallSpell = function(spell) {
-		if (this.isSpellMemorized(spell)) {
-			this.memorized[spell.id].count++;
-		}
-	};
-	
-	this.resetMemorized = function() {
-		for (var spellId in this.memorized) {
-			delete this.memorized[spellId];
-		}
-	};
-	
 	this.getKnownSpellsList = function() {
 		let known = [];
 		for (var id in this.spells) {
@@ -123,28 +47,9 @@ function SpellBook(character, pages, weight) {
 		}
 		return known;
 	};
-	
-	this.getMemorizedSpellsList = function() {
-		let list = [];
-		for (var id in this.memorized) {
-			if (this.isSpellMemorized(this.spells[id])) {
-				list.push(this.spells[id]);
-			}	
-		}
-		return list;
-	};
-	
-	this.getCastableSpellsList = function() {
-		let list = [];
-		for (var id in this.memorized) {
-			if (this.canBeCast(this.spells[id])) {
-				list.push(this.spells[id]);
-			}
-			
-		}
-		return list;
-	};
 }
+
+
 
 
 
@@ -188,57 +93,196 @@ function Spell(id, name, level, propertiesOrCallback, activateOrDeactivateCallba
 	};
 	
 	this.isMemorized = function(byCharacter) {
-		let spellbook = byCharacter.getSpellBook();
-		if (spellbook === undefined) {
+		let memorizedSpells = byCharacter.getMemorizedSpells();
+		if (memorizedSpells === undefined) {
 			return false;
 		}
-		return spellbook.isSpellMemorized(this);
+		return memorizedSpells.contains(this);
+	};
+	
+	this.memorizedCount = function(byCharacter) {
+		let memorizedSpells = byCharacter.getMemorizedSpells();
+		if (memorizedSpells === undefined) {
+			return false;
+		}
+		return memorizedSpells.memorizationCount(this);
 	};
 	
 	this.canBeCast = function(byCharacter) {
-		let spellbook = byCharacter.getSpellBook();
-		if (spellbook === undefined) {
+		let memorizedSpells = byCharacter.getMemorizedSpells();
+		if (memorizedSpells === undefined) {
 			return false;
 		}
-		return spellbook.canBeCast(this);
+		return memorizedSpells.canBeCast(this);
 	};
 	
 }
 
-function MemorizedSpell(spell) {
-	this.spell = spell;
-	this.count = 1;
-	this.cast = false;
+function MemorizedSpells(character) {
+	this.character = character;
+	this.memorized = {0:{},1:{},2:{},3:{},4:{},5:{},6:{},7:{},8:{},9:{}};
 	
-	this.memorizeAgain = function() {
-		this.count++;
+	this.reset = function() {
+		this.memorized = {0:{},1:{},2:{},3:{},4:{},5:{},6:{},7:{},8:{},9:{}};
 	};
 	
-	this.cast = function(params) {
-		if (this.count === 0 ) {
+	this.getSpellsByLevel = function(level) {
+		if (this.memorized[level] === undefined) {
+			this.memorized[level] = {};
+		}
+		return this.memorized[level];
+	};
+	
+	this.getExistingSpell = function(spell) {
+		spell = new MemorizedSpell(spell);
+		let memorizedSpellsByLevel = this.getSpellsByLevel(spell.getLevel());
+		let existingSpell = memorizedSpellsByLevel[spell.getId()];
+		return existingSpell !== undefined ? existingSpell : null;
+	};
+	
+	this.contains = function(spell){
+		let existingSpell = this.getExistingSpell(spell);
+		if (existingSpell === null) {
+			return false;
+		}
+		return true;
+	};
+	
+	this.memorizationCount = function(spell) {
+		let existingSpell = this.getExistingSpell(spell);
+		if (existingSpell === null) {
+			return 0;
+		} else {
+			return existingSpell.count;
+		}
+	}
+	
+	this.getSpellLevel=function(spell) {
+		if (spell instanceof Spell)  {
+			return spell.level;
+		} else if (spell instanceof MemorizedSpell) {
+			return spell.getLevel();
+		}
+		console.error("spell is not an instance of Spell or MemorizedSpell", spell);
+		return null;
+	};
+	
+	this.hasCapacity = function(spellOrSpellLevel) {
+		let spellLevel = spellOrSpellLevel;
+		if (!Number.isInteger(spellOrSpellLevel)) {
+			spellLevel = this.getSpellLevel(spellOrSpellLevel);
+		}
+		return this.size(spellLevel) < this.capacity(spellLevel);		
+	};
+
+	this.add = function(spell) {
+		if (!this.hasCapacity(spell)) {
 			return;
 		}
-		this.spell.activate(params);
-		this.count--;
-		this.cast = true;
+		let existingSpell = this.getExistingSpell(spell);
+		if (existingSpell === null) {
+			existingSpell = new MemorizedSpell(spell);
+			this.memorized[existingSpell.getLevel()][existingSpell.getId()] = existingSpell;
+		} else {
+			existingSpell.count++;
+		}
 	};
 	
+	this.remove = function(spell) {
+		let existingSpell = this.getExistingSpell(spell);
+		if (existingSpell === null) {
+			return 0;
+		}
+		existingSpell.count--;
+		if (existingSpell.count === 0 ) {
+			let memorizedByLevel = this.memorized[existingSpell.getLevel()];
+			delete memorizedByLevel[existingSpell.getId()];
+		}
+	};
+	
+	this.canBeCast = function(spell) {
+		let existingSpell = this.getExistingSpell(spell);
+		if (existingSpell === null) {
+			return false;
+		}
+		return existingSpell.canBeCast();
+	};
+	
+	this.cast = function(spell) {
+		if (this.canBeCast(spell)) {
+			existingSpell.castCount++;
+		}
+	};
+	
+	this.canBeRecalled = function(spell) {
+		let existingSpell = this.getExistingSpell(spell);
+		if (existingSpell === null) {
+			return false;
+		}
+		return existingSpell.canBeRecalled();
+	};
+	
+	this.recall = function(spell) {
+		if (this.canBeRecalled(spell)) {
+			existingSpell.castCount--;
+		}
+	};
+	
+	this.size = function(spellLevel) {
+		if (spellLevel === undefined) {
+			spellLevel = 0;
+		}
+		let memorizedSpellsByLevel = this.getSpellsByLevel(spellLevel);
+		let count = 0;
+		for (let spellId in memorizedSpellsByLevel) {
+			count += memorizedSpellsByLevel[spellId].count;
+		}
+		return count;
+	};
+	
+	this.capacity = function(spellLevel) {
+		if (spellLevel === undefined) {
+			spellLevel = 0;
+		}
+		return this.character.characterClass.spellsPerDay(spellLevel);
+	};
+		
+}
+
+function MemorizedSpell(spell) {
+	if (spell instanceof Spell) {
+		this.spell = spell;
+		this.count = 1;
+		this.castCount = 0;
+	} else if (spell instanceof MemorizedSpell) {
+		this.spell = spell.spell;
+		this.count = spell.count;
+		this.castCount = spell.castCount;
+	} else {
+		throw ["spell is not an instance of Spell or MemorizedSpell", spell];
+	}
+	
+	
+	
 	this.canBeRecalled = function() {
-		return this.cast;
+		return this.castCount > 0;
 	};
 	
 	this.canBeCast = function() {
-		return this.count > 0;
+		return this.count > this.castCount;
 	};
 	
-	this.recall = function() {
-		if (this.canBeRecalled()) {
-			this.count++;
-		}
-	};
 	
 	this.getLevel = function() {
 		return spell.level;
+	};
+	
+	this.getId = function() {
+		return spell.id;
+	};
+	
+	this.getName = function() {
+		return spell.name;
 	};
 	
 	
