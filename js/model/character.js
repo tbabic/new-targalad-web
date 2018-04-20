@@ -21,7 +21,7 @@ ActionType = {
 
 function createTargalad() {
 	var attributes = new Attributes(10, 20, 12, 18, 10, 10);
-	var targalad = new Character('magus', attributes, 10, 'equipment');
+	var targalad = new Character('magus', attributes, 11, 'equipment');
 	
 	
 	targalad.addItem(new Armor('Mithral Chainshirt +1', 'light', 4, 6, 1, 0, 15, 10));
@@ -29,7 +29,7 @@ function createTargalad() {
 	targalad.addItem(new Item('Belt of Dex +2', 'belt',new Bonus('DEXTERITY', BonusType.ENHANCEMENT, +2), 1));
 	targalad.addItem(new Item('Headband of Int +2', 'headband',new Bonus('INTELLIGENCE', BonusType.ENHANCEMENT, +2), 1));
 	targalad.addItem(new Item('Ring of Deflection +1', 'ring', new Bonus('ARMOR_CLASS', BonusType.DEFLECTION, +1), 0));
-	targalad.addItem(new Item('Cloak of Resistance +1', 'shoulders', new Bonus('SAVES', BonusType.RESISTANCE, +1), 1));
+	targalad.addItem(new Item('Cloak of Resistance +3', 'shoulders', new Bonus('SAVES', BonusType.RESISTANCE, +3), 1));
 	targalad.addItem(new Item('Pink Blue Ioun Stone', '', new Bonus(['CONSTITUTION', 'WISDOM'], BonusType.ENHANCEMENT, +2), 1));
 	targalad.addItem(new Item('Wayfinder', '', new Bonus([SkillsEnum.RIDE, SkillsEnum.KNOWLEDGE_PLANES], BonusType.COMPETENCE, +2), 1));
 	targalad.addItem(new Item('Amulet of Natural Armor +1', 'ring', new Bonus('ARMOR_CLASS', BonusType.NATURAL_ARMOR, +1), 0));
