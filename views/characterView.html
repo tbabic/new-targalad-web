@@ -1,0 +1,117 @@
+<div id ="characterView" class="view" style="display: none;">
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col">STR</th>
+				<th scope="col">DEX</th>
+				<th scope="col">CON</th>
+				<th scope="col">INT</th>
+				<th scope="col">WIS</th>
+				<th scope="col">CHA</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+				<td id="strengthId">${myCharacter.attributes.strength.getValue()}</td>
+				<td id="dexterityId">${myCharacter.attributes.dexterity.getValue()}</td>
+				<td id="constitutionId">${myCharacter.attributes.constitution.getValue()}</td>
+				<td id="intelligenceId">${myCharacter.attributes.intelligence.getValue()}</td>
+				<td id="wisdomId">${myCharacter.attributes.wisdom.getValue()}</td>
+				<td id="charismaId">${myCharacter.attributes.charisma.getValue()}</td>
+			</tr>			
+		</tbody>
+	</table>
+	
+	<div class="row">
+	
+		<!-- OFFENSE-->
+		<div id="offenseId" class="col">
+			<c-for-each list="myCharacter.offense.getAttacksSorted()" data-var="attack">
+				<div class="row">
+					<div class ="col-6">
+						Hit: <span id="toHitId">${attack.getToHit()}</span>
+					</div>
+					
+					<div class ="col-6">
+						Dmg: <span id="dmgBonusId" >${attack.getDmg()}</span>
+					</div>
+					
+				</div>
+			</c-for-each>
+		</div>
+	
+		<!-- DEFENSE-->
+		<div id="defenseId" class="col">
+			<div class="row">
+				<div class ="col-6">
+					AC:
+				</div>
+				<span class ="col" id="armorClassId">${myCharacter.defense.getArmorClass()}</span>
+			</div>
+			<div class="row">
+				<div class ="col-6">
+					Touch:
+				</div>
+				<span class ="col" id="touchAcId">${myCharacter.defense.getTouchAc()}</span>
+			</div>
+			<div class="row">
+				<div class ="col-6">
+					FlatFooted:
+				</div>
+				<span class ="col" id="flatFootedId">${myCharacter.defense.getFlatFootedAc()}</span>
+			</div>
+		</div>
+		
+		<!-- SAVES-->
+		<div id="saves" class="col">
+			<div class="row">
+				<div class ="col-5">
+					Fortitude:
+				</div>
+				<span class ="col" id="fortitudeId">${myCharacter.saves.fort.getValue()}</span>
+			</div>
+			<div class="row">
+				<div class ="col-5">
+					Reflex:
+				</div>
+				<span class ="col" id="reflexId">${myCharacter.saves.reflex.getValue()}</span>
+			</div>
+			<div class="row">
+				<div class ="col-5">
+					Will:
+				</div>
+				<span class ="col" id="willId">${myCharacter.saves.will.getValue()}</span>
+			</div>
+		</div>
+		
+	</div>
+	
+	<div class="row">		
+		<div class="col-8 abilities">
+			<c-view view="abilitiesView"></c-view>
+		</div>
+
+		<div id="statusEffectsId" class="col-4">
+			<c-view view="statusEffectsView"></c-view>
+			
+		</div>
+	
+	</div>
+	
+	<div id="conditionEffectTemplateId" style="display:none">
+		<div class="row condition-row">
+			<div class="col">
+				<button class="btn btn-condition-effect"></button>
+			</div>
+		</div>
+	</div>
+	
+	<div id="buffEffectTemplateId" style="display:none">
+		<div class="row condition-row">
+			<div class="col">
+				<button class="btn btn-buff-effect"></button>
+			</div>
+		</div>
+	</div>
+</div>
+

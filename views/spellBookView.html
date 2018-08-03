@@ -1,0 +1,132 @@
+<div id = "spellBookView" style="display: none;" class="view">
+	<div class="row spell-level-select"><div class="col">
+		<button class="btn spell-level-btn" data-spell-level="0" disabled>0</button>
+		<button class="btn spell-level-btn" data-spell-level="1">1</button>
+		<button class="btn spell-level-btn" data-spell-level="2">2</button>
+		<button class="btn spell-level-btn" data-spell-level="3">3</button>
+		<button class="btn spell-level-btn" data-spell-level="4">4</button>
+		<button class="btn spell-level-btn" data-spell-level="5">5</button>
+		<button class="btn spell-level-btn" data-spell-level="6">6</button>		
+	</div></div>
+	<div class="row">
+		<div class="spell-toggles col">
+			<button id="toggleAllId" type="button" class="btn spellbook-toggle" data-toggle="all">All</button>
+			<button id="toggleKnownId" disabled type="button" class="btn spellbook-toggle"  data-toggle="known">Known</button>
+			<button id="toggleMemorizedId" type="button" class="btn spellbook-toggle"  data-toggle="memorized" >Memorized</button>
+		</div>
+		<div class="memorized-configurations col">
+			<button type="button" class="btn save-memorized" data-toggle="modal" data-target="#saveMemorizedModalId">Save</button>
+			<button type="button" class="btn load-memorized" data-toggle="modal" data-target="#loadMemorizedModalId">Load</button>
+			<button type="button" class="btn reset-memorized" id="resetMemorizedId">Reset</button>
+		</div>
+		<div id="memorized-count" class="memorized-count col-12">
+				${myCharacter.getMemorizedSpells().size(0)}
+				/
+				${myCharacter.getMemorizedSpells().capacity(0)}
+		</div>
+		
+		
+		
+	</div>
+	
+
+<!-- 	<div id="allSpellsListId" class="toggle-known" data-spell-level=${spellbookController.getSelectedSpellLevel()}> -->
+<!-- 		<c-for-each list="allSpells" data-var="spell"> -->
+<!-- 		</c-for-each> -->
+<!-- 	</div> -->
+	
+	<div id="allSpellsListId" class="toggle-known" data-spell-level=0 data-toggle="known">
+		<c-for-each list="allSpells" data-var="spell">
+			<div id="spell-${spell.id}" data-spell-id="${spell.id}" 
+				class="row spell-row spell-level-${spell.level} all ${spell.isLearned(myCharacter) ? 'known' : ''}  ${spell.isMemorized(myCharacter) ? 'memorized' : ''}" 
+				style="display: none"> 
+				<div class="col-6 col-sm-4 spell-name align-middle"> <span class="align-middle">
+					<a class="align-middle" target="_blank" href="http://www.dxcontent.com/SDB_SpellBlock.asp?SDBID=${spell.id}">
+						${spell.name}
+					</a> (${spell.memorizedCount(myCharacter)})</span>
+				</div>
+
+				<div class ="col-6 col-sm">
+					<button type="button" class="btn learn-btn">Learn</button>
+					<button type="button" class="btn delete-btn" disabled>Delete</button>
+					<button type="button" class="btn memorize-btn">+</button>
+					<button type="button" class="btn unmemorize-btn">-</button>
+					<button type="button" class="btn cast-btn">C</button>
+					<button type="button" class="btn recall-btn">R</button>
+				</div>
+
+			</div>
+		</c-for-each>
+	</div>
+
+
+	<!--Save memorized Modal -->
+	<div class="modal fade" id="saveMemorizedModalId" tabindex="-1" role="dialog" aria-labelledby="saveMemorizedModal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">Save memorized spells</h4>
+				</div>
+				<div class="modal-body">
+<!-- 					<div class="form-group"> -->
+<!-- 						<label for="recipient-name" class="control-label">Name:</label> -->
+<!-- 						<input type="text" class="form-control" id="memorizedConfigNameId"> -->
+<!-- 					</div> -->
+					
+					<div class="row memorize-config">
+						<div class="col"><input type="text" id="memorizedConfigNameId"></div>
+						<div class="col"><button id="saveMemorizedId" type="button" class="btn btn-primary" data-dismiss="modal">Save</button></div>
+					</div>
+					
+					<div class="existing-memorize-configs">
+						<!--Load memorized configs -->
+					</div>
+					
+					
+					
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	<!--Load memorized Modal -->
+	<div class="modal fade" id="loadMemorizedModalId" tabindex="-1" role="dialog" aria-labelledby="loadMemorizedModal">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">Load memorized spells</h4>
+				</div>
+				<div class="modal-body">
+
+					<div class="existing-memorize-configs">
+						<!--Load memorized configs -->
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="memorizedConfigTemplateId" style="display:none">
+		<div class="row memorize-config">
+			<div class="col"><input readonly type="text" class="existing-memorized-name"></div>
+			<div class="col"><button type="button" data-dismiss="modal" class="btn btn-primary btn-existing-memorized-config">Save/Load</button></div>
+			<div class="col"><button type="button" data-dismiss="modal" class="btn btn-primary btn-delete-memorized-config">Delete</button></div>
+		</div>
+	</div>
+
+
+</div>

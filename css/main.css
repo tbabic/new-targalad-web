@@ -1,0 +1,339 @@
+html {
+	font-size: 16px;
+}
+@media (max-height: 900px) {
+	html { font-size: 1.5vh; }
+}
+
+@media (max-height: 540px) {
+	html { font-size: 2vh; }
+}
+
+@media (max-width: 400px) {
+	html { 
+		font-size: 3vw; 
+	}
+	
+	.col, .col-2, .col-3, .col-4, .col-5, .col-6, .col-7, .col-8, .col-9, .col-10, .col-11, .col-12 {
+		padding-right: 0px;
+	}
+	
+}
+
+.row .row {
+	margin-right: 0px;
+}
+
+.hamburger {
+	display: inline-block;
+    width: 1.3em;
+    height: 1.3em;
+    vertical-align: middle;
+    content: "";
+    background: no-repeat center center;
+    background-size: 100% 100%;
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba(255, 255, 255, 1)' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+.hide {
+	display:none;
+}
+
+.loader {
+	position: absolute;
+	left: 50%;
+	top: 50%;
+	z-index: 1;
+	width: 150px;
+	height: 150px;
+	margin: -75px 0 0 -75px;
+	border: 16px solid #f3f3f3;
+	border-radius: 50%;
+	border-top: 16px solid #3498db;
+	width: 120px;
+	height: 120px;
+	-webkit-animation: spin 2s linear infinite;
+	animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+
+
+/* ABILITIES*/
+
+
+
+.btn-ability {
+	width: 100%;
+	height: 100%;
+    font-size: 1em;
+    color: white;
+    background-color: #337ab7;
+    word-wrap: break-word;
+    white-space: normal;
+    border-radius: 0.5rem;
+    border-width: 2px;
+    border-color: #337ab7;
+	
+}
+
+.has-activation-options-false > .btn-ability {
+	border-top-right-radius: 0.5rem !important;
+	border-bottom-right-radius: 0.5rem !important;
+}
+
+.has-activation-options-false > .btn-ability-options {
+	display:none;
+}
+
+.has-activation-options-true > .btn-ability {
+	width: 80%;
+}
+
+
+
+
+.btn-ability-options {
+	width: 20%;
+	height: 100%;
+    font-size: 1em;
+    color: white;
+    background-color: #543eac;
+    word-wrap: break-word;
+    white-space: normal;
+    border-radius: 0.5rem;
+   	
+    padding: 0px;
+}
+
+
+
+.btn-ability.active {
+    background-color: #296596;
+    border-color: #71a9d7;
+    border-width: 2px;
+}
+
+.btn-ability.not-active {
+}
+
+.abilities > .row  .btn-group {
+	padding: 2px;
+}
+
+.ability-option-row {
+	align-items: center;
+	padding: 2px;
+}
+
+.ability-option-row .range-min{
+	padding-right:15px
+}
+
+.ability-option-row .range-max{
+	padding-left:15px
+}
+
+.ability-option-row .slider.slider-horizontal {
+	width: 70%;
+}
+
+.ability-option-row .tooltip.in {
+	opacity: 0.9
+}
+
+.ability-option-row .toggle-on  {
+
+    background-color: #337ab7;
+
+}
+
+.ability-option-row .toggle-off  {
+    background-color: #c0c0c0;
+    border-top-width: 1px;
+	border-bottom-width: 1px;
+	border-right-width: 1px;
+	border-left-width: 1px;;
+
+}
+
+.ability-option-row .toggle.btn-primary  {
+    background-color: #337ab7;
+}
+
+.ability-option-row .toggle.btn-default  {
+    background-color: #c0c0c0;
+}
+
+.ability-option-row .toggle-handle  {
+    background-color: white;
+}
+
+
+
+
+
+
+/* CONDITIONS */
+
+.dropdown-condition {
+	width: 100%;
+	height: 100%;
+	min-height: 30px;
+	background-color: #bf4002;
+	color: white;
+	margin-bottom: 10px;
+}
+
+.condition-row {
+	padding: 2px;
+}
+
+.btn-condition-effect {
+	width: 100%;
+	height: 100%;
+	min-height: 30px;
+    font-size: 1em;
+    color: white;
+    background-color: #bf4002;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.condition {
+	background-color: white;
+	color: #bf4002;
+	background-clip: content-box;
+}
+
+/* BUFFS */
+
+.dropdown-buff {
+	width: 100%;
+	height: 100%;
+	min-height: 30px;
+	background-color: #008000;
+	color: white;
+	margin-bottom: 10px;
+}
+
+.buff-row {
+	padding: 2px;
+}
+
+.btn-buff-effect {
+	width: 100%;
+	height: 100%;
+	min-height: 30px;
+    font-size: 1em;
+    color: white;
+    background-color: #008000;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.buff {
+	background-color: white;
+	color: #008000;
+	background-clip: content-box;
+}
+
+
+/* SPELLS*/
+
+.toggle-all .memorize-div-btn, .toggle-all .cast-div-btn,  .toggle-all .recall-div-btn {
+	display: none;
+}
+
+.toggle-known .learn-div-btn, .toggle-memorized .learn-div-btn {
+	display: none;
+}
+
+.toggle-all .memorize-btn, .toggle-all .unmemorize-btn, .toggle-all .cast-btn, .toggle-all .recall-btn, .toggle-all .memorize-count {
+	display: none;
+}
+
+.toggle-known .learn-btn, .toggle-memorized .learn-btn, .toggle-known .delete-btn, .toggle-memorized .delete-btn {
+	display: none;
+}
+
+
+.spellbook-toggle {
+	background-color: #337ab7;
+	color: white;
+	border-radius: 0;
+}
+
+.spell-level-btn {
+	background-color: #2fbba6;
+	color: white;
+	border-radius: 2rem;
+}
+
+.learn-btn, .delete-btn, .memorize-btn, .unmemorize-btn, .cast-btn, .recall-btn {
+	background-color: #337ab7;
+	color: white;
+	min-height:35px;
+	min-width:35px;
+}
+
+.spell-name {
+	display: inline-flex;
+	align-items: center;
+	
+}
+
+
+/* SKILLS*/
+
+.skill-header {
+
+
+}
+
+.skill-row {
+	border-top-width: 1px;
+	border-bottom-width: 0px;
+	border-right-width: 0px;
+	border-left-width: 0px;
+	border-color: black;
+	border-style: solid;
+	
+
+}
+
+.skill-name {
+	font-size: 1em;
+}
+
+.skill-value {
+	border-top-width: 0px;
+	border-bottom-width: 0px;
+	border-right-width: 0px;
+	border-left-width: 1px;
+	border-color: black;
+	border-style: solid;
+	min-width: 60px;
+	
+}
+
+.skill-rank {
+	border-top-width: 0px;
+	border-bottom-width: 0px;
+	border-right-width: 0px;
+	border-left-width: 1px;
+	border-color: black;
+	border-style: solid;
+	
+}
+
+.skill-class-skill-true {
+	font-weight: bold;
+}
+
+.skill-untrained-false {
+	font-style: italic;
+}

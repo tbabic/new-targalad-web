@@ -1,0 +1,35 @@
+<div id = "skillsView" style="display: none;" class="view">
+	<div class="skillsTable">
+		<div class="row skills-header">
+			<div class="col-6 skill-header skill-name">
+				Name
+			</div>
+			<div class="col-1 skill-header skill-value">
+				Value
+			</div>
+			<div class="col-1 skill-header skill-rank">
+				Ranks
+			</div>
+			
+		</div>
+		<c-for-each list="myCharacter.skillSet.getSkillsList()" 
+			data-var="skill">
+			<div class="row skill-row">
+				<div class="col-6 skill-name skill-untrained-${skill.untrained} skill-class-skill-${skill.isClassSkill}">
+					${skill.name}
+				</div>
+				<div class="col-1 skill-value">
+					${skill.getValue()}
+				</div>
+				<div class="col-1 skill-rank">
+					${skill.ranks}
+				</div>
+				<div class="col-3 skill-mod">
+					<button class="btn skill-add-btn" data-skill-name=${skill.name} >+</button>
+					<button class="btn skill-remove-btn"data-skill-name=${skill.name} >-</button>
+				</div>
+				
+			</div>
+		</c-for-each>
+	</div>
+</div>

@@ -1,0 +1,46 @@
+<div id="abilitiesViewId" class="abilities">
+
+	<c-for-each list=myCharacter.nonPassiveAbilities data-var="ability" class="row">
+		<div class="col-4 btn-group has-activation-options-${ability.hasActivationOptions()}">
+			<button id="${ability.id}" class="btn btn-ability not-active" data-ability="${ability}" >${ability.name}</button>
+			<button class="btn btn-ability-options" data-ability="${ability}" ><span class="hamburger"></span></button>
+		</div>
+	</c-for-each>
+
+
+
+
+<!--Ability options modal -->
+	<div class="modal fade" id="chooseAbilityOptionModal" tabindex="-1" role="dialog" aria-labelledby="chooseAbilityOption">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">Choose option</h4>
+				</div>
+				<div class="modal-body">
+
+					
+					
+				</div>
+				<div class="modal-footer">
+					<button id="confirmAbilityOptionId" type="button" class="btn btn-primary" data-dismiss="modal">Confirm</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	<div id="abilityOptionTemplateId" style="display:none">
+		<div class="row ability-option-row">
+			<div class="col-4"><span class="ability-option-name"></span></div>
+			<div class="col-8"><input type="text" class="ability-option-input"></div>
+		</div>
+	</div>
+
+
+</div>
+
