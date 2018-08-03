@@ -20,8 +20,8 @@ ActionType = {
 
 
 function createTargalad() {
-	var attributes = new Attributes(10, 20, 12, 18, 10, 10);
-	var targalad = new Character('magus', attributes, 11, 'equipment');
+	var attributes = new Attributes(10, 21, 12, 18, 10, 10);
+	var targalad = new Character('magus', attributes, 12, 'equipment');
 	
 	
 	targalad.addItem(new Armor('Mithral Chainshirt +1', 'light', 4, 6, 1, 0, 15, 10));
