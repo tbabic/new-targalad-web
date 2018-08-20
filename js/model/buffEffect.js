@@ -37,6 +37,22 @@ BuffsFactory = {
 		}, function(){
 			this.bonusEffectList.deactivate();
 		}),
+		
+		shield : new BuffEffect("Shield", function() {
+			this.bonusEffectList = new BonusEffectList(this);
+			this.bonusEffectList.add(new Bonus(BonusCategory.ARMOR_CLASS, BonusType.SHIELD, 4, this.name));
+			this.bonusEffectList.activate();
+		}, function(){
+			this.bonusEffectList.deactivate();
+		}),
+
+		bladeTutorsSpirit : new BuffEffect("Blade Tutors Spirit", function() {
+			this.bonusEffectList = new BonusEffectList(this);
+			this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, 3, this.name));
+			this.bonusEffectList.activate();
+		}, function(){
+			this.bonusEffectList.deactivate();
+		})
 
 };
 
