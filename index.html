@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml">
-<script src="js/jquery-3.2.1.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="js/popper.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="js/bootstrap-slider.js"></script>
 <script src="js/bootstrap-toggle.js"></script>
+<script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router@3.0.1/dist/vue-router.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="/js/http-vue.js"></script>
 
 <head>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -19,11 +23,12 @@
 
 </head>
 <body>
-<div class="container">
+<div class="container"><div id="app">
 	<nav class="navbar navbar-default">
 	  <div class="container-fluid">
 		<!-- Brand and toggle get grouped for better mobile display -->
 		<div class="navbar-header">
+		  <router-link class="navbar-brand navbar-header-btn" to="/main">Main</router-link>
 		  <a class="navbar-brand navbar-header-btn" data-ref-view="characterView" href="#">Main</a>
 		  <a class="navbar-brand navbar-header-btn" data-ref-view="spellBookView" href="#">Spells</a>
 		  <a class="navbar-brand navbar-header-btn" data-ref-view="skillsView" href="#">Skills</a>
@@ -38,13 +43,16 @@
 	</div>
 	
 	<div id="viewHolder">
-		<c-view view="characterView"></c-view>
-		<c-view view="spellBookView"></c-view>
-		<c-view view="skillsView"></c-view>
-		<c-view view="settingsView"></c-view>
+		
+	
+		
 	</div>
 	
-</div>
+	<router-view></router-view>
+	
+	
+	
+</div></div>
 <div id="model" style="display: none">
 </div>
 
@@ -73,9 +81,7 @@
 <script src="js/controllers/initController.js"></script>
 
 
-<script src="js/framework/view.js"></script>
-<script src="js/framework/for.js"></script>
-<script src="js/framework/framework.js"></script>
+
 
 
 
@@ -85,6 +91,27 @@
 <script src="js/controllers/spellbookController.js"></script>
 <script src="js/controllers/skillsController.js"></script>
 <script src="js/controllers/settingsController.js"></script>
+
+<script>
+
+var routes = [
+	  { path: '/main', component: characterComponent }
+	];
+	
+var router = new VueRouter({
+	  routes // short for `routes: routes`
+	});
+	
+	
+
+var app = new Vue({
+	router
+	}).$mount('#app')
+$("#initLoader").hide();
+
+
+
+</script>
 
 </html>
 
