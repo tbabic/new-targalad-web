@@ -216,7 +216,7 @@ var AbilityFactory = {
 			.activate(function() {
 				let acBonusValue = 2;
 				if ( this.owner.skillSet.getSkill(SkillsEnum.ACROBATICS).ranks >=3) {
-					acBonus = 3;
+					acBonusValue = 3;
 				}
 				this.bonusEffectList = new BonusEffectList(this, [
 					new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DODGE, acBonusValue, this.name), 
