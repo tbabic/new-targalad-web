@@ -1,4 +1,4 @@
-<div id = "spellBookView" style="display: none;" class="view">
+<div id = "spellBookView">
 	<div class="row spell-level-select"><div class="col">
 		<button class="btn spell-level-btn" data-spell-level="0" disabled>0</button>
 		<button class="btn spell-level-btn" data-spell-level="1">1</button>
@@ -10,8 +10,8 @@
 	</div></div>
 	<div class="row">
 		<div class="spell-toggles col">
-			<button id="toggleAllId" type="button" class="btn spellbook-toggle" data-toggle="all">All</button>
-			<button id="toggleKnownId" disabled type="button" class="btn spellbook-toggle"  data-toggle="known">Known</button>
+			<button id="toggleAllId" disabled type="button" class="btn spellbook-toggle" data-toggle="all">All</button>
+			<button id="toggleKnownId" type="button" class="btn spellbook-toggle"  data-toggle="known">Known</button>
 			<button id="toggleMemorizedId" type="button" class="btn spellbook-toggle"  data-toggle="memorized" >Memorized</button>
 		</div>
 		<div class="memorized-configurations col">
@@ -20,9 +20,9 @@
 			<button type="button" class="btn reset-memorized" id="resetMemorizedId">Reset</button>
 		</div>
 		<div id="memorized-count" class="memorized-count col-12">
-				${myCharacter.getMemorizedSpells().size(0)}
+				{{character.getMemorizedSpells().size(0)}}
 				/
-				${myCharacter.getMemorizedSpells().capacity(0)}
+				{{character.getMemorizedSpells().capacity(0)}}
 		</div>
 		
 		
@@ -35,28 +35,26 @@
 <!-- 		</c-for-each> -->
 <!-- 	</div> -->
 	
-	<div id="allSpellsListId" class="toggle-known" data-spell-level=0 data-toggle="known">
-		<c-for-each list="allSpells" data-var="spell">
-			<div id="spell-${spell.id}" data-spell-id="${spell.id}" 
-				class="row spell-row spell-level-${spell.level} all ${spell.isLearned(myCharacter) ? 'known' : ''}  ${spell.isMemorized(myCharacter) ? 'memorized' : ''}" 
-				style="display: none"> 
-				<div class="col-6 col-sm-4 spell-name align-middle"> <span class="align-middle">
-					<a class="align-middle" target="_blank" href="http://www.dxcontent.com/SDB_SpellBlock.asp?SDBID=${spell.id}">
-						${spell.name}
-					</a> (${spell.memorizedCount(myCharacter)})</span>
-				</div>
-
-				<div class ="col-6 col-sm">
-					<button type="button" class="btn learn-btn">Learn</button>
-					<button type="button" class="btn delete-btn" disabled>Delete</button>
-					<button type="button" class="btn memorize-btn">+</button>
-					<button type="button" class="btn unmemorize-btn">-</button>
-					<button type="button" class="btn cast-btn">C</button>
-					<button type="button" class="btn recall-btn">R</button>
-				</div>
-
+	<div id="allSpellsListId" class="toggle-all" data-spell-level=0 data-toggle="all">
+		<div v-for="spell in allSpells" v-bind:id="'spell-'+spell.id" v-bind:data-spell-id="spell.id" 
+			v-bind:class="'row spell-row spell-level-'+spell.level+' all '+(spell.isLearned(character) ? 'known' : '') +' '+ (spell.isMemorized(character) ? 'memorized' : '')" 
+			style="display: none"> 
+			<div class="col-6 col-sm-4 spell-name align-middle"> <span class="align-middle">
+				<a class="align-middle" target="_blank" v-bind:href="'http://www.dxcontent.com/SDB_SpellBlock.asp?SDBID='+spell.id">
+					{{spell.name}}
+				</a> ({{spell.memorizedCount(character)}})</span>
 			</div>
-		</c-for-each>
+
+			<div class ="col-6 col-sm">
+				<button type="button" class="btn learn-btn">Learn</button>
+				<button type="button" class="btn delete-btn" disabled>Delete</button>
+				<button type="button" class="btn memorize-btn">+</button>
+				<button type="button" class="btn unmemorize-btn">-</button>
+				<button type="button" class="btn cast-btn">C</button>
+				<button type="button" class="btn recall-btn">R</button>
+			</div>
+
+		</div>
 	</div>
 
 

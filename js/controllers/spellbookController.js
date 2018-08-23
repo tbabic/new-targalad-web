@@ -1,4 +1,22 @@
 console.log("spellbookController");
+var spellbookComponent = httpVue.component("spellbook-component", {
+	templateUrl:"views/spellBookView.html",
+	data: function() {
+		return {
+			character: myCharacter,
+			allSpells: allSpells
+		}
+	},
+	mounted : function() {
+		showSpells();
+		
+		learnBtn = $(this).find(".learn-btn");
+		deleteBtn = $(this).find(".delete-btn");
+		$(learnBtn).attr("disabled", true);
+		$(deleteBtn).attr("disabled", false);
+	}
+});
+
 
 function serializeSpellBook() {
 	var spellbook = myCharacter.getSpellBook();
@@ -46,7 +64,7 @@ function showSpells() {
 	$(".spell-row.spell-level-" + spellLevel+"."+toggle).show();
 }
 
-$(".spell-level-btn").on("click", function(event) {
+$(document.body).on("click", ".spell-level-btn", function(event) {
 	var spellLevel = event.target.dataset.spellLevel;
 	$("#allSpellsListId").data("spellLevel", +spellLevel);
 	$(".spell-level-btn").attr("disabled", false);
@@ -82,12 +100,12 @@ function deleteSpell(spell) {
 	
 }
 
-$(".learn-btn").on("click", function(event) {
+$(document.body).on("click", ".learn-btn",function(event) {
 	let spell = getSpellFromButton(event.target);
 	learnSpell(spell);
 });
 
-$(".delete-btn").on("click", function(event) {
+$(document.body).on("click", ".delete-btn", function(event) {
 	let spell = getSpellFromButton(event.target);
 	deleteSpell(spell);
 
@@ -103,28 +121,28 @@ function unmemorizeSpell(spell) {
 	memorizedSpells.remove(spell);
 }
 
-$(".memorize-btn").on("click", function(event) {
+$(document.body).on("click", ".memorize-btn", function(event) {
 	let spell = getSpellFromButton(event.target);
 	memorizeSpell(spell);
 });
 
-$(".unmemorize-btn").on("click", function(event) {
+$(document.body).on("click", ".unmemorize-btn", function(event) {
 	let spell = getSpellFromButton(event.target);
 	unmemorizeSpell(spell);
 });
 
-$(".cast-btn").on("click", function(event) {
+$(document.body).on("click", ".cast-btn", function(event) {
 	let spell = getSpellFromButton(event.target);
 	let memorizedSpells = myCharacter.memorizedSpells();
 	memorizedSpells.castSpell(spell);
 });
-$(".recall-btn").on("click", function(event) {
+$(document.body).on("click", ".recall-btn", function(event) {
 	let spell = getSpellFromButton(event.target);
 	let memorizedSpells = myCharacter.memorizedSpells();
 	memorizedSpells.recallSpell(spell);
 });
 
-$(".spellbook-toggle").on("click", function(event) {
+$(document.body).on("click", ".spellbook-toggle", function(event) {
 	var classToggle = "toggle-"+event.target.dataset.toggle;
 	$("#allSpellsListId").removeClass("toggle-all");
 	$("#allSpellsListId").removeClass("toggle-known");
@@ -191,7 +209,7 @@ function loadMemorizedConfiguration(memorizedName) {
 	}
 }
 
-$(".memorized-configurations > button").on("click", function(event) {
+$(document.body).on("click", ".memorized-configurations > button", function(event) {
 	var targetModal = $(event.target).data("target");
 	var action = "";
 	if (targetModal === "#loadMemorizedModalId") {
@@ -216,7 +234,7 @@ $(".memorized-configurations > button").on("click", function(event) {
 });
 
 
-$("#saveMemorizedId").on("click", function(event) {
+$(document.body).on("click", "#saveMemorizedId", function(event) {
 	var memorizedName = $("#memorizedConfigNameId").val();
 	saveMemorizedConfiguration(memorizedName);
 });
@@ -254,7 +272,7 @@ $("#resetMemorizedId").on('click', function(event) {
 
 
 deserializeSpellBook();
-showSpells();
+//showSpells();
 
 
 

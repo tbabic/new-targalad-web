@@ -29,8 +29,9 @@
 		<!-- Brand and toggle get grouped for better mobile display -->
 		<div class="navbar-header">
 		  <router-link class="navbar-brand navbar-header-btn" to="/main">Main</router-link>
+		  <router-link class="navbar-brand navbar-header-btn" to="/spells">Spells</router-link>
 <!-- 		  <a class="navbar-brand navbar-header-btn" data-ref-view="characterView" href="#">Main</a> -->
-		  <a class="navbar-brand navbar-header-btn" data-ref-view="spellBookView" href="#">Spells</a>
+<!-- 		  <a class="navbar-brand navbar-header-btn" data-ref-view="spellBookView" href="#">Spells</a> -->
 		  <a class="navbar-brand navbar-header-btn" data-ref-view="skillsView" href="#">Skills</a>
 		  <a class="navbar-brand navbar-header-btn" data-ref-view="equipmentView" href="#">Items</a>
 		  <a class="navbar-brand navbar-header-btn" data-ref-view="settingsView" href="#">Settings</a>
@@ -100,6 +101,9 @@ var routes = [
 	},
 	{
 		path: '/main', component: characterComponent 
+	},
+	{
+		path: '/spells', component: spellbookComponent
 	}
 ];
 	
