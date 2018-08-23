@@ -53,7 +53,9 @@ function SpellBook(character, pages, weight) {
 
 
 
-function Spell(id, name, level, propertiesOrCallback, activateOrDeactivateCallback, deactivateCallback) {
+function Spell(id, name, level, spellLevel, school,
+		castingTime, components, description,
+		propertiesOrCallback, activateOrDeactivateCallback, deactivateCallback) {
 	this.id = id;
 	this.name = name;
 	this.level = level;
