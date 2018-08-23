@@ -29,7 +29,7 @@
 		<!-- Brand and toggle get grouped for better mobile display -->
 		<div class="navbar-header">
 		  <router-link class="navbar-brand navbar-header-btn" to="/main">Main</router-link>
-		  <a class="navbar-brand navbar-header-btn" data-ref-view="characterView" href="#">Main</a>
+<!-- 		  <a class="navbar-brand navbar-header-btn" data-ref-view="characterView" href="#">Main</a> -->
 		  <a class="navbar-brand navbar-header-btn" data-ref-view="spellBookView" href="#">Spells</a>
 		  <a class="navbar-brand navbar-header-btn" data-ref-view="skillsView" href="#">Skills</a>
 		  <a class="navbar-brand navbar-header-btn" data-ref-view="equipmentView" href="#">Items</a>
@@ -95,8 +95,13 @@
 <script>
 
 var routes = [
-	  { path: '/main', component: characterComponent }
-	];
+	{ 
+		path: '*', redirect: '/main'
+	},
+	{
+		path: '/main', component: characterComponent 
+	}
+];
 	
 var router = new VueRouter({
 	  routes // short for `routes: routes`
@@ -106,7 +111,7 @@ var router = new VueRouter({
 
 var app = new Vue({
 	router
-	}).$mount('#app')
+	}).$mount('#app');
 $("#initLoader").hide();
 
 

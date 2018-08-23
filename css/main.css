@@ -61,6 +61,10 @@ html {
 	100% { transform: rotate(360deg); }
 }
 
+button.dropdown-item:hover {
+	cursor:pointer
+}
+
 
 /* ABILITIES*/
 
@@ -171,7 +175,6 @@ html {
 .ability-option-row .toggle-handle  {
     background-color: white;
 }
-
 
 
 
