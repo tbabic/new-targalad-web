@@ -59,6 +59,10 @@ function Spell(id, name, level, spellLevel, school,
 	this.id = id;
 	this.name = name;
 	this.level = level;
+	this.school = school;
+	this.castingTime = castingTime;
+	this.components = components;
+	this.description = description;
 	this.properties = new BonusEffectList(this);
 	if (propertiesOrCallback instanceof Function) {
 		this.activateCallback = propertiesOrCallback;
