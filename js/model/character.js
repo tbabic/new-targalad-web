@@ -20,13 +20,13 @@ ActionType = {
 
 
 function createTargalad() {
-	var attributes = new Attributes(10, 20, 12, 18, 10, 10);
-	var targalad = new Character('magus', attributes, 11, 'equipment');
+	var attributes = new Attributes(10, 21, 12, 18, 10, 10);
+	var targalad = new Character('magus', attributes, 12, 'equipment');
 	
 	
-	targalad.addItem(new Armor('Mithral Breastplate +1', 'light', 6, 5, 1, 0, 30, 15));
-	targalad.addItem(new Weapon('Scimitar +2, Keen', WeaponType.SCIMITAR, +2, 4));
-	targalad.addItem(new Item('Belt of Dex +2', 'belt',new Bonus('DEXTERITY', BonusType.ENHANCEMENT, +2), 1));
+	targalad.addItem(new Armor('Mithral Nimble Breastplate +1', 'light', 5, 7, 1, 0, 30, 20));
+	targalad.addItem(new Weapon('Scimitar +2, Spell Storing', WeaponType.SCIMITAR, +2, 4));
+	targalad.addItem(new Item('Belt of Dex +5', 'belt',new Bonus('DEXTERITY', BonusType.ENHANCEMENT, +5), 1));
 	targalad.addItem(new Item('Headband of Int +2', 'headband',new Bonus('INTELLIGENCE', BonusType.ENHANCEMENT, +2), 1));
 	targalad.addItem(new Item('Ring of Deflection +2', 'ring', new Bonus('ARMOR_CLASS', BonusType.DEFLECTION, +2), 0));
 	targalad.addItem(new Item('Cloak of Resistance +3', 'shoulders', new Bonus('SAVES', BonusType.RESISTANCE, +3), 1));
