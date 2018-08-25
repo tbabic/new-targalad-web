@@ -13,6 +13,7 @@ function Equipment() {
 	this.belt = undefined;
 	this.wrists = undefined;
 	this.hands = undefined;
+	this.feet = undefined;
 	this.leftRing = undefined;
 	this.rightRing = undefined;
 	this.inventory = [];
