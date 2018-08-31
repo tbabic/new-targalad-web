@@ -1,5 +1,5 @@
 var allSpells = [];
-
+console.log("loading spells");
 var loadSpells = function() {
 	let finished = false;
 	let url = "https://docs.google.com/spreadsheets/export?id=1cuwb3QSvWDD7GG5McdvyyRBpqycYuKMRsXgyrvxvLFI&exportFormat=csv";
@@ -41,7 +41,10 @@ var loadSpells = function() {
 					if (row.magus === "NULL") {
 						continue;
 					}
-					let spell = new Spell(i, row.name, row.magus, row.spell_level);
+					let spell = new Spell(i, row.name, row.magus, row.spell_level, row.school,
+							row.casting_time, row.components, row.range, row.area, row.effect, 
+							row.targets, row.duration, row.saving_throw, row.spell_resistence,
+							row.description_formated);
 					allSpells.push(spell);
 						
 				}

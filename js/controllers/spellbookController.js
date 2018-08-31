@@ -1,70 +1,13 @@
 console.log("spellbookController");
 
-var spellsRepository = {
-		spells : []
-};
-
-//var loadSpells = function() {
-//	let url = "https://docs.google.com/spreadsheets/export?id=1cuwb3QSvWDD7GG5McdvyyRBpqycYuKMRsXgyrvxvLFI&exportFormat=csv";
-//	axios.get(url).then(function(response) {
-//		
-//		Papa.parse(response.data, {
-//			delimiter: ",",
-//			newline:"\n",
-//			header: true,
-//			dynamicTyping: true,
-//			complete: function(results) {
-//				
-//				results.data.sort(function(a,b) {
-//					if (a.magus === "NULL" && b.magus === "NULL") {
-//						return 0;
-//					}
-//					if (a.magus === "NULL") {
-//						return 1;
-//					}
-//					if (b.magus === "NULL") {
-//						return -1;
-//					}
-//					
-//					if (a.magus == b.magus) {
-//						if (a.name < b.name) {
-//							return -1;
-//						}
-//						if (a.name > b.name) {
-//							return 1;
-//						}
-//						return 0;
-//					}
-//					
-//					return a.magus-b.magus;
-//					
-//				});
-////				console.log(results.data);
-//				for (let i = 0; i < results.data.length; i++) {
-//					let row = results.data[i];
-//					if (row.magus === "NULL") {
-//						continue;
-//					}
-//					let spell = new Spell(i, row.name, row.magus, row.spell_level);
-//					spellsRepository.spells.push(spell);
-//						
-//				}
-//				console.log("spells loaded");
-//			},
-//			error: function(err) {
-//				console.log("error parsing data");
-//				console.log(err);
-//			}});
-//		
-//	});
-//}();
 
 var spellbookComponent = httpVue.component("spellbook-component", {
 	templateUrl:"views/spellBookView.html",
 	data: function() {
 		return {
 			character: myCharacter,
-			allSpells: spellsRepository.spells
+			allSpells: allSpells,
+			Utils: Utils
 		}
 	},
 	mounted : function() {
@@ -74,6 +17,11 @@ var spellbookComponent = httpVue.component("spellbook-component", {
 		deleteBtn = $(this).find(".delete-btn");
 		$(learnBtn).attr("disabled", true);
 		$(deleteBtn).attr("disabled", false);
+	},
+	methods : {
+		showSpellDetails(spell) {
+			
+		}
 	}
 });
 

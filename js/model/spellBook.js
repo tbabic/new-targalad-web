@@ -53,15 +53,24 @@ function SpellBook(character, pages, weight) {
 
 
 
-function Spell(id, name, level, spellLevel, school,
-		castingTime, components, description,
+function Spell(id, name, level, spellLevel, school, castingTime,
+		components, range, area, effect, target, duration, 
+		savingThrow, spellResistance, description,
 		propertiesOrCallback, activateOrDeactivateCallback, deactivateCallback) {
 	this.id = id;
 	this.name = name;
 	this.level = level;
+	this.spellLevel = spellLevel;
 	this.school = school;
 	this.castingTime = castingTime;
 	this.components = components;
+	this.range = range;
+	this.area = area;
+	this.effect = effect;
+	this.target = target;
+	this.duration = duration;
+	this.savingThrow = savingThrow;
+	this.spellResistance = spellResistance;
 	this.description = description;
 	this.properties = new BonusEffectList(this);
 	if (propertiesOrCallback instanceof Function) {

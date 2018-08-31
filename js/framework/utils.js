@@ -28,6 +28,19 @@ var Utils = {
 			array.push(map[key]);
 		}
 		return array;
+	},
+	
+	isStringEmpty : function(string) {
+		if (string === undefined) {
+			return true;
+		}
+		if (string === null) {
+			return true;
+		}
+		if (string.trim() === '') {
+			return true;
+		}
+		return false;
 	}
 	
 };
