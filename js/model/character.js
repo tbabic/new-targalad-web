@@ -32,7 +32,7 @@ function createTargalad() {
 	targalad.addItem(new Item('Cloak of Resistance +3', 'shoulders', new Bonus('SAVES', BonusType.RESISTANCE, +3), 1));
 	targalad.addItem(new Item('Pink Blue Ioun Stone', '', new Bonus(['CONSTITUTION', 'WISDOM'], BonusType.ENHANCEMENT, +2), 1));
 	targalad.addItem(new Item('Wayfinder', '', new Bonus([SkillsEnum.RIDE, SkillsEnum.KNOWLEDGE_PLANES], BonusType.COMPETENCE, +2), 1));
-	targalad.addItem(new Item('Amulet of Natural Armor +1', 'ring', new Bonus('ARMOR_CLASS', BonusType.NATURAL_ARMOR, +1), 0));
+	targalad.addItem(new Item('Amulet of Natural Armor +2', 'ring', new Bonus('ARMOR_CLASS', BonusType.NATURAL_ARMOR, +2), 0));
 	targalad.addItem(new Item('Boots of Elven Kind', 'feet', new Bonus(SkillsEnum.ACROBATICS, BonusType.COMPETENCE, +5), 0));
 	
 	targalad.addAbility(FeatFactory.weaponFinesse(targalad));
