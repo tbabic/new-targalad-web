@@ -9,7 +9,7 @@ var statusEffectsComponent = httpVue.component("status-effects-component", {
 			conditions : ConditionsFactory,
 			buffs : BuffsFactory,
 			activatedBuffs : characterBuffs,
-			conditionEffects : copyVueMap(myCharacter.conditionEffects)
+			conditionEffects : Utils.copyVueMap(myCharacter.conditionEffects)
 		}
 	},
 	computed : {
@@ -24,11 +24,11 @@ var statusEffectsComponent = httpVue.component("status-effects-component", {
 	methods : {
 		activateCondition : function(condition) {
 			condition.apply(myCharacter);
-			copyVueMap(myCharacter.conditionEffects, this.conditionEffects);
+			Utils.copyVueMap(myCharacter.conditionEffects, this.conditionEffects);
 		},
 		removeConditionEffect:function(conditionEffect) {
 			conditionEffect.remove();
-			copyVueMap(myCharacter.conditionEffects, this.conditionEffects);
+			Utils.copyVueMap(myCharacter.conditionEffects, this.conditionEffects);
 		},
 		activateBuff : function(buff) {
 			buff.activate(myCharacter);
@@ -40,17 +40,3 @@ var statusEffectsComponent = httpVue.component("status-effects-component", {
 		}
 	}
 });
-
-var copyVueMap=function(source, destination) {
-	if (destination === undefined) {
-		destination = {};
-	}
-	for (let key in destination) {
-		Vue.delete(destination, key);
-	}
-	for (let key in source) {
-		Vue.set(destination, key, source[key]);
-	}
-	return destination;
-	
-}

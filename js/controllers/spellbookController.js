@@ -1,31 +1,5 @@
 console.log("spellbookController");
 
-
-var spellbookComponent = httpVue.component("spellbook-component", {
-	templateUrl:"views/spellBookView.html",
-	data: function() {
-		return {
-			character: myCharacter,
-			allSpells: allSpells,
-			Utils: Utils
-		}
-	},
-	mounted : function() {
-		showSpells();
-		
-		learnBtn = $(this).find(".learn-btn");
-		deleteBtn = $(this).find(".delete-btn");
-		$(learnBtn).attr("disabled", true);
-		$(deleteBtn).attr("disabled", false);
-	},
-	methods : {
-		showSpellDetails(spell) {
-			
-		}
-	}
-});
-
-
 function serializeSpellBook() {
 	var spellbook = myCharacter.getSpellBook();
 	var serialize = {
@@ -40,17 +14,97 @@ function serializeSpellBook() {
 }
 
 function deserializeSpellBook() {
-	var spellbook = myCharacter.getSpellBook();
+	let spellbook = myCharacter.getSpellBook();
 	if (window.localStorage.getItem("spellbook") === undefined || window.localStorage.getItem("spellbook") === null) {
 		return;
 	}
 	var serialize = JSON.parse(window.localStorage.getItem("spellbook"));
 	for(let spellId in serialize.spells) {
 		let spell = spellsDB.getById(spellId);
-		learnSpell(spell);
+		spellbook.addSpell(spell);
 		
 	}
 }
+deserializeSpellBook();
+
+var spellbookComponent = httpVue.component("spellbook-component", {
+	templateUrl:"views/spellBookView.html",
+	data: function() {
+		return {
+			character: myCharacter,
+			allSpells: allSpells,
+			spellbook: myCharacter.characterClass.spellbook,
+			Utils: Utils,
+			selectedLevel: 0
+		}
+	},
+	mounted : function() {
+		showSpells();
+		
+		learnBtn = $(this).find(".learn-btn");
+		deleteBtn = $(this).find(".delete-btn");
+		$(learnBtn).attr("disabled", true);
+		$(deleteBtn).attr("disabled", false);
+	},
+	computed : {
+		spellLevels : function() {
+			let spellLevels = [];
+			for (let level = 0; level <= this.character.characterClass.maxSpellLevel(); level++) {
+				spellLevels.push(level);
+			}
+			return spellLevels;
+		}
+	},
+	methods : {
+		isSpellKnown(spell) {
+			return spell.isLearned(this.character);
+		},
+		isSpellMemorized(spell) {
+			return spell.isMemorized(this.character);
+		},
+		memorizedCount(spell) {
+			return spell.memorizedCount(this.character);
+		},
+		learnSpell(spell) {
+			this.spellbook.addSpell(spell);
+			this.$forceUpdate();
+			
+		},
+		deleteSpell(spell) {
+			this.spellbook.deleteSpell(spell);
+			this.$forceUpdate();
+			
+		},
+		memorizeSpell(spell) {
+			let memorizedSpells = this.character.getMemorizedSpells();
+			memorizedSpells.add(spell);
+			this.$forceUpdate()
+		},
+		unmemorizeSpell(spell) {
+			let memorizedSpells = this.character.getMemorizedSpells();
+			memorizedSpells.remove(spell);
+			this.$forceUpdate()
+		},
+		castSpell(spell) {
+			let memorizedSpells = this.character.getMemorizedSpells();
+			memorizedSpells.castSpell(spell);
+			this.$forceUpdate()
+		},
+		recallSpell(spell) {
+			let memorizedSpells = this.character.getMemorizedSpells();
+			memorizedSpells.recallSpell(spell);
+			this.$forceUpdate()
+		},
+		changeSpellLevel(level) {
+			this.selectedLevel = level;
+			$("#allSpellsListId").data("spellLevel", +level);
+			showSpells();
+		}
+	}
+});
+
+
+
 	
 
 
@@ -72,84 +126,6 @@ function showSpells() {
 	$(".spell-row.spell-level-" + spellLevel+"."+toggle).show();
 }
 
-$(document.body).on("click", ".spell-level-btn", function(event) {
-	var spellLevel = event.target.dataset.spellLevel;
-	$("#allSpellsListId").data("spellLevel", +spellLevel);
-	$(".spell-level-btn").attr("disabled", false);
-	$(event.target).attr("disabled", true);
-	
-	showSpells();
-	
-});
-
-function getSpellFromButton(button) {
-	let parent = $(button).closest(".spell-row");
-	let spellId =parent.data().spellId;
-	return spellsDB.getById(spellId);
-}
-
-function learnSpell(spell) {
-	let spellBook = myCharacter.getSpellBook();
-	spellBook.addSpell(spell);
-	let parent = $("#spell-"+spell.id);
-	parent.addClass("known");
-	parent.find(".learn-btn").attr("disabled", true);
-	parent.find(".delete-btn").attr("disabled", false);
-	
-}
-
-function deleteSpell(spell) {
-	let spellBook = myCharacter.getSpellBook();
-	spellBook.deleteSpell(spell);
-	let parent = $("#spell-"+spell.id);
-	parent.removeClass("known");
-	parent.find(".learn-btn").attr("disabled", false);
-	parent.find(".delete-btn").attr("disabled", true);
-	
-}
-
-$(document.body).on("click", ".learn-btn",function(event) {
-	let spell = getSpellFromButton(event.target);
-	learnSpell(spell);
-});
-
-$(document.body).on("click", ".delete-btn", function(event) {
-	let spell = getSpellFromButton(event.target);
-	deleteSpell(spell);
-
-});
-
-function memorizeSpell(spell) {
-	let memorizedSpells = myCharacter.getMemorizedSpells()
-	memorizedSpells.add(spell);
-}
-
-function unmemorizeSpell(spell) {
-	let memorizedSpells = myCharacter.getMemorizedSpells()
-	memorizedSpells.remove(spell);
-}
-
-$(document.body).on("click", ".memorize-btn", function(event) {
-	let spell = getSpellFromButton(event.target);
-	memorizeSpell(spell);
-});
-
-$(document.body).on("click", ".unmemorize-btn", function(event) {
-	let spell = getSpellFromButton(event.target);
-	unmemorizeSpell(spell);
-});
-
-$(document.body).on("click", ".cast-btn", function(event) {
-	let spell = getSpellFromButton(event.target);
-	let memorizedSpells = myCharacter.memorizedSpells();
-	memorizedSpells.castSpell(spell);
-});
-$(document.body).on("click", ".recall-btn", function(event) {
-	let spell = getSpellFromButton(event.target);
-	let memorizedSpells = myCharacter.memorizedSpells();
-	memorizedSpells.recallSpell(spell);
-});
-
 $(document.body).on("click", ".spellbook-toggle", function(event) {
 	var classToggle = "toggle-"+event.target.dataset.toggle;
 	$("#allSpellsListId").removeClass("toggle-all");
@@ -163,14 +139,6 @@ $(document.body).on("click", ".spellbook-toggle", function(event) {
 	$(event.target).attr("disabled", true);
 	showSpells();
 	
-});
-
-
-$(".spell-row.known").each(function() {
-	learnBtn = $(this).find(".learn-btn");
-	deleteBtn = $(this).find(".delete-btn");
-	$(learnBtn).attr("disabled", true);
-	$(deleteBtn).attr("disabled", false);
 });
 
 
@@ -278,9 +246,6 @@ $("#resetMemorizedId").on('click', function(event) {
 	showSpells();
 });
 
-
-deserializeSpellBook();
-//showSpells();
 
 
 
