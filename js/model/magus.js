@@ -47,9 +47,16 @@ function Magus(character) {
 			return;
 		}
 		let baseSpells = this.baseSpellsPerDay(spellLevel);
+		if(baseSpells === undefined) {
+			return 0;
+		}
 		let bonusSpells = this.bonusSpellsPerDay(spellLevel);
 		return baseSpells + bonusSpells;
 	};
+	
+	this.maxSpellLevel = function() {
+		return 6;
+	}
 	
 	this.baseSpellsPerDay = function(spellLevel) {
 		let startingLevel = (spellLevel -1)*3 + 1;
