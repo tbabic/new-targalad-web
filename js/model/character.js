@@ -24,7 +24,7 @@ function createTargalad() {
 	var targalad = new Character('magus', attributes, 12, 'equipment');
 	
 	
-	targalad.addItem(new Armor('Mithral Nimble Breastplate +1', 'light', 5, 7, 1, 0, 30, 20));
+	targalad.addItem(new Armor('Mithral Nimble Breastplate +3', 'light', 5, 7, 1, 0, 30, 20));
 	targalad.addItem(new Weapon('Scimitar +2, Spell Storing', WeaponType.SCIMITAR, +2, 4));
 	targalad.addItem(new Item('Belt of Dex +5', 'belt',new Bonus('DEXTERITY', BonusType.ENHANCEMENT, +5), 1));
 	targalad.addItem(new Item('Headband of Int +2', 'headband',new Bonus('INTELLIGENCE', BonusType.ENHANCEMENT, +2), 1));
