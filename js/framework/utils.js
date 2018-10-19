@@ -41,6 +41,20 @@ var Utils = {
 			return true;
 		}
 		return false;
+	},
+	
+	copyVueMap : function(source, destination) {
+		if (destination === undefined) {
+			destination = {};
+		}
+		for (let key in destination) {
+			Vue.delete(destination, key);
+		}
+		for (let key in source) {
+			Vue.set(destination, key, source[key]);
+		}
+		return destination;
+		
 	}
 	
 };

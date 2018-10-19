@@ -1,12 +1,13 @@
 <div id = "spellBookView">
 	<div class="row spell-level-select"><div class="col">
-		<button class="btn spell-level-btn" data-spell-level="0" disabled>0</button>
-		<button class="btn spell-level-btn" data-spell-level="1">1</button>
-		<button class="btn spell-level-btn" data-spell-level="2">2</button>
-		<button class="btn spell-level-btn" data-spell-level="3">3</button>
-		<button class="btn spell-level-btn" data-spell-level="4">4</button>
-		<button class="btn spell-level-btn" data-spell-level="5">5</button>
-		<button class="btn spell-level-btn" data-spell-level="6">6</button>		
+		<button v-for="level in spellLevels" 
+			class="btn spell-level-btn" 
+			v-bind:data-spell-level="level" 
+			:disabled="selectedLevel == level"
+			v-on:click="changeSpellLevel(level)">
+			{{level}}
+			
+		</button>
 	</div></div>
 	<div class="row">
 		<div class="spell-toggles col">
@@ -20,9 +21,9 @@
 			<button type="button" class="btn reset-memorized" id="resetMemorizedId">Reset</button>
 		</div>
 		<div id="memorized-count" class="memorized-count col-12">
-				{{character.getMemorizedSpells().size(0)}}
+				{{character.getMemorizedSpells().size(selectedLevel)}}
 				/
-				{{character.getMemorizedSpells().capacity(0)}}
+				{{character.getMemorizedSpells().capacity(selectedLevel)}}
 		</div>
 		
 		
@@ -41,17 +42,17 @@
 			style="display: none"> 
 			<div class="col-6 col-sm-4 spell-name align-middle"> <span class="align-middle">
 				<button type="button" class="btn btn-primary align-middle spell-btn" data-toggle="modal" v-bind:data-target="'#spell-modal-'+spell.id">
-					{{spell.name}} ({{spell.memorizedCount(character)}})
+					{{spell.name}} ({{memorizedCount(spell)}})
 				</button> </span>
 			</div>
 
 			<div class ="col-6 col-sm">
-				<button type="button" class="btn learn-btn">Learn</button>
-				<button type="button" class="btn delete-btn" disabled>Delete</button>
-				<button type="button" class="btn memorize-btn">+</button>
-				<button type="button" class="btn unmemorize-btn">-</button>
-				<button type="button" class="btn cast-btn">C</button>
-				<button type="button" class="btn recall-btn">R</button>
+				<button type="button" class="btn learn-btn" v-on:click="learnSpell(spell)" :disabled="spell.isLearned(character)" >Learn</button>
+				<button type="button" class="btn delete-btn" v-on:click="deleteSpell(spell)" :disabled="!spell.isLearned(character)" >Delete</button>
+				<button type="button" class="btn memorize-btn" v-on:click="memorizeSpell(spell)">+</button>
+				<button type="button" class="btn unmemorize-btn" v-on:click="unmemorizeSpell(spell)" >-</button>
+				<button type="button" class="btn cast-btn" v-on:click="castSpell(spell)">C</button>
+				<button type="button" class="btn recall-btn" v-on:click="recallSpell(spell)">R</button>
 			</div>
 			
 			<div class="modal fade" v-bind:id="'spell-modal-'+spell.id" tabindex="-1" role="dialog" v-bind:aria-labelledby="'spell-modal-'+spell.id">
