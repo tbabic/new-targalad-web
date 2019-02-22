@@ -1,0 +1,10 @@
+<div v-bind:class="classObject">
+	<button v-on:click="triggerAbility" v-bind:id="ability.id" class="btn btn-ability not-active " >
+		{{ ability.name }}
+	</button>
+	<button v-on:click="triggerAbilityOptions" class="btn btn-ability-options">
+		<span class="hamburger"></span>
+	</button>	
+</div>
+
+

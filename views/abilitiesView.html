@@ -1,11 +1,7 @@
 <div id="abilitiesViewId" class="abilities">
-
-	<c-for-each list=myCharacter.nonPassiveAbilities data-var="ability" class="row">
-		<div class="col-4 btn-group has-activation-options-${ability.hasActivationOptions()}">
-			<button id="${ability.id}" class="btn btn-ability not-active" data-ability="${ability}" >${ability.name}</button>
-			<button class="btn btn-ability-options" data-ability="${ability}" ><span class="hamburger"></span></button>
-		</div>
-	</c-for-each>
+	<div class="row">
+		<ability-component v-for="ability in character.nonPassiveAbilities" :ability="ability" :key="ability.id"></ability-component>
+	</div>
 
 
 
@@ -15,10 +11,11 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel">Choose option</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-					<h4 class="modal-title" id="myModalLabel">Choose option</h4>
+					
 				</div>
 				<div class="modal-body">
 

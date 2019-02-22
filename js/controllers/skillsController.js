@@ -1,17 +1,19 @@
 console.log("skillsController");
 
-$(".skill-add-btn").on("click", function(event) {
-	var skillName = $(event.target).data("skillName");
-	var skill = myCharacter.skillSet.getSkill(skillName);
-	skill.addRank(1);
-	var skillRanks = $(event.target).closest(".skill-row").find(".skill-rank");
-	$(skillRanks).text(skill.ranks);
-});
-
-$(".skill-remove-btn").on("click", function(event) {
-	var skillName = $(event.target).data("skillName");
-	var skill = myCharacter.skillSet.getSkill(skillName);
-	skill.addRank(-1);
-	var skillRanks = $(event.target).closest(".skill-row").find(".skill-rank");
-	$(skillRanks).text(skill.ranks);
+var skillsComponent = httpVue.component("spellbook-component", {
+	templateUrl:"views/skillsView.html",
+	data: function() {
+		return {
+			character: myCharacter,
+			skills: myCharacter.skillSet.getSkillsList()
+		}
+	},
+	methods : {
+		addRank(skill) {
+			skill.addRank(1);
+		}, 
+		removeRank(skill) {
+			skill.addRank(-1);
+		}
+	}
 });
