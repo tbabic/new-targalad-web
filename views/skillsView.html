@@ -1,4 +1,4 @@
-<div id = "skillsView" style="display: none;" class="view">
+<div id = "skillsView" class="view">
 	<div class="skillsTable">
 		<div class="row skills-header">
 			<div class="col-6 skill-header skill-name">
@@ -12,24 +12,22 @@
 			</div>
 			
 		</div>
-		<c-for-each list="myCharacter.skillSet.getSkillsList()" 
-			data-var="skill">
-			<div class="row skill-row">
-				<div class="col-6 skill-name skill-untrained-${skill.untrained} skill-class-skill-${skill.isClassSkill}">
-					${skill.name}
-				</div>
-				<div class="col-1 skill-value">
-					${skill.getValue()}
-				</div>
-				<div class="col-1 skill-rank">
-					${skill.ranks}
-				</div>
-				<div class="col-3 skill-mod">
-					<button class="btn skill-add-btn" data-skill-name=${skill.name} >+</button>
-					<button class="btn skill-remove-btn"data-skill-name=${skill.name} >-</button>
-				</div>
-				
+
+		<div v-for="skill in skills" class="row skill-row">
+			<div v-bind:class="'col-6 skill-name skill-untrained-'+skill.untrained+' skill-classskill-'+skill.isClassSkill">
+				{{skill.name}}
 			</div>
-		</c-for-each>
+			<div class="col-1 skill-value">
+				{{skill.getValue()}}
+			</div>
+			<div class="col-1 skill-rank">
+				{{skill.ranks}}
+			</div>
+			<div class="col-3 skill-mod">
+				<button class="btn skill-add-btn" v-on:click="addRank(skill)" data-skill-name=${skill.name} >+</button>
+				<button class="btn skill-remove-btn" v-on:click="removeRank(skill)" data-skill-name=${skill.name} >-</button>
+			</div>
+			
+		</div>
 	</div>
 </div>

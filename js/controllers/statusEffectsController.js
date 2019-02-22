@@ -1,30 +1,42 @@
-$(".condition").on("click", function(e) {
-	var conditionName = event.target.text.toLowerCase();
-	var condition = ConditionsFactory[conditionName];
-	condition.apply(myCharacter);
-});
-
-
-$(document.body).on("click", ".btn-condition-effect", function(event) {
-	let conditionEffect = $(event.currentTarget).data("conditionEffect");
-	conditionEffect.remove();
-});
-
 var characterBuffs = {};
 
-$(".buff").on("click", function(e) {
-	var buff = $(event.currentTarget).data("buff");
-	buff.activate(myCharacter);
-	characterBuffs[buff.name] = buff;
-	
-});
+var buffsContainer = {}
 
-
-
-
-$(document.body).on("click", ".btn-buff-effect", function(event) {
-	let buff = $(event.currentTarget).data("buff");
-	buff.deactivate(myCharacter);
-	delete characterBuffs[buff.name];
-	
+var statusEffectsComponent = httpVue.component("status-effects-component", {
+	templateUrl:"views/statusEffectsView.html",
+	data: function() {
+		return {
+			conditions : ConditionsFactory,
+			buffs : BuffsFactory,
+			activatedBuffs : characterBuffs,
+			conditionEffects : Utils.copyVueMap(myCharacter.conditionEffects)
+		}
+	},
+	computed : {
+		conditionEffectsComputed : function(){
+			var copy = {};
+			for (let key in myCharacter.conditionEffects) {
+				copy[key] = myCharacter.conditionEffects[key];
+			}
+			return copy;
+		}
+	},
+	methods : {
+		activateCondition : function(condition) {
+			condition.apply(myCharacter);
+			Utils.copyVueMap(myCharacter.conditionEffects, this.conditionEffects);
+		},
+		removeConditionEffect:function(conditionEffect) {
+			conditionEffect.remove();
+			Utils.copyVueMap(myCharacter.conditionEffects, this.conditionEffects);
+		},
+		activateBuff : function(buff) {
+			buff.activate(myCharacter);
+			Vue.set(this.activatedBuffs, buff.name, buff);
+		},
+		removeBuff : function(buff) {
+			buff.deactivate(myCharacter);
+			Vue.delete(this.activatedBuffs, buff.name);
+		}
+	}
 });

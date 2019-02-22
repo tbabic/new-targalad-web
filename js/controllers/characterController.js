@@ -1,4 +1,45 @@
 console.log("characterController");
+var characterComponent = httpVue.component("character-component", {
+	templateUrl:"views/characterView.html",
+	data: function() {
+		return {character: myCharacter}
+	},
+});
+
+var abilitiesComponent = httpVue.component("abilities-component", {
+	templateUrl:"views/abilitiesView.html",
+	data: function() {
+		return {character: myCharacter}
+	},
+});
+
+var abilityComponent = httpVue.component("ability-component", {
+	templateUrl:"views/abilityView.html",
+	props:['ability'],
+	computed: {
+		classObject: function () {
+			return {
+				"has-activation-options-true" :this.ability.hasActivationOptions(),
+				"has-activation-options-false" :!this.ability.hasActivationOptions(),
+				"col-4":true,
+				"btn-group":true
+				
+			}
+		}
+	},
+	methods: {
+		triggerAbility : function(event) {
+			console.log("trigger ability");
+			triggerAbility(event, this.ability);
+		},
+		triggerAbilityOptions: function(event) {
+			console.log("trigger ability options");
+			showAbilityOptions(this.ability);
+		}
+	}
+})
+
+
 
 
 function showAbilityOptions(ability) {
@@ -128,8 +169,7 @@ function validateAbilityActivation() {
 	return;
 }
 
-function activateAbility(event, activationOptions) {
-	let ability = $(event.target).data("ability");
+function activateAbility(ability, activationOptions) {
 	let abilityId = ability.id;
 	var abilityElement = $("#"+abilityId);
 	abilityElement.removeClass("not-active");
@@ -139,8 +179,11 @@ function activateAbility(event, activationOptions) {
 
 
 
-function triggerAbility(event) {
-	let ability = $(event.target).data("ability");
+function triggerAbility(event, ability) {
+	if (ability === undefined) {
+		ability = $(event.target).data("ability");
+	}
+	
 	let abilityId = ability.id;
 	var abilityElement = $("#"+abilityId);
 	if ($(event.target).hasClass("active")) {
@@ -151,7 +194,7 @@ function triggerAbility(event) {
 	}
 	
 	if (!ability.hasActivationOptions()) {
-		activateAbility(event);
+		activateAbility(ability);
 		return;
 	}
 	
@@ -159,12 +202,12 @@ function triggerAbility(event) {
 	if(activationOptions === undefined) {
 		showAbilityOptions(ability);
 	} else {
-		activateAbility(event, activationOptions);
+		activateAbility(ability, activationOptions);
 	}
 }
 
 
-$("#confirmAbilityOptionId").on("click", function(event) {
+$(document.body).on("click", "#confirmAbilityOptionId", function(event) {
 	let inputs = $('#chooseAbilityOptionModal').find(".modal-body").find(".ability-option-input");
 	let activationOptions = [];
 	inputs.each(function(index, input) {
@@ -174,16 +217,16 @@ $("#confirmAbilityOptionId").on("click", function(event) {
 	});
 	let ability = $(event.target).data("ability");
 	$("#"+ability.id).data("activationOptions", activationOptions);
-	activateAbility(event, activationOptions);
+	activateAbility(ability, activationOptions);
 });
 
 
-$(document.body).on('click', '.btn-ability', triggerAbility);
-
-$(document.body).on('click', '.btn-ability-options', function(event) {
-	let ability = $(event.currentTarget).data("ability");
-	showAbilityOptions(ability);
-});
+//$(document.body).on('click', '.btn-ability', triggerAbility);
+//
+//$(document.body).on('click', '.btn-ability-options', function(event) {
+//	let ability = $(event.currentTarget).data("ability");
+//	showAbilityOptions(ability);
+//});
 
 
 

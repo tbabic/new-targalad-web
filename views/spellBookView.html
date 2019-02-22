@@ -1,17 +1,18 @@
-<div id = "spellBookView" style="display: none;" class="view">
+<div id = "spellBookView">
 	<div class="row spell-level-select"><div class="col">
-		<button class="btn spell-level-btn" data-spell-level="0" disabled>0</button>
-		<button class="btn spell-level-btn" data-spell-level="1">1</button>
-		<button class="btn spell-level-btn" data-spell-level="2">2</button>
-		<button class="btn spell-level-btn" data-spell-level="3">3</button>
-		<button class="btn spell-level-btn" data-spell-level="4">4</button>
-		<button class="btn spell-level-btn" data-spell-level="5">5</button>
-		<button class="btn spell-level-btn" data-spell-level="6">6</button>		
+		<button v-for="level in spellLevels" 
+			class="btn spell-level-btn" 
+			v-bind:data-spell-level="level" 
+			:disabled="selectedLevel == level"
+			v-on:click="changeSpellLevel(level)">
+			{{level}}
+			
+		</button>
 	</div></div>
 	<div class="row">
 		<div class="spell-toggles col">
-			<button id="toggleAllId" type="button" class="btn spellbook-toggle" data-toggle="all">All</button>
-			<button id="toggleKnownId" disabled type="button" class="btn spellbook-toggle"  data-toggle="known">Known</button>
+			<button id="toggleAllId" disabled type="button" class="btn spellbook-toggle" data-toggle="all">All</button>
+			<button id="toggleKnownId" type="button" class="btn spellbook-toggle"  data-toggle="known">Known</button>
 			<button id="toggleMemorizedId" type="button" class="btn spellbook-toggle"  data-toggle="memorized" >Memorized</button>
 		</div>
 		<div class="memorized-configurations col">
@@ -20,9 +21,9 @@
 			<button type="button" class="btn reset-memorized" id="resetMemorizedId">Reset</button>
 		</div>
 		<div id="memorized-count" class="memorized-count col-12">
-				${myCharacter.getMemorizedSpells().size(0)}
+				{{character.getMemorizedSpells().size(selectedLevel)}}
 				/
-				${myCharacter.getMemorizedSpells().capacity(0)}
+				{{character.getMemorizedSpells().capacity(selectedLevel)}}
 		</div>
 		
 		
@@ -35,28 +36,101 @@
 <!-- 		</c-for-each> -->
 <!-- 	</div> -->
 	
-	<div id="allSpellsListId" class="toggle-known" data-spell-level=0 data-toggle="known">
-		<c-for-each list="allSpells" data-var="spell">
-			<div id="spell-${spell.id}" data-spell-id="${spell.id}" 
-				class="row spell-row spell-level-${spell.level} all ${spell.isLearned(myCharacter) ? 'known' : ''}  ${spell.isMemorized(myCharacter) ? 'memorized' : ''}" 
-				style="display: none"> 
-				<div class="col-6 col-sm-4 spell-name align-middle"> <span class="align-middle">
-					<a class="align-middle" target="_blank" href="http://www.dxcontent.com/SDB_SpellBlock.asp?SDBID=${spell.id}">
-						${spell.name}
-					</a> (${spell.memorizedCount(myCharacter)})</span>
-				</div>
-
-				<div class ="col-6 col-sm">
-					<button type="button" class="btn learn-btn">Learn</button>
-					<button type="button" class="btn delete-btn" disabled>Delete</button>
-					<button type="button" class="btn memorize-btn">+</button>
-					<button type="button" class="btn unmemorize-btn">-</button>
-					<button type="button" class="btn cast-btn">C</button>
-					<button type="button" class="btn recall-btn">R</button>
-				</div>
-
+	<div id="allSpellsListId" class="toggle-all" data-spell-level=0 data-toggle="all">
+		<div v-for="spell in allSpells" v-bind:id="'spell-'+spell.id" v-bind:data-spell-id="spell.id" 
+			v-bind:class="'row spell-row spell-level-'+spell.level+' all '+(spell.isLearned(character) ? 'known' : '') +' '+ (spell.isMemorized(character) ? 'memorized' : '')" 
+			style="display: none"> 
+			<div class="col-6 col-sm-4 spell-name align-middle"> <span class="align-middle">
+				<button type="button" class="btn btn-primary align-middle spell-btn" data-toggle="modal" v-bind:data-target="'#spell-modal-'+spell.id">
+					{{spell.name}} ({{memorizedCount(spell)}})
+				</button> </span>
 			</div>
-		</c-for-each>
+
+			<div class ="col-6 col-sm">
+				<button type="button" class="btn learn-btn" v-on:click="learnSpell(spell)" :disabled="spell.isLearned(character)" >Learn</button>
+				<button type="button" class="btn delete-btn" v-on:click="deleteSpell(spell)" :disabled="!spell.isLearned(character)" >Delete</button>
+				<button type="button" class="btn memorize-btn" v-on:click="memorizeSpell(spell)">+</button>
+				<button type="button" class="btn unmemorize-btn" v-on:click="unmemorizeSpell(spell)" >-</button>
+				<button type="button" class="btn cast-btn" v-on:click="castSpell(spell)">C</button>
+				<button type="button" class="btn recall-btn" v-on:click="recallSpell(spell)">R</button>
+			</div>
+			
+			<div class="modal fade" v-bind:id="'spell-modal-'+spell.id" tabindex="-1" role="dialog" v-bind:aria-labelledby="'spell-modal-'+spell.id">
+				<div class="modal-dialog" role="document">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">{{spell.name}}</h4>
+							<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+							</button>
+							
+						</div>
+						<div class="modal-body">
+							<div class="row spell-info-school">
+								<div class="col-4 col-sm-3 spell-prop">School:</div>
+								<div class="col spell-prop-value">{{spell.school}}</div>
+							</div>
+							<div class="row spell-info-level">
+								<div class="col-4 col-sm-3 spell-prop">Level: </div>
+								<div class="col spell-prop-value">{{spell.spellLevel}}</div>
+							</div>
+							<hr/>
+							<div class="row spell-info-casting-time">
+								<div class="col-4 col-sm-3 spell-prop">Casting time: </div>
+								<div class="col spell-prop-value">{{spell.castingTime}}</div>
+							</div>
+							<div class="row spell-info-components">
+								<div class="col-4 col-sm-3 spell-prop">Components: </div>
+								<div class="col spell-prop-value">{{spell.components}}</div>
+							</div>
+							<div v-if="!Utils.isStringEmpty(spell.range)" class="row spell-info-range">
+								<div class="col-4 col-sm-3 spell-prop">Range: </div>
+								<div class="col spell-prop-value">{{spell.range}}</div>
+							</div>
+							<div v-if="!Utils.isStringEmpty(spell.area)" class="row spell-info-area">
+								<div class="col-4 col-sm-3 spell-prop">Area: </div>
+								<div class="col spell-prop-value">{{spell.area}}</div>
+							</div>
+							<div v-if="!Utils.isStringEmpty(spell.effect)" class="row spell-info-effect">
+								<div class="col-4 col-sm-3 spell-prop">Effect: </div>
+								<div class="col spell-prop-value">{{spell.effect}}</div>
+							</div>
+							<div v-if="!Utils.isStringEmpty(spell.target)" class="row spell-info-target">
+								<div class="col-4 col-sm-3 spell-prop">Target: </div>
+								<div class="col spell-prop-value">{{spell.target}}</div>
+							</div>
+							<div v-if="!Utils.isStringEmpty(spell.duration)" class="row spell-info-duration">
+								<div class="col-4 col-sm-3 spell-prop">Duration: </div>
+								<div class="col spell-prop-value">{{spell.duration}}</div>
+							</div>
+							<div v-if="!Utils.isStringEmpty(spell.savingThrow)" class="row spell-info-save">
+								<div class="col-4 col-sm-3 spell-prop">Saving throw: </div>
+								<div class="col spell-prop-value">{{spell.savingThrow}}</div>
+							</div>
+							<div v-if="!Utils.isStringEmpty(spell.spellResistance)" class="row spell-info-spell-resistance">
+								<div class="col-4 col-sm-3 spell-prop">Spell resistance: </div>
+								<div class="col spell-prop-value">{{spell.spellResistance}}</div>
+							</div>
+							<hr/>
+							<div class="row spell-info-description top10">
+								<div class="col">
+									<div class="spell-prop">Description: </div>
+									<div v-html="spell.description"></div>
+								</div>
+							</div>
+
+							
+							
+							
+						</div>
+						<div class="modal-footer">
+							<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
 	</div>
 
 
@@ -65,10 +139,11 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel">Save memorized spells</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-					<h4 class="modal-title" id="myModalLabel">Save memorized spells</h4>
+					
 				</div>
 				<div class="modal-body">
 <!-- 					<div class="form-group"> -->
@@ -101,10 +176,11 @@
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel">Load memorized spells</h4>
 					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 						<span aria-hidden="true">&times;</span>
 					</button>
-					<h4 class="modal-title" id="myModalLabel">Load memorized spells</h4>
+					
 				</div>
 				<div class="modal-body">
 
