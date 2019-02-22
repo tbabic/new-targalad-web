@@ -143,6 +143,29 @@ var MagusArcanaFactory = {
 			.get();
 	},
 	
+	blackBladeStrike : function(owner) {
+		var damageBonus = 1;
+		if (owner.level > 5 ) {
+			damageBonus = 2;
+		}
+		if (owner.level > 9 ) {
+			damageBonus = 3;
+		}
+		if (owner.level > 13 ) {
+			damageBonus = 4;
+		}
+		if (owner.level > 17 ) {
+			damageBonus = 5;
+		}
+		return getAbilityBuilder()
+			.name("Black Blade Strike")
+			.actionType(ActionType.FREE)
+			.properties(new Bonus(BonusCategory.DAMAGE, BonusType.UNTYPED, 1, "Black Blade Strike"))
+			.owner(owner)
+			.get();
+		
+	},
+	
 };
 
 var MagusAbilities = {
