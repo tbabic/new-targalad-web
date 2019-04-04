@@ -45,6 +45,14 @@ BuffsFactory = {
 		}, function(){
 			this.bonusEffectList.deactivate();
 		}),
+		
+		catsGrace : new BuffEffect("Cats Grace", function() {
+			this.bonusEffectList = new BonusEffectList(this);
+			this.bonusEffectList.add(new Bonus('DEXTERITY', BonusType.ENHANCEMENT, 4, this.name));
+			this.bonusEffectList.activate();
+		}, function(){
+			this.bonusEffectList.deactivate();
+		}),
 
 		bladeTutorsSpirit : new BuffEffect("Blade Tutors Spirit", function() {
 			this.bonusEffectList = new BonusEffectList(this);
