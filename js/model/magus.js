@@ -152,16 +152,16 @@ var MagusArcanaFactory = {
 	
 	blackBladeStrike : function(owner) {
 		var damageBonus = 1;
-		if (owner.level > 5 ) {
+		if (owner.level >= 5 ) {
 			damageBonus = 2;
 		}
-		if (owner.level > 9 ) {
+		if (owner.level >= 9 ) {
 			damageBonus = 3;
 		}
-		if (owner.level > 13 ) {
+		if (owner.level >= 13 ) {
 			damageBonus = 4;
 		}
-		if (owner.level > 17 ) {
+		if (owner.level >= 17 ) {
 			damageBonus = 5;
 		}
 		return getAbilityBuilder()
