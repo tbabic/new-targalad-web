@@ -21,11 +21,11 @@ ActionType = {
 
 function createTargalad() {
 	var attributes = new Attributes(13, 18, 12, 18, 13, 13);
-	var targalad = new Character('magus', attributes, 4, 'equipment');
+	var targalad = new Character('magus', attributes, 5, 'equipment');
 	
 	
 	targalad.addItem(new Armor('Mithral Chainshirt', 'light', 4, 6, 0, 0, 20, 20));
-	targalad.addItem(new Weapon('BlackBlade Scimitar', WeaponType.SCIMITAR, +1, 4));
+	targalad.addItem(new Weapon('BlackBlade Scimitar', WeaponType.SCIMITAR, +2, 4));
 	
 	targalad.addAbility(FeatFactory.weaponFinesse(targalad));
 	targalad.addAbility(FeatFactory.dervishDance(targalad));
