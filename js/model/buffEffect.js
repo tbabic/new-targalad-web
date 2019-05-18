@@ -54,9 +54,10 @@ BuffsFactory = {
 			this.bonusEffectList.deactivate();
 		}),
 
-		bladeTutorsSpirit : new BuffEffect("Blade Tutors Spirit", function() {
+		bladeTutorsSpirit : new BuffEffect("Blade Tutors Spirit", function(character) {
+			let maxBonus = 1 + character.level / 5;
 			this.bonusEffectList = new BonusEffectList(this);
-			this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, 3, this.name));
+			this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, maxBonus, this.name));
 			this.bonusEffectList.activate();
 		}, function(){
 			this.bonusEffectList.deactivate();
