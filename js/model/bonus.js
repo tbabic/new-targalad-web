@@ -225,6 +225,13 @@ function BonusTypeGroup(type, isStacking) {
 		this.cachedValue = undefined;
 	};
 	
+	this.getBySource = function(source) {
+		if (this.sourceList.hasOwnProperty(source)) {
+			return this.sourceList[source].value;
+		}
+		return 0;
+	}
+	
 	this.get = function(vsSomething) {
 		if (this.cachedValue !== undefined && vsSomething === undefined) {
 			return this.cachedValue;
@@ -308,6 +315,14 @@ function BonusProcessor() {
 				value += _list[i].get();
 			}
 			this.cachedValue = value;
+			return value;
+		},
+		
+		getValueBySource : function(source) {
+			var value = 0;
+			for (var i in _list) {
+				value += _list[i].getBySource(source);
+			}
 			return value;
 		},
 		

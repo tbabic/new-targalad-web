@@ -56,8 +56,24 @@ BuffsFactory = {
 
 		bladeTutorsSpirit : new BuffEffect("Blade Tutors Spirit", function(character) {
 			let maxBonus = 1 + character.level / 5;
+			let abilityNames = ["Spell combat", "Fighting defensively", "Power attack", "Combat expertise"];
+			let totalPenalty = 0;
+			for (let i = 0; i < abilityNames.length; i++) {
+				let ability = character.getAbilityByName(abilityNames[i]);
+				if (ability === undefined) {
+					continue;
+				}
+				let penalty = character.offense.toHitBonusProcessor.getValueBySource(ability.id);
+				if (penalty < 0) {
+					totalPenalty -= penalty;
+				}
+			}
+			let bonus = maxBonus;
+			if (bonus > totalPenalty) {
+				bonus = totalPenalty;
+			}
 			this.bonusEffectList = new BonusEffectList(this);
-			this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, maxBonus, this.name));
+			this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, bonus, this.name));
 			this.bonusEffectList.activate();
 		}, function(){
 			this.bonusEffectList.deactivate();

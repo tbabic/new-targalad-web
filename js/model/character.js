@@ -138,11 +138,11 @@ function Character(characterClass, attributes, level, equipment) {
 		
 	};
 	
-	this.deactivateAbility = function(featId) {
-		for (var i = 0; i < this.nonPassiveFeats.length; i++) {
-			var feat = this.nonPassiveFeats[i];
-			if (feat.id == featId && feat.active) {
-				feat.deactivate();
+	this.deactivateAbility = function(abilityId) {
+		for (var i = 0; i < this.nonPassiveAbilities.length; i++) {
+			var ability = this.nonPassiveAbilities[i];
+			if (ability.id == abilityId && ability.active) {
+				ability.deactivate();
 			}
 		}
 		
@@ -176,6 +176,19 @@ function Character(characterClass, attributes, level, equipment) {
 	var classAbilities = this.characterClass.getAllAbilities();
 	for(i = 0; i < classAbilities.length; i++) {
 		this.addAbility(classAbilities[i]);
+	}
+	
+	this.getAbilityByName = function(name) {
+		for (let i = 0; i < this.nonPassiveAbilities.length; i++) {
+			if (this.nonPassiveAbilities[i].name === name) {
+				return this.nonPassiveAbilities[i];
+			}
+		}
+		for (let i = 0; i < this.passiveAbilities.length; i++) {
+			if (this.passiveAbilities[i].name === name) {
+				return this.passiveAbilities[i];
+			}
+		}
 	}
 	
 	this.getSpellBook = function() {
