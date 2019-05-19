@@ -167,7 +167,7 @@ var MagusArcanaFactory = {
 		return getAbilityBuilder()
 			.name("Black Blade Strike")
 			.actionType(ActionType.FREE)
-			.properties(new Bonus(BonusCategory.DAMAGE, BonusType.UNTYPED, 1, "Black Blade Strike"))
+			.properties(new Bonus(BonusCategory.DAMAGE, BonusType.UNTYPED, damageBonus, "Black Blade Strike"))
 			.owner(owner)
 			.get();
 		
