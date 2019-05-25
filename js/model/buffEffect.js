@@ -55,28 +55,61 @@ BuffsFactory = {
 		}),
 
 		bladeTutorsSpirit : new BuffEffect("Blade Tutors Spirit", function(character) {
-			let maxBonus = 1 + character.level / 5;
-			let abilityNames = ["Spell combat", "Fighting defensively", "Power attack", "Combat expertise"];
-			let totalPenalty = 0;
-			for (let i = 0; i < abilityNames.length; i++) {
-				let ability = character.getAbilityByName(abilityNames[i]);
-				if (ability === undefined) {
-					continue;
+			this.isAbilityActive = true;
+			this.isBonusActive = false;
+			this.character = character;
+			this.lock = false;
+			this.activate = function() {
+				if (!this.isAbilityActive) {
+					return;
 				}
-				let penalty = character.offense.toHitBonusProcessor.getValueBySource(ability.id);
-				if (penalty < 0) {
-					totalPenalty -= penalty;
+				if (this.lock) {
+					return;
 				}
+				if (this.isBonusActive) {
+					this.lock = true;
+					this.bonusEffectList.deactivate();
+					this.isBonusActive = false;
+					this.lock = false;
+				}
+				let character = this.character;
+				let maxBonus = 1 + character.level / 5;
+				let abilityNames = ["Spell combat", "Fighting defensively", "Power attack", "Combat expertise"];
+				let totalPenalty = 0;
+				for (let i = 0; i < abilityNames.length; i++) {
+					let ability = character.getAbilityByName(abilityNames[i]);
+					if (ability === undefined) {
+						continue;
+					}
+					let penalty = character.offense.toHitBonusProcessor.getValueBySource(ability.id);
+					if (penalty < 0) {
+						totalPenalty -= penalty;
+					}
+				}
+				let bonus = maxBonus;
+				if (bonus > totalPenalty) {
+					bonus = totalPenalty;
+				}
+				this.bonusEffectList = new BonusEffectList(this);
+				this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, bonus, this.name));
+				this.lock = true;
+				this.bonusEffectList.activate();
+				this.isBonusActive = true;
+				this.lock = false;
 			}
-			let bonus = maxBonus;
-			if (bonus > totalPenalty) {
-				bonus = totalPenalty;
-			}
-			this.bonusEffectList = new BonusEffectList(this);
-			this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, bonus, this.name));
-			this.bonusEffectList.activate();
+			this.activate();
+			
+			addModelListener("TO_HIT", (e, bonusEffect) => {
+				this.activate();
+			});
+			
+			
 		}, function(){
+			this.isAbilityActive = false;
+			this.lock = true;
 			this.bonusEffectList.deactivate();
+			this.lock = false;
+			
 		})
 
 };
