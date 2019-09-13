@@ -6,6 +6,49 @@ function BuffEffect(name, activate, deactivate) {
 
 
 BuffsFactory = {
+		
+		bless : new BuffEffect("Bless", function() {
+			this.bonusEffectList = new BonusEffectList(this);
+			this.bonusEffectList.add(new Bonus([BonusCategory.TO_HIT], BonusType.MORALE, 1, this.name));
+			this.bonusEffectList.activate();
+		}, function(){
+			this.bonusEffectList.deactivate();
+		}),
+		
+		aid : new BuffEffect("Aid", function() {
+			this.bonusEffectList = new BonusEffectList(this);
+			this.bonusEffectList.add(new Bonus([BonusCategory.TO_HIT], BonusType.MORALE, 1, this.name));
+			this.bonusEffectList.activate();
+		}, function(){
+			this.bonusEffectList.deactivate();
+		}),
+		
+		hexFury : new BuffEffect("Hex Fury", function() {
+			this.bonusEffectList = new BonusEffectList(this);
+			this.bonusEffectList.add(new Bonus([BonusCategory.TO_HIT], BonusType.MORALE, 2, this.name));
+			this.bonusEffectList.activate();
+		}, function(){
+			this.bonusEffectList.deactivate();
+		}),
+		
+		guidance : new BuffEffect("Guidance", function() {
+			this.bonusEffectList = new BonusEffectList(this);
+			this.bonusEffectList.add(new Bonus([BonusCategory.TO_HIT, BonusCategory.SAVES, BonusCategory.SKILLS], BonusType.COMPETENCE, 1, this.name));
+			this.bonusEffectList.activate();
+		}, function(){
+			this.bonusEffectList.deactivate();
+		}),
+		
+		barkskin : new BuffEffect("Barkskin", function(character) {
+			let value = 2;
+			let bonusValue = Math.floor( (character.level -3) / 3);
+			this.bonusEffectList = new BonusEffectList(this);
+			this.bonusEffectList.add(new Bonus([BonusCategory.ARMOR_CLASS], BonusType.NATURAL_ARMOR, value + bonusValue, this.name));
+			this.bonusEffectList.activate();
+		}, function(){
+			this.bonusEffectList.deactivate();
+		}),
+		
 		haste : new BuffEffect("Haste", function(character) {
 			this.bonusEffectList = new BonusEffectList(this);
 			this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, 1, this.name));
@@ -59,7 +102,7 @@ BuffsFactory = {
 			this.isBonusActive = false;
 			this.character = character;
 			this.lock = false;
-			this.activate = function() {
+			this.runActivate = function() {
 				if (!this.isAbilityActive) {
 					return;
 				}
@@ -97,10 +140,10 @@ BuffsFactory = {
 				this.isBonusActive = true;
 				this.lock = false;
 			}
-			this.activate();
+			this.runActivate();
 			
 			addModelListener("TO_HIT", (e, bonusEffect) => {
-				this.activate();
+				this.runActivate();
 			});
 			
 			
