@@ -9,7 +9,9 @@ idGenerator = new IdGenerator(100000);
 
 function start() {
 	console.log("start");
-	createTargalad();
+	level = window.localStorage.getItem("character-level");
+	createTargalad(level);
+	window.localStorage.setItem("character-level", myCharacter.level);
 	//start loader
 }
 

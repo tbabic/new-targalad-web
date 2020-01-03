@@ -19,9 +19,12 @@ ActionType = {
 };
 
 
-function createTargalad() {
+function createTargalad(level) {
+	if (level == undefined) {
+		level = 6;
+	}
 	var attributes = new Attributes(13, 18, 12, 18, 13, 13);
-	var targalad = new Character('magus', attributes, 6, 'equipment');
+	var targalad = new Character('magus', attributes, +level, 'equipment');
 	
 	
 	targalad.addItem(new Armor('Mithral Chainshirt', 'light', 4, 6, 0, 0, 20, 20));
@@ -29,11 +32,11 @@ function createTargalad() {
 	
 	targalad.addAbility(FeatFactory.weaponFinesse(targalad));
 	targalad.addAbility(FeatFactory.dervishDance(targalad));
+	targalad.addAbility(FeatFactory.powerAttack(targalad));
 	
 	if (targalad.level >= 3) {
 		targalad.characterClass.addArcana(MagusArcanaFactory.blackBladeStrike(targalad));
 	}
-	
 	
 	targalad.skillSet.getSkill(SkillsEnum.ACROBATICS).addRank(3);
 	targalad.skillSet.getSkill(SkillsEnum.APPRAISE).addRank(0);
@@ -75,14 +78,12 @@ function createTargalad() {
 	targalad.skillSet.getSkill(SkillsEnum.SURVIVAL).addRank(0);
 	targalad.skillSet.getSkill(SkillsEnum.SWIM).addRank(1);
 	targalad.skillSet.getSkill(SkillsEnum.USE_MAGIC_DEVICE).addRank(1);
-
 	
 	console.log(targalad);
 	
 	
 	myCharacter = targalad;
 }
-
 
 function Character(characterClass, attributes, level, equipment) {
 	//properties
@@ -99,7 +100,7 @@ function Character(characterClass, attributes, level, equipment) {
 	
 	
 	this.getBab = function() {
-		return bab(level);
+		return bab(this.level);
 	};
 	
 	this.getMaxArcanePool = function() {

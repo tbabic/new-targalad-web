@@ -110,6 +110,29 @@ var FeatFactory = {
 			})
 			.owner(owner)
 			.get();
+	},
+	
+	powerAttack : function(owner) {
+		return getAbilityBuilder()
+			.name("Power Attack")
+			.actionType(ActionType.FREE)
+			.activate(function() {
+				var modifier = 1 + Math.floor(owner.getBab()/4);
+				var toHitPenalty = -modifier;
+				var dmgBonus = 2*modifier;
+				
+				
+				this.bonusEffectList = new BonusEffectList(this, new Bonus(BonusCategory.DAMAGE, BonusType.UNTYPED, dmgBonus, this.name));
+				this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, toHitPenalty, this.name));
+				this.bonusEffectList.activate();
+			})
+			.deactivate(function() {
+				if (this.bonusEffectList !== undefined) {
+					this.bonusEffectList.deactivate();
+				}
+			})
+			.owner(owner)
+			.get();
 	}
 };
 
