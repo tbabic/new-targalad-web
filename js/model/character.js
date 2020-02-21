@@ -33,6 +33,7 @@ function createTargalad(level) {
 	targalad.addAbility(FeatFactory.weaponFinesse(targalad));
 	targalad.addAbility(FeatFactory.dervishDance(targalad));
 	targalad.addAbility(FeatFactory.powerAttack(targalad));
+	targalad.addAbility(FeatFactory.arcaneStrike(targalad));
 	
 	if (targalad.level >= 3) {
 		targalad.characterClass.addArcana(MagusArcanaFactory.blackBladeStrike(targalad));
