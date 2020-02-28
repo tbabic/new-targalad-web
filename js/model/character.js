@@ -29,11 +29,14 @@ function createTargalad(level) {
 	
 	targalad.addItem(new Armor('Mithral Chainshirt', 'light', 4, 6, 0, 0, 20, 20));
 	targalad.addItem(new Weapon('BlackBlade Scimitar', WeaponType.SCIMITAR, +2, 4));
+	targalad.addItem(new Item('Ring of Deflection +2', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 2, "Ring of Deflection +2"), 0));
+	targalad.addItem(new Item('Amulet of Natural Armor +1', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 1, "Amulet of Natural Armor +1"), 0));
 	
 	targalad.addAbility(FeatFactory.weaponFinesse(targalad));
 	targalad.addAbility(FeatFactory.dervishDance(targalad));
 	targalad.addAbility(FeatFactory.powerAttack(targalad));
 	targalad.addAbility(FeatFactory.arcaneStrike(targalad));
+	targalad.addAbility(FeatFactory.dodge(targalad));
 	
 	if (targalad.level >= 3) {
 		targalad.characterClass.addArcana(MagusArcanaFactory.blackBladeStrike(targalad));

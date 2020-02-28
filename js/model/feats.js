@@ -78,6 +78,19 @@ var FeatFactory = {
 			.get();
 	},
 	
+	dodge : function(owner) {
+		return getAbilityBuilder()
+			.name("Dodge")
+			.actionType(ActionType.PASSIVE)
+			.activate(function() {
+				this.bonusEffectList = new BonusEffectList(this, new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DODGE, 1, this.name));
+				this.bonusEffectList.activate();
+				
+			})
+			.owner(owner)
+			.get();
+	},
+	
 	toughness : function(owner) {
 		return getAbilityBuilder()
 			.name("Toughness")
