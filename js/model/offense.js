@@ -153,16 +153,10 @@ function Offense(character) {
 	
 	addModelListener("WEAPON", "ADDED", (e, weapon) => {
 		this.mainHand = character.equipment.weapon;
-		if (this.character.equipment.shield instanceof Weapon ) {
-			this.offHand = this.equipment.shield;
-		}
 	});
 	
 	addModelListener("WEAPON", "REMOVED", (e, weapon) => {
 		this.mainHand = character.equipment.weapon;
-		if (this.character.equipment.shield instanceof Weapon ) {
-			this.offHand = this.equipment.shield;
-		}
 	});
 	
 	addModelListener("TO_HIT", (e, bonusEffect) => {

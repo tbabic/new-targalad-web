@@ -249,6 +249,15 @@ var AbilityFactory = {
 			.properties(new Bonus(BonusCategory.ARMOR_CLASS, BonusType.PENALTY, -2, "Charge"))
 			.owner(owner)
 			.get();
+	},
+	
+	flank : function(owner) {
+		return getAbilityBuilder()
+			.name("Flank")
+			.actionType(ActionType.FREE)
+			.properties(new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, 2, "Flank"))
+			.owner(owner)
+			.get();
 	}
 
 };

@@ -334,6 +334,9 @@ function BonusProcessor() {
 		},
 		
 		processBonusEffect : function(bonusEffect) {
+			if (bonusEffect == undefined) {
+				return;
+			}
 			if (!(bonusEffect instanceof BonusEffect)) {
 				throw (bonus + " is not a BonusEffect");
 			}

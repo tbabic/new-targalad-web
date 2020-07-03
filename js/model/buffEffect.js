@@ -96,6 +96,24 @@ BuffsFactory = {
 		}, function(){
 			this.bonusEffectList.deactivate();
 		}),
+		
+		bullsStrength : new BuffEffect("Bulls Strength", function() {
+			this.bonusEffectList = new BonusEffectList(this);
+			this.bonusEffectList.add(new Bonus('STRENGTH', BonusType.ENHANCEMENT, 4, this.name));
+			this.bonusEffectList.activate();
+		}, function(){
+			this.bonusEffectList.deactivate();
+		}),
+		
+		ironskin : new BuffEffect("Ironskin", function(character) {
+			let value = 4;
+			let bonusValue = Math.floor( (character.level -4) / 4);
+			this.bonusEffectList = new BonusEffectList(this);
+			this.bonusEffectList.add(new Bonus([BonusCategory.ARMOR_CLASS], BonusType.NATURAL_ARMOR, value + bonusValue, this.name));
+			this.bonusEffectList.activate();
+		}, function(){
+			this.bonusEffectList.deactivate();
+		}),
 
 		bladeTutorsSpirit : new BuffEffect("Blade Tutors Spirit", function(character) {
 			this.isAbilityActive = true;

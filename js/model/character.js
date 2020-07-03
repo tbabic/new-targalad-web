@@ -38,7 +38,7 @@ function createVindred(level) {
 		}
 	}
 	
-	vindred.addItem(new Armor('Chainmail', 'medium', 6, 2, 0, 5, 30, 40));
+	vindred.addItem(new Armor('Chainmail', 'medium', 6, 3, 0, 5, 30, 40));
 	vindred.addItem(new Weapon('Greatsword', WeaponType.GREATSWORD, +2, 4, undefined, furiousProperty));
 	
 	vindred.addItem(new Item('Cracked ioun stone', 'inventory', new Bonus(BonusCategory.TO_HIT, BonusType.CIRCUMSTANCE, 1, "Cracked ioun stone"), 0));
