@@ -91,6 +91,30 @@ var FeatFactory = {
 			.get();
 	},
 	
+	fatesFavored : function(owner) {
+		return getAbilityBuilder()
+			.name("Fate's Favored")
+			.actionType(ActionType.PASSIVE)
+			.owner(owner)
+			.get();
+	},
+	
+	craneStyle : function(owner) {
+		return getAbilityBuilder()
+			.name("Crane Style")
+			.actionType(ActionType.PASSIVE)
+			.owner(owner)
+			.get();
+	},
+	
+	cautiousWarrior : function(owner) {
+		return getAbilityBuilder()
+			.name("Cautious Warrior")
+			.actionType(ActionType.PASSIVE)
+			.owner(owner)
+			.get();
+	},
+	
 	toughness : function(owner) {
 		return getAbilityBuilder()
 			.name("Toughness")
@@ -134,6 +158,9 @@ var FeatFactory = {
 				var toHitPenalty = -modifier;
 				var dmgBonus = 2*modifier;
 				
+				if(owner.equipment.weapon.category == WeaponCategory.MELEE_TWO_HANDED) {
+					dmgBonus = Math.floor(dmgBonus*1.5);
+				}
 				
 				this.bonusEffectList = new BonusEffectList(this, new Bonus(BonusCategory.DAMAGE, BonusType.UNTYPED, dmgBonus, this.name));
 				this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, toHitPenalty, this.name));

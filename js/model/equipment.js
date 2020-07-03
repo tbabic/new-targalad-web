@@ -56,7 +56,9 @@ function Equipment() {
 			this.weapon.unequip();
 		}
 		this.weapon = weapon;
-		if ([WeaponCategory.MELEE_TWO_HANDED, WeaponCategory.RANGED_TWO_HANDED].indexOf(weapon.category))
+		if ([WeaponCategory.MELEE_TWO_HANDED, WeaponCategory.RANGED_TWO_HANDED].indexOf(weapon.category)) {
+			this.shield = weapon;
+		}
 		weapon.equip();
 	};
 	
@@ -303,13 +305,14 @@ var WeaponType = {
 
 
 
-function Weapon(name, type, enhancement, weight, properties) {
-	
+function Weapon(name, type, enhancement, weight, properties, special) {
+	Item.call(this, name, "weapon", properties, weight);
 	this.type = type;
 	this.category = WeaponType.properties[type].category;
 	this.weaponBonus = new Bonus([BonusCategory.TO_HIT, BonusCategory.DAMAGE], BonusType.ENHANCEMENT, enhancement, "Weapon bonus");
 	this.enhancement = enhancement;
 	this.dmgDie = WeaponType.properties[type].dmgDie;
+	this.special = special;
 	
 	Item.call(this, name, "weapon", properties, weight);
 	this.addProperty(this.weaponBonus);
@@ -318,11 +321,19 @@ function Weapon(name, type, enhancement, weight, properties) {
 	this.equip = function() {
 		triggerModelChange("WEAPON", this, "ADDED");
 		this.properties.activate(this);
+		if (this.special != undefined) {
+			this.special.activate(this);
+		}
+		
 	};
 	
 	this.unequip = function() {
 		triggerModelChange("WEAPON", this, "REMOVED");
 		this.properties.deactivate();
+		if (this.special != undefined) {
+			this.special.deactivate(this);
+		}
+		
 	};
 
 }

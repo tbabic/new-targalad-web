@@ -9,7 +9,13 @@ function Magus(character) {
 		return this.character.attributes.intelligence.getModifier() + Math.floor(this.character.level/2);
 	};
 	
+	this.getBab = function(level) {
+		return Math.floor(level * 0.75);
+	};
+	
 	this.currentArcanePool = this.getArcanePool();
+	
+	this.saves = new Saves(true, false, true,  this.character);
 	
 	
 	if (character.level >= 1) {

@@ -215,12 +215,21 @@ var AbilityFactory = {
 			.actionType(ActionType.FREE)
 			.activate(function() {
 				let acBonusValue = 2;
+				let acPenalty = -4;
 				if ( this.owner.skillSet.getSkill(SkillsEnum.ACROBATICS).ranks >=3) {
 					acBonusValue = 3;
 				}
+				if (owner.getAbilityByName("Crane Style") != undefined) {
+					acBonusValue++;
+					acPenalty = -2;
+				}
+				if (owner.getAbilityByName("Cautious Warrior") != undefined) {
+					acBonusValue++;
+				}
+				
 				this.bonusEffectList = new BonusEffectList(this, [
 					new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DODGE, acBonusValue, this.name), 
-					new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, -4, this.name)]);
+					new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, acPenalty, this.name)]);
 				this.bonusEffectList.activate();
 			})
 			.deactivate(function() {

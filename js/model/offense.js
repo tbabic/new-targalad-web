@@ -8,7 +8,7 @@ function Attack(offense, extraAttackBonus) {
 	this.source = extraAttackBonus.source;
 	
 	this.getWeapon = function() {
-		return this.offense[this.weaponSlot];
+		return this.offense.character.equipment.weapon;
 	};
 	
 	if(extraAttackBonus.attrToHit === undefined) {
@@ -37,7 +37,11 @@ function Attack(offense, extraAttackBonus) {
 	};
 	
 	this.getDmg = function() {
-		return this.dmgBonusProcessor.getValue() + this.attrDmg.getModifier();
+		let dmgModifier = this.attrDmg.getModifier();
+		if (this.attrDmg.type == "STRENGTH" && this.getWeapon().category == WeaponCategory.MELEE_TWO_HANDED) {
+			dmgModifier = Math.floor(1.5*dmgModifier);
+		}
+		return this.dmgBonusProcessor.getValue() + dmgModifier;
 	};
 	
 	this.addBonus = function(source, toHitBonus, dmgBonus) {

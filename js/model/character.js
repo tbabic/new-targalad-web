@@ -18,6 +18,90 @@ ActionType = {
 	MODAL : "MODAL"
 };
 
+function createVindred(level) {
+	if (level == undefined) {
+		level = 8;
+	}
+	var attributes = new Attributes(19, 14, 14, 11, 11, 15);
+	var vindred = new Character('bloodrager', attributes, +level, 'equipment');
+	
+	furiousProperty  = {
+	    name : "furious",
+		activate : function(weapon) {
+			let bloodrage = vindred.getAbilityByName("Bloodrage");
+			bonusValue = 2; 
+			this.bonus = new Bonus([BonusCategory.TO_HIT, BonusCategory.DAMAGE],  BonusType.UNTYPED, bonusValue, 'Furious');
+			bloodrage.properties.add(this.bonus);
+		},
+		deactivate : function() {
+			bloodrage.bonusEffectList.removeAndDeactivate(this.bonus);
+		}
+	}
+	
+	vindred.addItem(new Armor('Chainmail', 'medium', 6, 2, 0, 5, 30, 40));
+	vindred.addItem(new Weapon('Greatsword', WeaponType.GREATSWORD, +2, 4, undefined, furiousProperty));
+	
+	vindred.addItem(new Item('Cracked ioun stone', 'inventory', new Bonus(BonusCategory.TO_HIT, BonusType.CIRCUMSTANCE, 1, "Cracked ioun stone"), 0));
+	
+	
+	vindred.addAbility(FeatFactory.powerAttack(vindred));
+	vindred.addAbility(FeatFactory.dodge(vindred));
+	vindred.addAbility(FeatFactory.fatesFavored(vindred));
+	vindred.addAbility(FeatFactory.craneStyle(vindred));
+	vindred.addAbility(FeatFactory.cautiousWarrior(vindred));
+	
+	vindred.addAbility(BloodragePowerFactory.destinedStrike(vindred));
+	vindred.addAbility(BloodragePowerFactory.fatedBloodrager(vindred));
+	vindred.addAbility(BloodragePowerFactory.guardedStance(vindred));
+	
+	
+	vindred.skillSet.getSkill(SkillsEnum.ACROBATICS).addRank(3);
+	vindred.skillSet.getSkill(SkillsEnum.APPRAISE).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.BLUFF).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.CLIMB).addRank(1);
+	vindred.skillSet.getSkill(SkillsEnum.CRAFT_ALCHEMY).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.CRAFT_ARMOR).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.CRAFT_WEAPON).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.DIPLOMACY).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.DISABLE_DEVICE).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.DISGUISE).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.ESCAPE_ARTIST).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.FLY).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.HANDLE_ANIMAL).addRank(1);
+	vindred.skillSet.getSkill(SkillsEnum.HEAL).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.INTIMIDATE).addRank(8);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_ARCANA).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_DUNGEONEERING).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_ENGINEERING).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_GEOGRAPHY).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_HISTORY).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_LOCAL).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_NATURE).addRank(1);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_NOBILITY).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_PLANES).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_RELIGION).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_MARTIAL).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.LINGUISTICS).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.PERCEPTION).addRank(8);
+	vindred.skillSet.getSkill(SkillsEnum.PERFORM_DANCE).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.PERFORM_SING).addRank(6);
+	vindred.skillSet.getSkill(SkillsEnum.PERFORM_ORATORY).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.PROFESSION).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.RIDE).addRank(1);
+	vindred.skillSet.getSkill(SkillsEnum.SENSE_MOTIVE).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.SLEIGHT_OF_HAND).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.SPELLCRAFT).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.STEALTH).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.SURVIVAL).addRank(1);
+	vindred.skillSet.getSkill(SkillsEnum.SWIM).addRank(1);
+	vindred.skillSet.getSkill(SkillsEnum.USE_MAGIC_DEVICE).addRank(0);
+	
+	console.log(vindred);
+	
+	
+	myCharacter = vindred;
+}
+
 
 function createTargalad(level) {
 	if (level == undefined) {
@@ -93,19 +177,18 @@ function Character(characterClass, attributes, level, equipment) {
 	//properties
 	this.attributes = attributes;
 	this.level = level;
+	this.characterClass = characterClass;
 	
 	
 	this.equipment = new Equipment();
-	this.saves = new Saves(true, false, true, this);
+	
 	this.nonPassiveAbilities = [];
 	this.passiveAbilities = [];
 	this.conditionEffects = {};
 	
 	
 	
-	this.getBab = function() {
-		return bab(this.level);
-	};
+	
 	
 	this.getMaxArcanePool = function() {
 		return this.attributes.intelligence.getModifier() + Math.floor(this.level * 0.5);
@@ -113,8 +196,7 @@ function Character(characterClass, attributes, level, equipment) {
 	
 	this.currentArcanePool = this.getMaxArcanePool();
 	
-	this.defense = new Defense(this);
-	this.offense = new Offense(this);
+	
 	
 	this.addItem = function(item) {
 		this.equipment.addItem(item);
@@ -130,7 +212,22 @@ function Character(characterClass, attributes, level, equipment) {
 		
 	};
 	
-	this.characterClass = new Magus(this);
+	if (characterClass == 'magus') {
+		this.characterClass = new Magus(this);
+	}
+	if (characterClass == 'bloodrager') {
+		this.characterClass = new Bloodrager(this);
+	}
+	this.saves = this.characterClass.saves;
+	this.getBab = function() {
+		return this.characterClass.getBab(this.level);
+	};
+	
+	this.defense = new Defense(this);
+	this.offense = new Offense(this);
+	
+	
+	
 	this.skillSet = new SkillSet(this);
 	
 	this.deactivateAbilitiesByAction = function(actionType) {
