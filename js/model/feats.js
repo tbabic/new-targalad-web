@@ -115,6 +115,14 @@ var FeatFactory = {
 			.get();
 	},
 	
+	ragingVitality : function(owner) {
+		return getAbilityBuilder()
+			.name("Raging Vitality")
+			.actionType(ActionType.PASSIVE)
+			.owner(owner)
+			.get();
+	},
+	
 	toughness : function(owner) {
 		return getAbilityBuilder()
 			.name("Toughness")

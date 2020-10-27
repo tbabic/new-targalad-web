@@ -22,7 +22,7 @@ function createVindred(level) {
 	if (level == undefined) {
 		level = 8;
 	}
-	var attributes = new Attributes(19, 14, 14, 11, 11, 15);
+	var attributes = new Attributes(19, 14, 15, 11, 11, 14);
 	var vindred = new Character('bloodrager', attributes, +level, 'equipment');
 	
 	furiousProperty  = {
@@ -42,13 +42,17 @@ function createVindred(level) {
 	vindred.addItem(new Weapon('Greatsword', WeaponType.GREATSWORD, +2, 4, undefined, furiousProperty));
 	
 	vindred.addItem(new Item('Cracked ioun stone', 'inventory', new Bonus(BonusCategory.TO_HIT, BonusType.CIRCUMSTANCE, 1, "Cracked ioun stone"), 0));
-	
+	vindred.addItem(new Item('Wayfinder (51)', 'inventory', new Bonus('REFLEX', BonusType.RESISTANCE, 1, "Wayfinder"), 0));
+	vindred.addItem(new Item('Ring of Deflection +1', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 1, "Ring of Deflection +1"), 0));
+	vindred.addItem(new Item('Amulet of Natural Armor +1', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 1, "Amulet of Natural Armor +1"), 0));
+	vindred.addItem(new Item('Belt of Giant Strength +4', 'belt', new Bonus('STRENGTH', BonusType.ENHANCEMENT, 4, "Belt of Giant Strength +4"), 0));
 	
 	vindred.addAbility(FeatFactory.powerAttack(vindred));
 	vindred.addAbility(FeatFactory.dodge(vindred));
 	vindred.addAbility(FeatFactory.fatesFavored(vindred));
 	vindred.addAbility(FeatFactory.craneStyle(vindred));
 	vindred.addAbility(FeatFactory.cautiousWarrior(vindred));
+	vindred.addAbility(FeatFactory.ragingVitality(vindred));
 	
 	vindred.addAbility(BloodragePowerFactory.destinedStrike(vindred));
 	vindred.addAbility(BloodragePowerFactory.fatedBloodrager(vindred));

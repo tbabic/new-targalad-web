@@ -23,9 +23,33 @@ BuffsFactory = {
 			this.bonusEffectList.deactivate();
 		}),
 		
-		hexFury : new BuffEffect("Hex Fury", function() {
+		ancestralBlessing : new BuffEffect("Ancestral Blessing", function(character) {
 			this.bonusEffectList = new BonusEffectList(this);
-			this.bonusEffectList.add(new Bonus([BonusCategory.TO_HIT], BonusType.MORALE, 2, this.name));
+			this.bonusEffectList.add(new Bonus([BonusCategory.TO_HIT, BonusCategory.DAMAGE], BonusType.COMPETENCE, 1, this.name));
+			this.bonusEffectList.activate();
+		}, function(){
+			this.bonusEffectList.deactivate();
+		}),
+		
+		prayer : new BuffEffect("Prayer", function(character) {
+			let bonusValue = 1;
+			if (character.getAbilityByName("Fate's Favored") != undefined) {
+				bonusValue++;
+			}
+			this.bonusEffectList = new BonusEffectList(this);
+			this.bonusEffectList.add(new Bonus([BonusCategory.TO_HIT, BonusCategory.DAMAGE, BonusCategory.SAVES, BonusCategory.SKILLS], BonusType.LUCK, bonusValue, this.name));
+			this.bonusEffectList.activate();
+		}, function(){
+			this.bonusEffectList.deactivate();
+		}),
+		
+		hexFury : new BuffEffect("Hex Fury", function(character) {
+			let value = 2;
+			if (character.level >= 8) {
+				value = 3;
+			}
+			this.bonusEffectList = new BonusEffectList(this);
+			this.bonusEffectList.add(new Bonus([BonusCategory.TO_HIT], BonusType.MORALE, value, this.name));
 			this.bonusEffectList.activate();
 		}, function(){
 			this.bonusEffectList.deactivate();

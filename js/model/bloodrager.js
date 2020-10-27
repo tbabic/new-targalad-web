@@ -121,8 +121,18 @@ var BloodragerAbilities = {
 				.name("Bloodrage")
 				.actionType(ActionType.FREE)
 				.activate(function() {
-					let bonusValue = 2
-					this.bonusEffectList = new BonusEffectList(this, new Bonus(["STRENGTH", "CONSTITUTION"], BonusType.MORALE, 2*bonusValue, this.name))
+					let bonusValue = 2;
+					let conBonus = 2*bonusValue;
+					if (this.owner.level >= 11) {
+						bonusValue = 3;
+					}
+					this.bonusEffectList = new BonusEffectList(this, new Bonus("STRENGTH", BonusType.MORALE, 2*bonusValue, this.name));
+					if (this.owner.getAbilityByName("Raging Vitality") != undefined) {
+						conBonus+=2;
+					}
+					
+					
+					this.bonusEffectList.add(new Bonus("CONSTITUTION", BonusType.MORALE, conBonus, this.name));
 					this.bonusEffectList.add(new Bonus('WILL', BonusType.MORALE, bonusValue, this.name));
 					this.bonusEffectList.add(new Bonus(BonusCategory.ARMOR_CLASS, BonusType.PENALTY, -2, this.name));
 					this.bonusEffectList.activate();
