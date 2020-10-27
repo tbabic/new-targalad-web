@@ -181,6 +181,18 @@ var FeatFactory = {
 			})
 			.owner(owner)
 			.get();
+	},
+	
+	weaponFocus : function(owner) {
+		return getAbilityBuilder()
+			.name("Weapon focus")
+			.actionType(ActionType.PASSIVE)
+			.activate(function() {
+				this.bonusEffectList = new BonusEffectList(this, new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, 1, this.name));
+				this.bonusEffectList.activate();
+			})
+			.owner(owner)
+			.get();
 	}
 };
 
