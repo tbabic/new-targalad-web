@@ -41,7 +41,7 @@ function createVindred(level) {
 	vindred.addItem(new Armor('Chainmail', 'medium', 6, 3, 0, 5, 30, 40));
 	vindred.addItem(new Weapon('Greatsword', WeaponType.GREATSWORD, +2, 4, undefined, furiousProperty));
 	
-	vindred.addItem(new Item('Cracked ioun stone', 'inventory', new Bonus(BonusCategory.TO_HIT, BonusType.CIRCUMSTANCE, 1, "Cracked ioun stone"), 0));
+	vindred.addItem(new Item('Cracked ioun stone', 'inventory', new Bonus(BonusCategory.TO_HIT, BonusType.COMPETENCE, 1, "Cracked ioun stone"), 0));
 	vindred.addItem(new Item('Wayfinder (51)', 'inventory', new Bonus('REFLEX', BonusType.RESISTANCE, 1, "Wayfinder"), 0));
 	vindred.addItem(new Item('Ring of Deflection +1', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 1, "Ring of Deflection +1"), 0));
 	vindred.addItem(new Item('Amulet of Natural Armor +1', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 1, "Amulet of Natural Armor +1"), 0));
