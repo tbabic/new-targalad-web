@@ -93,7 +93,6 @@ function Defense(character) {
 	
 	addModelListener("CMD", (e, bonusEffect) => {
 		var bonusType = bonusEffect.bonus.type;
-		this.bonusProcessor.processBonusEffect(bonusEffect);
 		this.cmdBonusProcessor.processBonusEffect(bonusEffect);
 		
 	});
