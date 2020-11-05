@@ -30,7 +30,7 @@ function createVindred(level) {
 		activate : function(weapon) {
 			let bloodrage = vindred.getAbilityByName("Bloodrage");
 			bonusValue = 2; 
-			this.bonus = new Bonus([BonusCategory.TO_HIT, BonusCategory.DAMAGE],  BonusType.UNTYPED, bonusValue, 'Furious');
+			this.bonus = new Bonus([BonusCategory.TO_HIT, BonusCategory.DAMAGE],  "ENHANCEMENT STACKING", bonusValue, 'Furious');
 			bloodrage.properties.add(this.bonus);
 		},
 		deactivate : function() {

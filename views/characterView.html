@@ -86,6 +86,33 @@
 		
 	</div>
 	
+	<div class="row border-top border-bottom">
+	
+		<!-- CMB-->
+		<div id="cmbWeaponId" class="col-4 ">
+			<div class="row">
+				<div class ="col-6">
+					Cmb: <span>{{ character.offense.getCmb() }}</span>
+				</div>
+				
+				<div class ="col-6">
+					Wpn: <span>{{ character.offense.getCmbWeapon() }}</span>
+				</div>
+			</div>
+		</div>
+		
+		<div id="cmdId" class="col-4">
+			<div class="row">
+				<div class ="col">
+					Cmd:
+				</div>
+				<span class ="col" id="fortitudeId">{{ character.defense.getCmd() }}</span>
+			</div>
+		</div>
+	
+	
+	</div>
+	
 	<div class="row">		
 		<div class="col-8 abilities">
 			<abilities-component></abilities-component>

@@ -16,6 +16,8 @@ var FeatFactory = {
 						if (attackWeapon.category == WeaponCategory.MELEE_LIGHT || 
 							attackWeapon.type == WeaponType.RAPIER) {
 							attack.attrToHit = owner.attributes.dexterity;
+							
+							owner.offense.attrToHit = owner.attributes.dexterity;
 						}
 					}
 				}
@@ -55,6 +57,8 @@ var FeatFactory = {
 						if (attackWeapon.type == WeaponType.SCIMITAR) {
 							attack.attrToHit = owner.attributes.dexterity;
 							attack.attrDmg = owner.attributes.dexterity;
+							
+							owner.offense.attrToHit = owner.attributes.dexterity;
 						}
 					}
 				}

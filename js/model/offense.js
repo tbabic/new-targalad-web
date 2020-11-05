@@ -89,11 +89,15 @@ function Offense(character) {
 	
 	this.toHitBonusProcessor = new BonusProcessor();
 	this.dmgBonusProcessor = new BonusProcessor();
+	this.cmbWeaponBonusProcessor = new BonusProcessor();
+	this.cmbBonusProcessor = new BonusProcessor();
 	this.extraAttackBonusProcessor = new BonusProcessor();
-	this.attrToHit = character.attributes.dexterity;
-	this.attrDmg = character.attributes.dexterity;
+	this.attrToHit = character.attributes.strength;
+	this.attrDmg = character.attributes.strength;
 	this.mainHand = character.equipment.weapon;
 	this.offHand = undefined;
+	
+	
 	if (character.equipment.shield instanceof Weapon) {
 		this.offhand = character.equipment.shield;
 	}
@@ -118,6 +122,8 @@ function Offense(character) {
 	
 	var bab = this.getBab();
 	this.toHitBonusProcessor.add("BAB", new Bonus(BonusCategory.TO_HIT, BonusType.BAB, bab, "BAB"));
+	this.cmbBonusProcessor.add("BAB", new Bonus(BonusCategory.TO_HIT, BonusType.BAB, bab, "BAB"));
+	this.cmbWeaponBonusProcessor.add("BAB", new Bonus(BonusCategory.TO_HIT, BonusType.BAB, bab, "BAB"));
 	
 	var extraAttackBonus = new ExtraAttackBonus("BAB", "mainHand");
 	
@@ -149,6 +155,14 @@ function Offense(character) {
 		});
 		return attacks;
 	};
+	
+	this.getCmb = function() {
+		return this.cmbBonusProcessor.getValue() + this.character.attributes.strength.getModifier();
+	}
+	
+	this.getCmbWeapon = function() {
+		return this.cmbWeaponBonusProcessor.getValue() + this.attrToHit.getModifier();
+	}
 
 	
 	addModelListener("WEAPON", "ADDED", (e, weapon) => {
@@ -161,6 +175,15 @@ function Offense(character) {
 	
 	addModelListener("TO_HIT", (e, bonusEffect) => {
 		this.toHitBonusProcessor.processBonusEffect(bonusEffect);
+		this.cmbWeaponBonusProcessor.processBonusEffect(bonusEffect);
+		if("ENHANCEMENT" != bonusEffect.bonus.type && !bonusEffect.bonus.type.includes("ENHANCEMENT")) {
+			this.cmbBonusProcessor.processBonusEffect(bonusEffect);
+		}
+	});
+	
+	addModelListener("CMB", (e, bonusEffect) => {
+		this.cmbWeaponBonusProcessor.processBonusEffect(bonusEffect);
+		this.cmbBonusProcessor.processBonusEffect(bonusEffect);
 	});
 	
 	addModelListener("DAMAGE", (e, bonusEffect) => {

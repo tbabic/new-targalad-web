@@ -366,3 +366,11 @@ button.dropdown-item:hover {
 .skill-untrained-false {
 	font-style: italic;
 }
+
+.border-top {
+	border-top: 1px solid #c0c0c0;
+}
+
+.border-bottom {
+	border-bottom: 1px solid #c0c0c0;
+}

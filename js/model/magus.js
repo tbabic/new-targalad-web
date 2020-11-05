@@ -233,7 +233,7 @@ var MagusAbilities = {
 				for(let i = 0; i< activationOptions.length; i++) {
 					let selected = activationOptions[i];
 					if (selected.name === "Enhancement") {
-						let bonus = new Bonus([BonusCategory.TO_HIT, BonusCategory.DAMAGE], BonusType.UNTPYED, +selected.value, "Weapon bonus");
+						let bonus = new Bonus([BonusCategory.TO_HIT, BonusCategory.DAMAGE], "ENHANCEMENT STACKING", +selected.value, "Weapon bonus");
 						this.bonusEffectList.add(bonus);
 					} else if (selected.value !== true) {
 						continue;

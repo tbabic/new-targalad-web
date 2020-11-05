@@ -8,6 +8,7 @@ function Defense(character) {
 	this.bonusProcessor = new BonusProcessor();
 	this.touchBonusProcessor = new BonusProcessor();
 	this.flatFootedBonusProcessor = new BonusProcessor();
+	this.cmdBonusProcessor = new BonusProcessor();
 	
 	this.getArmorClass = function() {
 		value = 10;
@@ -37,6 +38,15 @@ function Defense(character) {
 		return value;
 	};
 	
+	this.getCmd = function() {
+		value = 10;
+		value += character.attributes.strength.getModifier();
+		value += character.attributes.dexterity.getModifier();
+		value += character.level;
+		value += this.cmdBonusProcessor.getValue();
+		return value;
+	}
+	
 	this.removeDexBonus = function(source) {
 		//remove dex and dodge bonus to AC
 		var penaltyValue = Math.min(this.armor.maxDexBonus, character.attributes.dexterity.getModifier());
@@ -44,6 +54,7 @@ function Defense(character) {
 		this.dexPenalty = new BonusEffect(source, new Bonus(BonusCategory.ARMOR_CLASS, BonusType.Penalty, -penaltyValue, "No Dex to AC"));
 		this.bonusProcessor.add(this.dexPenalty.source, this.dexPenalty.bonus);
 		this.touchBonusProcessor.add(this.dexPenalty.source, this.dexPenalty.bonus);
+		this.cmdBonusProcessor.add(this.dexPenalty.source, this.dexPenalty.bonus);
 	};
 	
 	this.applyDexBonus = function() {
@@ -72,10 +83,18 @@ function Defense(character) {
 		this.bonusProcessor.processBonusEffect(bonusEffect);
 		if([BonusType.SHIELD, BonusType.ARMOR, BonusType.NATURAL_ARMOR].indexOf(bonusType) == -1) {
 			this.touchBonusProcessor.processBonusEffect(bonusEffect);
+			this.cmdBonusProcessor.processBonusEffect(bonusEffect);
 		}
 		if(bonusType != BonusType.DODGE) {
 			this.flatFootedBonusProcessor.processBonusEffect(bonusEffect);
 		}
+		
+	});
+	
+	addModelListener("CMD", (e, bonusEffect) => {
+		var bonusType = bonusEffect.bonus.type;
+		this.bonusProcessor.processBonusEffect(bonusEffect);
+		this.cmdBonusProcessor.processBonusEffect(bonusEffect);
 		
 	});
 }
