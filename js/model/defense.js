@@ -42,7 +42,7 @@ function Defense(character) {
 		value = 10;
 		value += character.attributes.strength.getModifier();
 		value += character.attributes.dexterity.getModifier();
-		value += character.level;
+		value += character.getBab();
 		value += this.cmdBonusProcessor.getValue();
 		return value;
 	}
