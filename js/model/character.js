@@ -38,7 +38,7 @@ function createVindred(level) {
 		}
 	}
 	
-	vindred.addItem(new Armor('Chainmail', 'medium', 6, 3, 0, 5, 30, 40));
+	vindred.addItem(new Armor('Chainshirt +2', 'light', 4, 4, 0, 1, 20, 25, new Bonus(BonusCategory.ARMOR_CLASS, BonusType.ENHANCMENT, 2, "Chainshirt +2")));
 	vindred.addItem(new Weapon('Greatsword', WeaponType.GREATSWORD, +2, 4, undefined, furiousProperty));
 	
 	vindred.addItem(new Item('Cracked ioun stone', 'inventory', new Bonus(BonusCategory.TO_HIT, BonusType.COMPETENCE, 1, "Cracked ioun stone"), 0));
@@ -46,6 +46,8 @@ function createVindred(level) {
 	vindred.addItem(new Item('Ring of Deflection +1', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 1, "Ring of Deflection +1"), 0));
 	vindred.addItem(new Item('Amulet of Natural Armor +1', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 1, "Amulet of Natural Armor +1"), 0));
 	vindred.addItem(new Item('Belt of Giant Strength +4', 'belt', new Bonus('STRENGTH', BonusType.ENHANCEMENT, 4, "Belt of Giant Strength +4"), 0));
+	vindred.addItem(new Item('Cloak of Resistance +1', 'shoulders', new Bonus('SAVES', BonusType.RESISTANCE, 1, "Cloak of Resistance +1"), 0));
+	vindred.addItem(new Item('Headband of Charisma +2', 'headband', new Bonus('CHARISMA', BonusType.CHARISMA, 2, "Headband of Charisma +2"), 0));
 	
 	vindred.addAbility(FeatFactory.powerAttack(vindred));
 	vindred.addAbility(FeatFactory.dodge(vindred));
@@ -86,9 +88,9 @@ function createVindred(level) {
 	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_RELIGION).addRank(0);
 	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_MARTIAL).addRank(0);
 	vindred.skillSet.getSkill(SkillsEnum.LINGUISTICS).addRank(0);
-	vindred.skillSet.getSkill(SkillsEnum.PERCEPTION).addRank(8);
+	vindred.skillSet.getSkill(SkillsEnum.PERCEPTION).addRank(7);
 	vindred.skillSet.getSkill(SkillsEnum.PERFORM_DANCE).addRank(0);
-	vindred.skillSet.getSkill(SkillsEnum.PERFORM_SING).addRank(6);
+	vindred.skillSet.getSkill(SkillsEnum.PERFORM_SING).addRank(8);
 	vindred.skillSet.getSkill(SkillsEnum.PERFORM_ORATORY).addRank(0);
 	vindred.skillSet.getSkill(SkillsEnum.PROFESSION).addRank(0);
 	vindred.skillSet.getSkill(SkillsEnum.RIDE).addRank(1);

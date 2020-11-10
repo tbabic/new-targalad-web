@@ -81,7 +81,7 @@ function Defense(character) {
 	addModelListener("ARMOR_CLASS", (e, bonusEffect) => {
 		var bonusType = bonusEffect.bonus.type;
 		this.bonusProcessor.processBonusEffect(bonusEffect);
-		if([BonusType.SHIELD, BonusType.ARMOR, BonusType.NATURAL_ARMOR].indexOf(bonusType) == -1) {
+		if([BonusType.SHIELD, BonusType.ARMOR, BonusType.NATURAL_ARMOR, BonusType.ENHANCMENT].indexOf(bonusType) == -1) {
 			this.touchBonusProcessor.processBonusEffect(bonusEffect);
 			this.cmdBonusProcessor.processBonusEffect(bonusEffect);
 		}
