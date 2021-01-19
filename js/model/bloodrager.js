@@ -159,6 +159,9 @@ var BloodragePowerFactory = {
 						return;
 					}
 					let bonusValue = Math.floor(this.owner.level / 2);
+					if (bonusValue < 1) {
+						bonusValue = 1;
+					}
 					this.bonusEffectList = new BonusEffectList(this, new Bonus(BonusCategory.TO_HIT, BonusType.INSIGHT, bonusValue, this.name));
 					this.bonusEffectList.activate();
 				})
