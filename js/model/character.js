@@ -213,6 +213,93 @@ function createWhirlwind(level) {
 }
 
 
+function createSpot(level) {
+	if (level == undefined) {
+		level = 1;
+	}
+	var attributes = new Attributes(17, 13, 14, 11, 13, 11);
+	var vindred = new Character('bloodrager', attributes, +level, 'equipment');
+	
+	furiousProperty  = {
+	    name : "furious",
+		activate : function(weapon) {
+			let bloodrage = vindred.getAbilityByName("Bloodrage");
+			bonusValue = 2; 
+			this.bonus = new Bonus([BonusCategory.TO_HIT, BonusCategory.DAMAGE],  "ENHANCEMENT STACKING", bonusValue, 'Furious');
+			bloodrage.properties.add(this.bonus);
+		},
+		deactivate : function() {
+			bloodrage.bonusEffectList.removeAndDeactivate(this.bonus);
+		}
+	}
+	
+	vindred.addItem(new Armor('Hide armor', 'light', 4, 3, 0, 1, 20, 25, new Bonus(BonusCategory.ARMOR_CLASS, BonusType.ENHANCMENT, 0, "Hide armor")));
+	vindred.addItem(new Weapon('Greataxe', WeaponType.GREATEAXE, +0, 0, undefined, undefined));
+	//vindred.addItem(new Weapon('Greatsword', WeaponType.BARDICHE, +0, 0, undefined, furiousProperty));
+	
+	
+	
+	vindred.addItem(new Item('Ring of Deflection +0', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 0, "Ring of Deflection +0"), 0));
+	vindred.addItem(new Item('Amulet of Natural Armor +0', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 0, "Amulet of Natural Armor +0"), 0));
+	vindred.addItem(new Item('Belt of Giant Strength +0', 'belt', new Bonus('STRENGTH', BonusType.ENHANCEMENT, 0, "Belt of Giant Strength +0"), 0));
+	vindred.addItem(new Item('Cloak of Resistance +0', 'shoulders', new Bonus('SAVES', BonusType.RESISTANCE, 0, "Cloak of Resistance +0"), 0));
+	vindred.addItem(new Item('Headband of Charisma +0', 'headband', new Bonus('CHARISMA', BonusType.CHARISMA, 0, "Headband of Charisma +0"), 0));
+	
+	
+	if (vindred.level >= 3) {
+		vindred.addAbility(FeatFactory.powerAttack(vindred));
+	}
+
+	
+	
+	vindred.skillSet.getSkill(SkillsEnum.ACROBATICS).addRank(1);
+	vindred.skillSet.getSkill(SkillsEnum.APPRAISE).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.BLUFF).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.CLIMB).addRank(1);
+	vindred.skillSet.getSkill(SkillsEnum.CRAFT_ALCHEMY).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.CRAFT_ARMOR).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.CRAFT_WEAPON).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.DIPLOMACY).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.DISABLE_DEVICE).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.DISGUISE).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.ESCAPE_ARTIST).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.FLY).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.HANDLE_ANIMAL).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.HEAL).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.INTIMIDATE).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_ARCANA).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_DUNGEONEERING).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_ENGINEERING).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_GEOGRAPHY).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_HISTORY).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_LOCAL).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_NATURE).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_NOBILITY).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_PLANES).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_RELIGION).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.KNOWLEDGE_MARTIAL).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.LINGUISTICS).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.PERCEPTION).addRank(1);
+	vindred.skillSet.getSkill(SkillsEnum.PERFORM_DANCE).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.PERFORM_SING).addRank(1);
+	vindred.skillSet.getSkill(SkillsEnum.PERFORM_ORATORY).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.PROFESSION).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.RIDE).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.SENSE_MOTIVE).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.SLEIGHT_OF_HAND).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.SPELLCRAFT).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.STEALTH).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.SURVIVAL).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.SWIM).addRank(0);
+	vindred.skillSet.getSkill(SkillsEnum.USE_MAGIC_DEVICE).addRank(0);
+	
+	console.log(vindred);
+	
+	
+	myCharacter = vindred;
+}
+
+
 function createTargalad(level) {
 	if (level == undefined) {
 		level = 6;
