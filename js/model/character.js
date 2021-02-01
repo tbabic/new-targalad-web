@@ -234,7 +234,7 @@ function createSpot(level) {
 	}
 	
 	vindred.addItem(new Armor('Hide armor', 'light', 4, 3, 0, 1, 20, 25, new Bonus(BonusCategory.ARMOR_CLASS, BonusType.ENHANCMENT, 0, "Hide armor")));
-	vindred.addItem(new Weapon('Greataxe', WeaponType.GREATEAXE, +0, 0, undefined, undefined));
+	vindred.addItem(new Weapon('Greataxe', WeaponType.GREATAXE, +0, 0, undefined, undefined));
 	//vindred.addItem(new Weapon('Greatsword', WeaponType.BARDICHE, +0, 0, undefined, furiousProperty));
 	
 	
