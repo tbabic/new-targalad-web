@@ -153,6 +153,7 @@ function createWhirlwind(level) {
 	
 	if (vindred.level >= 3) {
 		vindred.addAbility(FeatFactory.powerAttack(vindred));
+		vindred.skillSet.getSkill(SkillsEnum.ACROBATICS).addRank(2);
 	}
 	//vindred.addAbility(FeatFactory.ragingVitality(vindred));
 	
