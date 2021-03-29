@@ -208,6 +208,13 @@ BuffsFactory = {
 			this.bonusEffectList.deactivate();
 			this.lock = false;
 			
+		}),
+		seanceBoonDamage : new BuffEffect("Seance boon - dmg", function() {
+			this.bonusEffectList = new BonusEffectList(this);
+			this.bonusEffectList.add(new Bonus('DAMAGE', BonusType.UNTYPED, 2, this.name));
+			this.bonusEffectList.activate();
+		}, function(){
+			this.bonusEffectList.deactivate();
 		})
 
 };

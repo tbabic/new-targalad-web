@@ -137,7 +137,7 @@ function createWhirlwind(level) {
 	vindred.addItem(new Item('Ring of Deflection +0', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 0, "Ring of Deflection +0"), 0));
 	vindred.addItem(new Item('Amulet of Natural Armor +0', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 0, "Amulet of Natural Armor +0"), 0));
 	vindred.addItem(new Item('Belt of Giant Strength +0', 'belt', new Bonus('STRENGTH', BonusType.ENHANCEMENT, 0, "Belt of Giant Strength +0"), 0));
-	vindred.addItem(new Item('Cloak of Resistance +0', 'shoulders', new Bonus('SAVES', BonusType.RESISTANCE, 0, "Cloak of Resistance +0"), 0));
+	vindred.addItem(new Item('Cloak of Resistance +1', 'shoulders', new Bonus('SAVES', BonusType.RESISTANCE, 1, "Cloak of Resistance +1"), 0));
 	vindred.addItem(new Item('Headband of Charisma +0', 'headband', new Bonus('CHARISMA', BonusType.CHARISMA, 0, "Headband of Charisma +0"), 0));
 	
 	
