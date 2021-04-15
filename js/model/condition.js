@@ -72,7 +72,7 @@ ConditionsFactory = {
 			[new Bonus(BonusCategory.ARMOR_CLASS, BonusType.PENALTY, -2, "Blinded")], 
 			function(character) {
 				//remove dexBonus and dodge bonus to AC
-				character.defense.removeDexBonus(this.name);
+				character.defense.removeDexBonus(this.name + "  dex penalty");
 				//TODO -4 penalty to dex and str skill checks and perception
 			}, 
 			function(character) {

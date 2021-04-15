@@ -51,7 +51,7 @@ function Defense(character) {
 		//remove dex and dodge bonus to AC
 		var penaltyValue = Math.min(this.armor.maxDexBonus, character.attributes.dexterity.getModifier());
 		penaltyValue += this.bonusProcessor.getValueByType(BonusType.DODGE);
-		this.dexPenalty = new BonusEffect(source, new Bonus(BonusCategory.ARMOR_CLASS, BonusType.Penalty, -penaltyValue, "No Dex to AC"));
+		this.dexPenalty = new BonusEffect(source, new Bonus(BonusCategory.ARMOR_CLASS, BonusType.PENALTY, -penaltyValue, "No Dex to AC"));
 		this.bonusProcessor.add(this.dexPenalty.source, this.dexPenalty.bonus);
 		this.touchBonusProcessor.add(this.dexPenalty.source, this.dexPenalty.bonus);
 		this.cmdBonusProcessor.add(this.dexPenalty.source, this.dexPenalty.bonus);
