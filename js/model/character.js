@@ -26,7 +26,7 @@ function createVindred(level) {
 	var vindred = new Character('bloodrager', attributes, +level, 'equipment');
 	
 	furiousProperty  = {
-	    name : "furious",
+	    name : "FURIOUS",
 		activate : function(weapon) {
 			let bloodrage = vindred.getAbilityByName("Bloodrage");
 			bonusValue = 2; 
@@ -38,7 +38,7 @@ function createVindred(level) {
 		}
 	}
 	
-	vindred.addItem(new Armor('Chainshirt +2', 'light', 4, 4, 0, 1, 20, 25, new Bonus(BonusCategory.ARMOR_CLASS, BonusType.ENHANCMENT, 2, "Chainshirt +2")));
+	vindred.addItem(new Armor('Chainshirt +1', ArmorType.CHAINSHIRT, undefined, 4, 4, 0, 1, 20, 25, new Bonus(BonusCategory.ARMOR_CLASS, BonusType.ENHANCEMENT, 2, "Chainshirt +2")));
 	vindred.addItem(new Weapon('Greatsword', WeaponType.GREATSWORD, +2, 4, undefined, furiousProperty));
 	
 	vindred.addItem(new Item('Cracked ioun stone', 'inventory', new Bonus(BonusCategory.TO_HIT, BonusType.COMPETENCE, 1, "Cracked ioun stone"), 0));
@@ -48,6 +48,8 @@ function createVindred(level) {
 	vindred.addItem(new Item('Belt of Giant Strength +4', 'belt', new Bonus('STRENGTH', BonusType.ENHANCEMENT, 4, "Belt of Giant Strength +4"), 0));
 	vindred.addItem(new Item('Cloak of Resistance +1', 'shoulders', new Bonus('SAVES', BonusType.RESISTANCE, 1, "Cloak of Resistance +1"), 0));
 	vindred.addItem(new Item('Headband of Charisma +2', 'headband', new Bonus('CHARISMA', BonusType.CHARISMA, 2, "Headband of Charisma +2"), 0));
+	
+	loadEquipmentFromStorage(vindred);
 	
 	vindred.addAbility(FeatFactory.powerAttack(vindred));
 	vindred.addAbility(FeatFactory.dodge(vindred));
@@ -128,7 +130,7 @@ function createWhirlwind(level) {
 		}
 	}
 	
-	vindred.addItem(new Armor('Hide armor', 'light', 4, 3, 0, 1, 20, 25, new Bonus(BonusCategory.ARMOR_CLASS, BonusType.ENHANCMENT, 0, "Hide armor")));
+	vindred.addItem(new Armor('Hide armor', ArmorType.HIDE, undefined, 4, 3, 0, 1, 20, 25, new Bonus(BonusCategory.ARMOR_CLASS, BonusType.ENHANCEMENT, 0, "Hide armor")));
 	vindred.addItem(new Weapon('Greatsword', WeaponType.BARDICHE, +0, 0, undefined, undefined));
 	//vindred.addItem(new Weapon('Greatsword', WeaponType.BARDICHE, +0, 0, undefined, furiousProperty));
 	
@@ -140,12 +142,15 @@ function createWhirlwind(level) {
 	vindred.addItem(new Item('Cloak of Resistance +1', 'shoulders', new Bonus('SAVES', BonusType.RESISTANCE, 1, "Cloak of Resistance +1"), 0));
 	vindred.addItem(new Item('Headband of Charisma +0', 'headband', new Bonus('CHARISMA', BonusType.CHARISMA, 0, "Headband of Charisma +0"), 0));
 	
+	loadEquipmentFromStorage(vindred);
 	
 	vindred.addAbility(FeatFactory.dodge(vindred));
 	vindred.addAbility(FeatFactory.fatesFavored(vindred));
 	vindred.addAbility(BloodragePowerFactory.destinedStrike(vindred));
 	
 	vindred.addAbility(FeatFactory.cautiousWarrior(vindred));
+	vindred.addAbility(FeatFactory.improvedUnarmedStrike(vindred));
+	
 	
 	if (vindred.level >= 2) {
 		vindred.addAbility(FeatFactory.craneStyle(vindred));
@@ -153,16 +158,49 @@ function createWhirlwind(level) {
 	
 	if (vindred.level >= 3) {
 		vindred.addAbility(FeatFactory.powerAttack(vindred));
+		vindred.addAbility(FeatFactory.dirtyFighter(vindred));
 		vindred.skillSet.getSkill(SkillsEnum.ACROBATICS).addRank(2);
 	}
+	
+	
 	//vindred.addAbility(FeatFactory.ragingVitality(vindred));
 	
 	if (vindred.level >= 4) {
 	
 		vindred.addAbility(BloodragePowerFactory.fatedBloodrager(vindred));
 	}
+	
+	if (vindred.level >= 5) {
+		vindred.addAbility(FeatFactory.combatReflexes(vindred));
+	}
+	
+	if (vindred.level >= 6) {
+		vindred.addAbility(FeatFactory.endurance(vindred));
+	}
+	
+	if (vindred.level >= 7) {
+		vindred.addAbility(FeatFactory.ironWill(vindred));
+	}
+	
+	if (vindred.level >= 8) {
+		vindred.addAbility(FeatFactory.diehard(vindred));
+	}
+	
+	
 	if (vindred.level >= 8) {
 		vindred.addAbility(BloodragePowerFactory.guardedStance(vindred));
+	}
+	
+	if (vindred.level >= 9) {
+		vindred.addAbility(FeatFactory.stalwart(vindred));
+	}
+	
+	if (vindred.level >= 11) {
+		vindred.addAbility(FeatFactory.improvedstalwart(vindred));
+	}
+	
+	if (vindred.level >= 12) {
+		vindred.addAbility(FeatFactory.weaponFocus(vindred, WeaponType.BARDICHE));
 	}
 	
 	
@@ -234,17 +272,15 @@ function createSpot(level) {
 		}
 	}
 	
-	vindred.addItem(new Armor('Hide armor', 'light', 4, 3, 0, 1, 20, 25, new Bonus(BonusCategory.ARMOR_CLASS, BonusType.ENHANCMENT, 0, "Hide armor")));
-	vindred.addItem(new Weapon('Greataxe', WeaponType.GREATAXE, +0, 0, undefined, undefined));
+	vindred.addItem(new Armor('Breastplate Masterwork', ArmorType.BREASTPLATE, undefined, 6, 3, 0, 3, 20, 25, new Bonus(BonusCategory.ARMOR_CLASS, BonusType.ENHANCEMENT, 0, "Breastplate")));
+	vindred.addItem(new Weapon('Greataxe Masterwork', WeaponType.GREATAXE, 0, 0, new Bonus(BonusCategory.TO_HIT, BonusType.ENHANCEMENT, 1, "MASTERWORK WEAPON"), undefined));
 	//vindred.addItem(new Weapon('Greatsword', WeaponType.BARDICHE, +0, 0, undefined, furiousProperty));
 	
 	
 	
-	vindred.addItem(new Item('Ring of Deflection +0', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 0, "Ring of Deflection +0"), 0));
-	vindred.addItem(new Item('Amulet of Natural Armor +0', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 0, "Amulet of Natural Armor +0"), 0));
-	vindred.addItem(new Item('Belt of Giant Strength +0', 'belt', new Bonus('STRENGTH', BonusType.ENHANCEMENT, 0, "Belt of Giant Strength +0"), 0));
-	vindred.addItem(new Item('Cloak of Resistance +0', 'shoulders', new Bonus('SAVES', BonusType.RESISTANCE, 0, "Cloak of Resistance +0"), 0));
-	vindred.addItem(new Item('Headband of Charisma +0', 'headband', new Bonus('CHARISMA', BonusType.CHARISMA, 0, "Headband of Charisma +0"), 0));
+	
+	vindred.addItem(new Item('Amulet of Natural Armor +1', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 1, "Amulet of Natural Armor +1"), 0));
+
 	
 	
 	if (vindred.level >= 3) {
@@ -253,7 +289,7 @@ function createSpot(level) {
 
 	
 	
-	vindred.skillSet.getSkill(SkillsEnum.ACROBATICS).addRank(1);
+	vindred.skillSet.getSkill(SkillsEnum.ACROBATICS).addRank(3);
 	vindred.skillSet.getSkill(SkillsEnum.APPRAISE).addRank(0);
 	vindred.skillSet.getSkill(SkillsEnum.BLUFF).addRank(0);
 	vindred.skillSet.getSkill(SkillsEnum.CLIMB).addRank(1);
@@ -309,7 +345,7 @@ function createTargalad(level) {
 	var targalad = new Character('magus', attributes, +level, 'equipment');
 	
 	
-	targalad.addItem(new Armor('Mithral Chainshirt', 'light', 4, 6, 0, 0, 20, 20));
+	targalad.addItem(new Armor('Mithral Chainshirt', ArmorType.CHAINSHIRT, undefined, 4, 6, 0, 0, 20, 20));
 	targalad.addItem(new Weapon('BlackBlade Scimitar', WeaponType.SCIMITAR, +2, 4));
 	targalad.addItem(new Item('Ring of Deflection +2', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 2, "Ring of Deflection +2"), 0));
 	targalad.addItem(new Item('Amulet of Natural Armor +1', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 1, "Amulet of Natural Armor +1"), 0));
@@ -378,7 +414,7 @@ function Character(characterClass, attributes, level, equipment) {
 	this.characterClass = characterClass;
 	
 	
-	this.equipment = new Equipment();
+	this.equipment = new Equipment(this);
 	
 	this.nonPassiveAbilities = [];
 	this.passiveAbilities = [];

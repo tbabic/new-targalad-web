@@ -187,16 +187,116 @@ var FeatFactory = {
 			.get();
 	},
 	
-	weaponFocus : function(owner) {
+	weaponFocus : function(owner, weaponType) {
 		return getAbilityBuilder()
 			.name("Weapon focus")
 			.actionType(ActionType.PASSIVE)
 			.activate(function() {
-				this.bonusEffectList = new BonusEffectList(this, new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, 1, this.name));
-				this.bonusEffectList.activate();
+				if (this.bonusEffectList == undefined) {
+					this.bonusEffectList = new BonusEffectList(this, new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, 1, this.name));
+				}
+				this.usesFocusWeapon = false;
+				if (owner.equipment.weapon.type == weaponType) {
+					this.bonusEffectList.activate();
+					this.usesFocusWeapon = true;
+				}
+				
+				addModelListener("WEAPON", "ADDED", (e, weapon) => {
+					if (this.usesFocusWeapon && weapon.type != weaponType) {
+						this.bonusEffectList.deactivate();
+						this.usesFocusWeapon = false;
+					} else if (!this.usesFocusWeapon && weapon.type == weaponType) {
+						this.bonusEffectList.activate();
+						this.usesFocusWeapon = true;
+					}
+				});				
 			})
 			.owner(owner)
 			.get();
-	}
+	},
+	dirtyFighter : function(owner) {
+		return getAbilityBuilder()
+			.name("Dirty Fighter")
+			.actionType(ActionType.PASSIVE)
+			.owner(owner)
+			.get();
+	},
+	improvedUnarmedStrike : function(owner) {
+		return getAbilityBuilder()
+			.name("Unarmed Strike")
+			.actionType(ActionType.FREE)
+			.activate(function() {
+				if (this.fist == undefined) {
+					this.fist = new Weapon('Fist', WeaponType.UNARMED, +0, 0, undefined, undefined)
+				}
+				
+				if (owner.equipment.weapon.type != WeaponType.UNARMED) {
+					this.oldWeapon = owner.equipment.weapon;
+					owner.addItem(this.fist);
+				}
+				
+			})
+			.deactivate(function() {
+				if (owner.equipment.weapon.type == WeaponType.UNARMED) {
+					owner.addItem(this.oldWeapon);
+				}
+				
+			})
+			.owner(owner)
+			.get();
+	},
+	
+	combatReflexes : function(owner) {
+		return getAbilityBuilder()
+			.name("Combat Reflexes")
+			.actionType(ActionType.PASSIVE)
+			.owner(owner)
+			.get();
+	},
+	
+	stalwart : function(owner) {
+		return getAbilityBuilder()
+			.name("Stalwart")
+			.actionType(ActionType.FREE)
+			.owner(owner)
+			.get();
+	},
+	
+	improvedStalwart : function(owner) {
+		return getAbilityBuilder()
+			.name("Improved Stalwart")
+			.actionType(ActionType.PASSIVE)
+			.owner(owner)
+			.get();
+	},
+	
+	diehard : function(owner) {
+		return getAbilityBuilder()
+			.name("Diehard")
+			.actionType(ActionType.PASSIVE)
+			.owner(owner)
+			.get();
+	},
+	
+	endurance : function(owner) {
+		return getAbilityBuilder()
+			.name("Endurance")
+			.actionType(ActionType.PASSIVE)
+			.owner(owner)
+			.get();
+	},
+	
+	ironWill : function(owner) {
+		return getAbilityBuilder()
+			.name("Iron Will")
+			.actionType(ActionType.PASSIVE)
+			.activate(function() {
+				this.bonusEffectList = new BonusEffectList(this, new Bonus("WILL", BonusType.UNTYPED, 1, this.name));
+				this.bonusEffectList.activate();
+				
+			})
+			.owner(owner)
+			.get();
+	},
 };
 

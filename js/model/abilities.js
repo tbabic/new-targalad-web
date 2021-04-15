@@ -255,11 +255,21 @@ var AbilityFactory = {
 		return getAbilityBuilder()
 			.name("Flank")
 			.actionType(ActionType.FREE)
-			.properties(new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, 2, "Flank"))
+			.activate(function() {
+				this.bonusEffectList = new BonusEffectList(this,new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, 2, "Flank"));
+				if (owner.getAbilityByName("Dirty Fighter") != undefined) {
+					this.bonusEffectList.add(new Bonus(BonusCategory.DAMAGE, BonusType.UNTYPED, 1, "Dirty Fighter"));
+				}
+				this.bonusEffectList.activate();
+			})
+			.deactivate(function() {
+				if (this.bonusEffectList !== undefined) {
+					this.bonusEffectList.deactivate();
+				}
+			})
 			.owner(owner)
 			.get();
 	}
-
 };
 
 

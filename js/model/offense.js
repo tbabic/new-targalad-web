@@ -33,7 +33,7 @@ function Attack(offense, extraAttackBonus) {
 	}
 	
 	this.getToHit = function() {
-		return this.toHitBonusProcessor.getValue() + this.attrToHit.getModifier();
+		return +this.toHitBonusProcessor.getValue() + +this.attrToHit.getModifier();
 	};
 	
 	this.getDmg = function() {
@@ -176,7 +176,7 @@ function Offense(character) {
 	addModelListener("TO_HIT", (e, bonusEffect) => {
 		this.toHitBonusProcessor.processBonusEffect(bonusEffect);
 		this.cmbWeaponBonusProcessor.processBonusEffect(bonusEffect);
-		if("ENHANCEMENT" != bonusEffect.bonus.type && !bonusEffect.bonus.type.includes("ENHANCEMENT")) {
+		if("ENHANCEMENT" != bonusEffect.bonus.type && !bonusEffect.bonus.type.includes("ENHANCEMENT") && !bonusEffect.source == this.character.getAbilityByName("Weapon focus")) {
 			this.cmbBonusProcessor.processBonusEffect(bonusEffect);
 		}
 	});

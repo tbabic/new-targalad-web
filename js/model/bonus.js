@@ -200,6 +200,10 @@ function BonusEffectList(source, bonusList) {
 		removeAndDeactivate : function(bonus) {
 			bonus.deactivate(_source);
 			_apply("deactivate", _list);
+		},
+		
+		list : function() {
+			return _list;
 		}
 	};
 }
@@ -213,6 +217,9 @@ function BonusTypeGroup(type, isStacking) {
 	this.vsSomething = {};
 	
 	this.add = function(source, bonus) {
+		if (this.getBySource(source) > bonus.value ) {
+			return;
+		}
 		this.remove(source);
 		this.sourceList[source] = bonus;
 		this.cachedValue = undefined;
@@ -244,9 +251,9 @@ function BonusTypeGroup(type, isStacking) {
 				continue;
 			}
 			if (bonus.value > max) {
-				max = bonus.value;
+				max = +bonus.value;
 			}
-			sum += bonus.value;
+			sum += +bonus.value;
 		}
 		var value;
 		if (this.isStacking) {
@@ -312,7 +319,7 @@ function BonusProcessor() {
 			}
 			var value = 0;
 			for (var i in _list) {
-				value += _list[i].get();
+				value += +_list[i].get();
 			}
 			this.cachedValue = value;
 			return value;

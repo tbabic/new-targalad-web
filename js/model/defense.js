@@ -24,26 +24,26 @@ function Defense(character) {
 	this.getTouchAc = function() {
 		value = 10;
 		if (this.armor !== undefined) {
-			value += Math.min(this.armor.maxDexBonus, character.attributes.dexterity.getModifier());
+			value += +Math.min(this.armor.maxDexBonus, character.attributes.dexterity.getModifier());
 		} else {
-			value += character.attributes.dexterity.getModifier();
+			value += +character.attributes.dexterity.getModifier();
 		}
-		value += this.touchBonusProcessor.getValue();
+		value += +this.touchBonusProcessor.getValue();
 		return value;
 	};
 	
 	this.getFlatFootedAc = function() {
 		value = 10;
-		value += this.flatFootedBonusProcessor.getValue();
+		value += +this.flatFootedBonusProcessor.getValue();
 		return value;
 	};
 	
 	this.getCmd = function() {
 		value = 10;
-		value += character.attributes.strength.getModifier();
-		value += character.attributes.dexterity.getModifier();
-		value += character.getBab();
-		value += this.cmdBonusProcessor.getValue();
+		value += +character.attributes.strength.getModifier();
+		value += +character.attributes.dexterity.getModifier();
+		value += +character.getBab();
+		value += +this.cmdBonusProcessor.getValue();
 		return value;
 	}
 	
@@ -81,7 +81,7 @@ function Defense(character) {
 	addModelListener("ARMOR_CLASS", (e, bonusEffect) => {
 		var bonusType = bonusEffect.bonus.type;
 		this.bonusProcessor.processBonusEffect(bonusEffect);
-		if([BonusType.SHIELD, BonusType.ARMOR, BonusType.NATURAL_ARMOR, BonusType.ENHANCMENT].indexOf(bonusType) == -1) {
+		if([BonusType.SHIELD, BonusType.ARMOR, BonusType.NATURAL_ARMOR, BonusType.ENHANCEMENT].indexOf(bonusType) == -1) {
 			this.touchBonusProcessor.processBonusEffect(bonusEffect);
 			this.cmdBonusProcessor.processBonusEffect(bonusEffect);
 		}

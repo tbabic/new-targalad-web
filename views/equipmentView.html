@@ -1,0 +1,119 @@
+<div id ="equipmentView">
+	<div v-for="slot in slots" class="row">
+		<div class="col-5">
+			{{ slot.visibleName }}
+		</div>
+		<div class="col-6">
+			<button v-on:click="changeItem(slot)" class="btn btn-primary btn-slot" data-toggle="modal" data-target="#chooseItemModal"> {{ slot.item.name }}</button>
+		</div>
+		<div class="col-1">
+			<button v-on:click="removeItem(slot)" class="btn btn-danger">  X</button>
+		</div>
+	</div>
+	
+	
+	<div class="modal fade" id="chooseItemModal" tabindex="-1" role="dialog">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel">Choose {{ itemSelector.slot.visibleName}}</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					
+				</div>
+				<div class="modal-body">
+				
+					<div  class="row property-picker">
+						<div class="col-4">
+							Properties:
+						</div>
+						
+						<div class="col">
+							<div v-for="propertyPicker in itemSelector.propertiesPickerList" class="row selector">
+								<div class="col">
+									<select v-model="propertyPicker.name" v-on:change="refreshSelector">
+										<option v-for="p in selectorActiveProperties">{{ p.name }}</option>
+									</select>
+									<select v-if="hasOptions(propertyPicker.name)"  v-model="propertyPicker.option">
+										<option v-for="o in selectedPropertyOptions(propertyPicker.name)" v-bind:value="o.value">{{ o.name }}</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+		
+						
+					<div v-if="itemSelector.slot.name == 'weapon'" class="row selector">
+						<div class="col-4">
+							Type:
+						</div>
+						<div class="col">
+							<select  v-model="weaponSelector.type">
+								<option v-for="weaponType in weaponSelector.typeList" v-bind:value="weaponType.type">{{ weaponType.name }}</option>
+							</select>
+						</div>
+					</div>
+					
+					<div v-if="itemSelector.slot.name == 'armor'">
+						<div class="row selector">
+							<div class="col-4">
+								Type:
+							</div>
+							<div class="col">
+								<select  v-model="armorSelector.type">
+									<option v-for="armorType in armorSelector.typeList" v-bind:value="armorType.type">{{ armorType.name }}</option>
+								</select>
+							</div>
+						</div>
+						<div class="row selector">
+							<div class="col-4">
+								Category:
+							</div>
+							<div class="col">
+								<select  v-model="armorSelector.category">
+									<option v-for="armorCategory in armorSelector.categoryList" >{{ armorCategory }}</option>
+								</select>
+							</div>
+						</div>
+						
+						
+						
+						<div class="row selector">
+							<div class="col-4">
+								Armor bonus:
+							</div>
+							<div class="col">
+								<input v-model="armorSelector.armorBonus" type="number" class="form-control">
+							</div>
+						</div>
+						<div class="row selector">
+							<div class="col-4">
+								Max dex bonus:
+							</div>
+							<div class="col">
+								<input v-model="armorSelector.maxDexBonus" type="number" class="form-control">
+							</div>
+						</div>
+						<div class="row selector">
+							<div class="col-4">
+								Armor check penalty:
+							</div>
+							<div class="col">
+								<input v-model="armorSelector.armorCheckPenalty" type="number" class="form-control">
+							</div>
+						</div>
+						
+					</div>
+
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-primary" data-dismiss="modal" v-on:click="equipItem">Confirm</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+
+			</div>
+		</div>
+	</div>
+	
+</div>

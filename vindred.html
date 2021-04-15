@@ -32,10 +32,10 @@
 		  <router-link class="navbar-brand navbar-header-btn" to="/main">Main</router-link>
 		  <router-link class="navbar-brand navbar-header-btn" to="/spells">Spells</router-link>
 		  <router-link class="navbar-brand navbar-header-btn" to="/skills">Skills</router-link>
+		  <router-link class="navbar-brand navbar-header-btn" to="/equipment">Items</router-link>
 <!-- 		  <a class="navbar-brand navbar-header-btn" data-ref-view="characterView" href="#">Main</a> -->
 <!-- 		  <a class="navbar-brand navbar-header-btn" data-ref-view="spellBookView" href="#">Spells</a> -->
 <!-- 		  <a class="navbar-brand navbar-header-btn" data-ref-view="skillsView" href="#">Skills</a> -->
-		  <a class="navbar-brand navbar-header-btn" data-ref-view="equipmentView" href="#">Items</a>
 		  <a class="navbar-brand navbar-header-btn" data-ref-view="settingsView" href="#">Settings</a>
 		  <level-component></level-component>
 		</div>
@@ -94,6 +94,7 @@
 <script src="js/controllers/characterController.js"></script>
 <script src="js/controllers/spellbookController.js"></script>
 <script src="js/controllers/skillsController.js"></script>
+<script src="js/controllers/equipmentController.js"></script>
 <script src="js/controllers/settingsController.js"></script>
 <script src="js/controllers/characterLevelController.js"></script>
 <script>
@@ -110,6 +111,9 @@ var routes = [
 	},
 	{
 		path: '/skills', component: skillsComponent
+	},
+	{
+		path: '/equipment', component: equipmentComponent
 	}
 ];
 	

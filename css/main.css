@@ -374,3 +374,15 @@ button.dropdown-item:hover {
 .border-bottom {
 	border-bottom: 1px solid #c0c0c0;
 }
+
+.property-picker {
+	padding-bottom: 10px;
+}
+
+.selector {
+	padding-bottom: 10px;
+}
+.btn-slot {
+	white-space: normal;
+	word-wrap: break-word;
+}
