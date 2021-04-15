@@ -217,9 +217,15 @@ function BonusTypeGroup(type, isStacking) {
 	this.vsSomething = {};
 	
 	this.add = function(source, bonus) {
-		if (this.getBySource(source) > bonus.value ) {
+		if(bonus.value == 0) {
 			return;
 		}
+		
+		let existingValue = this.getBySource(source);
+		if (existingValue != 0 && existingValue > bonus.value ) {
+			return;
+		}
+		
 		this.remove(source);
 		this.sourceList[source] = bonus;
 		this.cachedValue = undefined;
