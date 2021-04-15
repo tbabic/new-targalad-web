@@ -1,13 +1,13 @@
 <div id ="equipmentView">
 	<div v-for="slot in slots" class="row">
-		<div class="col-5">
+		<div class="col-4">
 			{{ slot.visibleName }}
 		</div>
 		<div class="col-6">
 			<button v-on:click="changeItem(slot)" class="btn btn-primary btn-slot" data-toggle="modal" data-target="#chooseItemModal"> {{ slot.item.name }}</button>
 		</div>
-		<div class="col-1">
-			<button v-on:click="removeItem(slot)" class="btn btn-danger">  X</button>
+		<div class="col-2">
+			<button v-on:click="removeItem(slot)" class="btn btn-danger">X</button>
 		</div>
 	</div>
 	
