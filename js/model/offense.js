@@ -6,6 +6,8 @@ function Attack(offense, extraAttackBonus) {
 	this.attrToHit = "STRENGTH";
 	this.attrDmg = "STRENGTH";
 	this.source = extraAttackBonus.source;
+	this.dmg = 0;
+	this.toHit = 0;
 	
 	this.getWeapon = function() {
 		return this.offense.character.equipment.weapon;
@@ -63,12 +65,16 @@ function Attack(offense, extraAttackBonus) {
 	
 	addModelListener("TO_HIT", (e, bonusEffect) => {
 		this.toHitBonusProcessor.processBonusEffect(bonusEffect);
+		this.toHit = this.getToHit();
 	});
 	
 	addModelListener("DAMAGE", (e, bonusEffect) => {
 		this.dmgBonusProcessor.processBonusEffect(bonusEffect);
+		this.dmg = this.getDmg();
 	});
 	
+	this.dmg = this.getDmg();
+	this.toHit = this.getToHit();
 }
 
 function ExtraAttackBonus(source, weaponSlot, toHitBonus, dmgBonus, attrToHit, attrDmg) {
@@ -176,7 +182,7 @@ function Offense(character) {
 	addModelListener("TO_HIT", (e, bonusEffect) => {
 		this.toHitBonusProcessor.processBonusEffect(bonusEffect);
 		this.cmbWeaponBonusProcessor.processBonusEffect(bonusEffect);
-		if("ENHANCEMENT" != bonusEffect.bonus.type && !bonusEffect.bonus.type.includes("ENHANCEMENT") && !bonusEffect.source == this.character.getAbilityByName("Weapon focus")) {
+		if("ENHANCEMENT" != bonusEffect.bonus.type && !bonusEffect.bonus.type.includes("ENHANCEMENT") && !(bonusEffect.source == this.character.getAbilityByName("Weapon focus"))) {
 			this.cmbBonusProcessor.processBonusEffect(bonusEffect);
 		}
 	});

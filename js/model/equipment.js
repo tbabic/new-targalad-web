@@ -57,9 +57,6 @@ function Equipment(character) {
 			this.weapon.unequip();
 		}
 		this.weapon = weapon;
-		if ([WeaponCategory.MELEE_TWO_HANDED, WeaponCategory.RANGED_TWO_HANDED].indexOf(weapon.category)) {
-			this.shield = weapon;
-		}
 		weapon.equip(character);
 	};
 	

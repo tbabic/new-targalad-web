@@ -171,8 +171,8 @@ BuffsFactory = {
 					this.lock = false;
 				}
 				let character = this.character;
-				let maxBonus = 1 + character.level / 5;
-				let abilityNames = ["Spell combat", "Fighting defensively", "Power attack", "Combat expertise"];
+				let maxBonus = 1 + Math.floor(character.level / 5);
+				let abilityNames = ["Spell combat", "Fighting defensively", "Power Attack", "Combat expertise"];
 				let totalPenalty = 0;
 				for (let i = 0; i < abilityNames.length; i++) {
 					let ability = character.getAbilityByName(abilityNames[i]);
