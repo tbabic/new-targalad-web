@@ -54,6 +54,7 @@ ConditionUtils = {
 			let existingCondition = character.getCondition(condition.name);
 			if (existingCondition !== undefined) {
 				condition.attrDamage = existingCondition.attrDamage;
+				condition.bonusEffectList.deactivate();
 			} else {
 				condition.attrDamage = 0;
 			}
@@ -90,6 +91,7 @@ ConditionsFactory = {
 				let existingCondition = character.getCondition(this.name);
 				if (existingCondition !== undefined) {
 					this.drained = existingCondition.drained;
+					existingCondition.bonusEffectList.deactivate();
 				} else {
 					this.drained = 0;
 				}
@@ -147,7 +149,7 @@ ConditionsFactory = {
 			}),
 		constitutionPenalty : new Condition("Con Penalty", [], 
 			function(character) {
-				ConditionUtils.addAttributeDamage(character, this, "DEXTERITY", 1)
+				ConditionUtils.addAttributeDamage(character, this, "CONSTITUTION", 1)
 			},
 			function(character) {
 				ConditionUtils.removeAttributeDamage(this);
