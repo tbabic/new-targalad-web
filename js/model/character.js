@@ -168,6 +168,7 @@ function createWhirlwind(level) {
 	if (vindred.level >= 4) {
 	
 		vindred.addAbility(BloodragePowerFactory.fatedBloodrager(vindred));
+		vindred.attributes.strength.value++;
 	}
 	
 	if (vindred.level >= 5) {
@@ -184,6 +185,7 @@ function createWhirlwind(level) {
 	
 	if (vindred.level >= 8) {
 		vindred.addAbility(FeatFactory.diehard(vindred));
+		vindred.attributes.strength.value++;
 	}
 	
 	
@@ -196,11 +198,12 @@ function createWhirlwind(level) {
 	}
 	
 	if (vindred.level >= 11) {
-		vindred.addAbility(FeatFactory.improvedstalwart(vindred));
+		vindred.addAbility(FeatFactory.improvedStalwart(vindred));
 	}
 	
 	if (vindred.level >= 12) {
 		vindred.addAbility(FeatFactory.weaponFocus(vindred, WeaponType.BARDICHE));
+		vindred.attributes.charisma.value++;
 	}
 	
 	

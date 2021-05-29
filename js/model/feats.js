@@ -291,7 +291,7 @@ var FeatFactory = {
 			.name("Iron Will")
 			.actionType(ActionType.PASSIVE)
 			.activate(function() {
-				this.bonusEffectList = new BonusEffectList(this, new Bonus("WILL", BonusType.UNTYPED, 1, this.name));
+				this.bonusEffectList = new BonusEffectList(this, new Bonus("WILL", BonusType.UNTYPED, 2, this.name));
 				this.bonusEffectList.activate();
 				
 			})

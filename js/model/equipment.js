@@ -377,7 +377,7 @@ function Weapon(name, type, enhancement, weight, properties, special) {
 	if (enhancement == "MASTERWORK") {
 		this.weaponBonus.add(new Bonus([BonusCategory.TO_HIT], BonusType.ENHANCEMENT, 1, "MASTERWORK WEAPON"));
 	} else {
-		this.weaponBonus.add(new Bonus([BonusCategory.TO_HIT, BonusCategory.DAMAGE], BonusType.ENHANCEMENT, enhancement, "Weapon bonus"));
+		this.weaponBonus.add(new Bonus([BonusCategory.TO_HIT, BonusCategory.DAMAGE], BonusType.ENHANCEMENT, +enhancement, "Weapon bonus"));
 	}
 	
 	this.enhancement = enhancement;
@@ -394,6 +394,7 @@ function Weapon(name, type, enhancement, weight, properties, special) {
 	this.equip = function(owner) {
 		triggerModelChange("WEAPON", this, "ADDED");
 		this.properties.activate(this);
+		this.weaponBonus.activate(this);
 		if (this.special != undefined) {
 			this.special.activate(this, owner);
 		}
@@ -402,6 +403,7 @@ function Weapon(name, type, enhancement, weight, properties, special) {
 	
 	this.unequip = function(owner) {
 		triggerModelChange("WEAPON", this, "REMOVED");
+		this.weaponBonus.deactivate();
 		this.properties.deactivate();
 		if (this.special != undefined) {
 			this.special.deactivate(this, owner);
@@ -421,7 +423,10 @@ var SpecialProperties = {
 			this.bloodrage.properties.add(this.bonus);
 		},
 		deactivate : function() {
-			this.bloodrage.bonusEffectList.removeAndDeactivate(this.bonus);
+			if (this.bloodrage.bonusEffectList != undefined) {
+				this.bloodrage.bonusEffectList.removeAndDeactivate(this.bonus);
+			}
+			
 		}
 	}
 }
