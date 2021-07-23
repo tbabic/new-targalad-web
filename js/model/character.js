@@ -259,7 +259,7 @@ function createSpot(level) {
 	if (level == undefined) {
 		level = 1;
 	}
-	var attributes = new Attributes(17, 13, 14, 11, 13, 11);
+	var attributes = new Attributes(18, 13, 14, 11, 13, 11);
 	var vindred = new Character('bloodrager', attributes, +level, 'equipment');
 	
 	furiousProperty  = {
