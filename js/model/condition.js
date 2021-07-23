@@ -85,7 +85,7 @@ ConditionsFactory = {
 		cowering: new Condition("Cowering", []),
 		dazed: new Condition("Dazed", []),
 		dazzled: new Condition("Dazzled", 
-			[new Bonus([BonusCategory.TO_HIT, SkillsEnum.PERCEPTION, BonusType.PENALTY], -1, "Dazzled")]),
+			[new Bonus([BonusCategory.TO_HIT, SkillsEnum.PERCEPTION], BonusType.PENALTY, -1, "Dazzled")]),
 		drained: new Condition("Drained", [], 
 			function(character) {
 				let existingCondition = character.getCondition(this.name);
