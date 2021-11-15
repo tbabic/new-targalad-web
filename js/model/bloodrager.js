@@ -170,6 +170,13 @@ var BloodragePowerFactory = {
 						this.bonusEffectList.deactivate();
 					}
 				})
+				.validateActivation(function() {
+					let bloodrage = owner.getAbilityByName("Bloodrage");
+					if (!bloodrage.active) {
+						return false;
+					}
+					return true;
+				})
 				.owner(owner)
 				.get();
 		},

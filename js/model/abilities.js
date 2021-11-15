@@ -46,6 +46,10 @@ function AbilityBuilder() {
 				owner(owner);
 			}
 			return new Ability(abilityConstr);
+		},
+		description : function(value) {
+			abilityConstr.description = value;
+			return this;
 		}
 	};
 }
@@ -65,6 +69,7 @@ function Ability(constr) {
 		if (constr.validateActivation !== undefined) {
 			this.activationOptions.validate = constr.validateActivation;
 		}
+		this.description = constr.description;
 	}
 	this.active = false;
 	
@@ -76,11 +81,11 @@ function Ability(constr) {
 		
 		let isValid = this.validateActivation(...params);
 		if (!isValid) {
-			return;
+			return false;
 		}
 		
 		if (this.owner === undefined) {
-			return;
+			return false;
 		}
 		console.log("activating ability " + this.name);
 		this.properties.activate(this);
@@ -88,6 +93,7 @@ function Ability(constr) {
 		if (this.owner !== undefined && this.activateCallback instanceof Function) {
 			this.activateCallback.apply(this, params);
 		}
+		return true;
 	};
 	
 	this.deactivate = function(...params){

@@ -2,6 +2,10 @@
 	<div class="row">
 		<ability-component v-for="ability in character.nonPassiveAbilities" :ability="ability" :key="ability.id"></ability-component>
 	</div>
+	
+	<div class="row border-top description-abilities">
+		<ability-component v-for="ability in character.getDescriptionAbilities()" :ability="ability" :key="ability.id"></ability-component>
+	</div>
 
 
 
@@ -35,6 +39,29 @@
 		<div class="row ability-option-row">
 			<div class="col-4"><span class="ability-option-name"></span></div>
 			<div class="col-8"><input type="text" class="ability-option-input"></div>
+		</div>
+	</div>
+
+	<!--Ability description modal -->
+	<div class="modal fade" id="abilityDescriptionModal" tabindex="-1" role="dialog" aria-labelledby="chooseAbilityOption">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="ability-description-modal-title" id="abilityDescriptionModalTitle"></h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					
+				</div>
+				<div class="modal-body  ability-description">
+
+					
+					
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
 		</div>
 	</div>
 

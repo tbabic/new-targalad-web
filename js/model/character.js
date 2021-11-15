@@ -150,7 +150,7 @@ function createWhirlwind(level) {
 	
 	vindred.addAbility(FeatFactory.cautiousWarrior(vindred));
 	vindred.addAbility(FeatFactory.improvedUnarmedStrike(vindred));
-	
+	vindred.addAbility(FeatFactory.zealous(vindred));
 	
 	if (vindred.level >= 2) {
 		vindred.addAbility(FeatFactory.craneStyle(vindred));
@@ -536,5 +536,15 @@ function Character(characterClass, attributes, level, equipment) {
 	
 	this.getMemorizedSpells = function() {
 		return this.characterClass.memorizedSpells;
+	};
+	
+	this.getDescriptionAbilities = function() {
+		let descriptionAbilities = [];
+		for (let i = 0; i < this.passiveAbilities.length; i++) {
+			if (this.passiveAbilities[i].description != null && this.passiveAbilities[i].description != undefined) {
+				descriptionAbilities.push(this.passiveAbilities[i]);
+			}
+		}
+		return descriptionAbilities;
 	};
 }
