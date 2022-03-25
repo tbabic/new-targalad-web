@@ -276,14 +276,14 @@ function createSpot(level) {
 	}
 	
 	vindred.addItem(new Armor('Breastplate Masterwork', ArmorType.BREASTPLATE, undefined, 6, 3, 0, 3, 20, 25, new Bonus(BonusCategory.ARMOR_CLASS, BonusType.ENHANCEMENT, 0, "Breastplate")));
-	vindred.addItem(new Weapon('Greataxe Masterwork', WeaponType.GREATAXE, 0, 0, new Bonus(BonusCategory.TO_HIT, BonusType.ENHANCEMENT, 1, "MASTERWORK WEAPON"), undefined));
+	vindred.addItem(new Weapon('Greatsword', WeaponType.GREATSWORD, +2, 4, undefined, undefined));
 	//vindred.addItem(new Weapon('Greatsword', WeaponType.BARDICHE, +0, 0, undefined, furiousProperty));
 	
 	
 	
 	
 	vindred.addItem(new Item('Amulet of Natural Armor +1', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 1, "Amulet of Natural Armor +1"), 0));
-
+	targalad.addItem(new Item('Ring of Deflection +1', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 1, "Ring of Deflection +1"), 0));
 	
 	
 	if (vindred.level >= 3) {
