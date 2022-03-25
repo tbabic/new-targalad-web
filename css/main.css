@@ -386,3 +386,11 @@ button.dropdown-item:hover {
 	white-space: normal;
 	word-wrap: break-word;
 }
+
+.description-abilities .btn-ability {
+	background-color: #008000;
+}
+
+.ability-description {
+	white-space: pre-line;
+}

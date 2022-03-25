@@ -250,6 +250,7 @@ var FeatFactory = {
 		return getAbilityBuilder()
 			.name("Combat Reflexes")
 			.actionType(ActionType.PASSIVE)
+			.description("Benefit: You may make a number of additional attacks of opportunity per round equal to your Dexterity bonus. With this feat, you may also make attacks of opportunity while flat-footed.")
 			.owner(owner)
 			.get();
 	},
@@ -274,6 +275,7 @@ var FeatFactory = {
 		return getAbilityBuilder()
 			.name("Diehard")
 			.actionType(ActionType.PASSIVE)
+			.description("")
 			.owner(owner)
 			.get();
 	},
@@ -282,6 +284,8 @@ var FeatFactory = {
 		return getAbilityBuilder()
 			.name("Endurance")
 			.actionType(ActionType.PASSIVE)
+			.description("Benefit: You gain a +4 bonus on the following checks and saves: Swim checks made to resist nonlethal damage from exhaustion; Constitution checks made to continue running; Constitution checks made to avoid nonlethal damage from a forced march; Constitution checks made to hold your breath; Constitution checks made to avoid nonlethal damage from starvation or thirst; Fortitude saves made to avoid nonlethal damage from hot or cold environments; and Fortitude saves made to resist damage from suffocation." +
+				"\n\nYou may sleep in light or medium armor without becoming fatigued.")
 			.owner(owner)
 			.get();
 	},
@@ -294,6 +298,24 @@ var FeatFactory = {
 				this.bonusEffectList = new BonusEffectList(this, new Bonus("WILL", BonusType.UNTYPED, 2, this.name));
 				this.bonusEffectList.activate();
 				
+			})
+			.owner(owner)
+			.get();
+	},
+	zealous : function(owner) {
+		return getAbilityBuilder()
+			.name("Zealous")
+			.actionType(ActionType.FREE)
+			.activate(function() {
+
+				this.bonusEffectList = new BonusEffectList(this, new Bonus(BonusCategory.DAMAGE, BonusType.UNTYPED, 2, this.name));
+				this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, -5, this.name));
+				this.bonusEffectList.activate();
+			})
+			.deactivate(function() {
+				if (this.bonusEffectList !== undefined) {
+					this.bonusEffectList.deactivate();
+				}
 			})
 			.owner(owner)
 			.get();

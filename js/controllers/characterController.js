@@ -40,7 +40,11 @@ var abilityComponent = httpVue.component("ability-component", {
 })
 
 
-
+function showAbilityDescription(ability) {
+	$('#abilityDescriptionModal').find(".modal-body").text(ability.description);
+	$('#abilityDescriptionModal').find("#abilityDescriptionModalTitle").text(ability.name);
+	$('#abilityDescriptionModal').modal('show');
+}
 
 function showAbilityOptions(ability) {
 	$('#chooseAbilityOptionModal').find(".modal-body").empty();
@@ -172,9 +176,16 @@ function validateAbilityActivation() {
 function activateAbility(ability, activationOptions) {
 	let abilityId = ability.id;
 	var abilityElement = $("#"+abilityId);
-	abilityElement.removeClass("not-active");
-	abilityElement.addClass("active");
-	ability.activate.apply(ability, activationOptions);
+	
+	if (ability.description != null && ability.description != undefined) {
+		showAbilityDescription(ability);
+		return;
+	}
+	
+	if (ability.activate.apply(ability, activationOptions)) {
+		abilityElement.removeClass("not-active");
+		abilityElement.addClass("active");
+	};
 }
 
 
