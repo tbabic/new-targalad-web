@@ -276,7 +276,7 @@ function createSpot(level) {
 	}
 	
 	vindred.addItem(new Armor('Breastplate Masterwork', ArmorType.BREASTPLATE, undefined, 6, 3, 0, 3, 20, 25, new Bonus(BonusCategory.ARMOR_CLASS, BonusType.ENHANCEMENT, 0, "Breastplate")));
-	vindred.addItem(new Weapon('Greatsword', WeaponType.GREATSWORD, +2, 4, undefined, undefined));
+	vindred.addItem(new Weapon('Greataxe +2', WeaponType.GREATAXE, +2, 4, undefined, undefined));
 	//vindred.addItem(new Weapon('Greatsword', WeaponType.BARDICHE, +0, 0, undefined, furiousProperty));
 	
 	
@@ -285,6 +285,9 @@ function createSpot(level) {
 	vindred.addItem(new Item('Amulet of Natural Armor +1', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 1, "Amulet of Natural Armor +1"), 0));
 	vindred.addItem(new Item('Ring of Deflection +1', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 1, "Ring of Deflection +1"), 0));
 	
+	
+	
+	loadEquipmentFromStorage(vindred);
 	
 	if (vindred.level >= 3) {
 		vindred.addAbility(FeatFactory.powerAttack(vindred));
