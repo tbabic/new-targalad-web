@@ -30,13 +30,22 @@
 			
 			<div v-for="attack in character.offense.getAttacks()" class="row">
 				<div class ="col-6">
-					Hit: <span id="toHitId">{{ attack.getToHit() }}</span>
+					Hit: <span id="toHitId">{{ attack.getToHit() }} </span>
 				</div>
 				
 				<div class ="col-6">
 					Dmg: <span id="dmgBonusId" >{{ attack.getDmg() }}</span>
 				</div>
 				
+			</div>
+			
+			<div class="row" v-if="character.offense.attackOfOpportunity.getToHit() != character.offense.getAttacks()[0].getToHit() || character.offense.attackOfOpportunity.getDmg() != character.offense.getAttacks()[0].getDmg()">
+				<div class ="col-6">
+				   AoO: <span id="dmgBonusId" >{{ character.offense.attackOfOpportunity.getToHit() }}</span>
+				</div>
+				<div class ="col-6">
+				  Dmg: <span id="dmgBonusId" >{{ character.offense.attackOfOpportunity.getDmg() }}</span>
+				</div>
 			</div>
 		</div>
 	

@@ -176,13 +176,29 @@ var FeatFactory = {
 				
 				this.bonusEffectList = new BonusEffectList(this, new Bonus(BonusCategory.DAMAGE, BonusType.UNTYPED, dmgBonus, this.name));
 				this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, toHitPenalty, this.name));
-				this.bonusEffectList.activate();
+				this.bonusEffectList.activate();		
+				if (owner.getAbilityByName("Furious Focus") != undefined) {
+					this.furiousFocusBonus = new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, modifier, this.name);
+					owner.offense.getAttacks()[0].addBonus(this.name, this.furiousFocusBonus);
+				}
+				
 			})
 			.deactivate(function() {
 				if (this.bonusEffectList !== undefined) {
 					this.bonusEffectList.deactivate();
 				}
+				if (this.furiousFocusBonus != undefined) {
+					this.furiousFocusBonus.deactivate(this.name);
+				}
 			})
+			.owner(owner)
+			.get();
+	},
+	
+	furiousFocus : function(owner) {
+		return getAbilityBuilder()
+			.name("Furious Focus")
+			.actionType(ActionType.PASSIVE)
 			.owner(owner)
 			.get();
 	},

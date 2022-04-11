@@ -34,7 +34,8 @@ function createVindred(level) {
 			bloodrage.properties.add(this.bonus);
 		},
 		deactivate : function() {
-			bloodrage.bonusEffectList.removeAndDeactivate(this.bonus);
+			let bloodrage = vindred.getAbilityByName("Bloodrage");
+			bloodrage.properties.removeAndDeactivate(this.bonus);
 		}
 	}
 	
@@ -291,6 +292,14 @@ function createSpot(level) {
 	
 	if (vindred.level >= 3) {
 		vindred.addAbility(FeatFactory.powerAttack(vindred));
+	}
+	
+	if (vindred.level >= 5) {
+		vindred.addAbility(FeatFactory.furiousFocus(vindred));
+	}
+	
+	if (vindred.level >= 6) {
+		vindred.addAbility(FeatFactory.ironWill(vindred));
 	}
 
 	

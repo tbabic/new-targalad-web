@@ -53,11 +53,21 @@ function Equipment(character) {
 	};
 	
 	this.addWeapon = function(weapon) {
+		let reactivatePowerAttack = true;
 		if (this.weapon !== undefined && Utils.isFunction(this.weapon.unequip)) {
 			this.weapon.unequip();
-		}
+		}		
 		this.weapon = weapon;
 		weapon.equip(character);
+		
+		if (reactivatePowerAttack) {
+			let powerAttack = character.getAbilityByName("Power Attack");
+			if (powerAttack != undefined && powerAttack.active) {
+				powerAttack.deactivate();
+				powerAttack.activate();
+			}
+			
+		}
 	};
 	
 	this.addSecondWeapon = function(weapon) {
@@ -423,8 +433,8 @@ var SpecialProperties = {
 			this.bloodrage.properties.add(this.bonus);
 		},
 		deactivate : function() {
-			if (this.bloodrage.bonusEffectList != undefined) {
-				this.bloodrage.bonusEffectList.removeAndDeactivate(this.bonus);
+			if (this.bloodrage.properties != undefined) {
+				this.bloodrage.properties.removeAndDeactivate(this.bonus);
 			}
 			
 		}

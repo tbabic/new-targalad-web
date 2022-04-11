@@ -102,6 +102,7 @@ function Offense(character) {
 	this.attrDmg = character.attributes.strength;
 	this.mainHand = character.equipment.weapon;
 	this.offHand = undefined;
+	this.attackOfOpportunity = undefined;
 	
 	
 	if (character.equipment.shield instanceof Weapon) {
@@ -144,7 +145,7 @@ function Offense(character) {
 		babPenalty += 5;
 	}
 	
-	
+	this.attackOfOpportunity = new Attack(this, extraAttackBonus);
 	
 	this.getAttacks = function() {
 		var attacks = [];
