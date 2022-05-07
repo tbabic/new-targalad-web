@@ -215,7 +215,29 @@ BuffsFactory = {
 			this.bonusEffectList.activate();
 		}, function(){
 			this.bonusEffectList.deactivate();
-		})
+		}),
+		
+		inspiringCallAttack : new BuffEffect("Inspiring Call (Att)", function(character) {
+			bonusValue = 1+1+Math.floor(character.level / 4);
+			
+			
+			this.bonusEffectList = new BonusEffectList(this);
+			this.bonusEffectList.add(new Bonus(['DAMAGE', 'TO_HIT'], BonusType.COMPETENCE, bonusValue, this.name));
+			this.bonusEffectList.activate();
+		}, function(){
+			this.bonusEffectList.deactivate();
+		}),
+		
+		inspiringCallSaves : new BuffEffect("Inspiring Call (Svs)", function(character) {
+			bonusValue = 1+1+Math.floor(character.level / 4);
+			
+			
+			this.bonusEffectList = new BonusEffectList(this);
+			this.bonusEffectList.add(new Bonus('SAVES', BonusType.COMPETENCE, bonusValue, this.name));
+			this.bonusEffectList.activate();
+		}, function(){
+			this.bonusEffectList.deactivate();
+		}),
 
 };
 
