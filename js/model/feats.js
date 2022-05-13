@@ -306,6 +306,15 @@ var FeatFactory = {
 			.get();
 	},
 	
+	bodyguard : function(owner) {
+		return getAbilityBuilder()
+			.name("Bodyguard")
+			.actionType(ActionType.PASSIVE)
+			.description("Benefit: When an adjacent ally is attacked, you may use an attack of opportunity to attempt the aid another action to improve your ally’s AC. You may not use the aid another action to improve your ally’s attack roll with this attack.")
+			.owner(owner)
+			.get();
+	},
+	
 	ironWill : function(owner) {
 		return getAbilityBuilder()
 			.name("Iron Will")

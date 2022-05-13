@@ -176,6 +176,10 @@ function createWhirlwind(level) {
 		vindred.addAbility(FeatFactory.combatReflexes(vindred));
 	}
 	
+	if (vindred.level >= 5) {
+		vindred.addAbility(FeatFactory.bodyguard(vindred));
+	}
+	
 	if (vindred.level >= 6) {
 		vindred.addAbility(FeatFactory.endurance(vindred));
 	}
