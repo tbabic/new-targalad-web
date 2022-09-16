@@ -219,24 +219,60 @@ BuffsFactory = {
 		
 		inspiringCallAttack : new BuffEffect("Inspiring Call (Att)", function(character) {
 			bonusValue = 1+1+Math.floor(character.level / 4);
+			if (BuffsFactory.inspiringCallBonus.isActive) {
+				bonusValue++;
+			}
 			
-			
+			this.isActive = true;
 			this.bonusEffectList = new BonusEffectList(this);
 			this.bonusEffectList.add(new Bonus(['DAMAGE', 'TO_HIT'], BonusType.COMPETENCE, bonusValue, this.name));
 			this.bonusEffectList.activate();
 		}, function(){
 			this.bonusEffectList.deactivate();
+			this.isActive = false;
 		}),
 		
 		inspiringCallSaves : new BuffEffect("Inspiring Call (Svs)", function(character) {
 			bonusValue = 1+1+Math.floor(character.level / 4);
-			
+			if (BuffsFactory.inspiringCallBonus.isActive) {
+				bonusValue++;
+			}
 			
 			this.bonusEffectList = new BonusEffectList(this);
 			this.bonusEffectList.add(new Bonus('SAVES', BonusType.COMPETENCE, bonusValue, this.name));
 			this.bonusEffectList.activate();
+			this.isActive = true;
+			
+			
 		}, function(){
 			this.bonusEffectList.deactivate();
+			this.isActive = false;
+		}),
+		
+		inspiringCallBonus : new BuffEffect("Inspiring Call Bonus", function(character) {
+			this.isActive = true;
+			if (BuffsFactory.inspiringCallAttack.isActive) {
+				BuffsFactory.inspiringCallAttack.deactivate(character);
+				BuffsFactory.inspiringCallAttack.activate(character);
+			}
+			if (BuffsFactory.inspiringCallSaves.isActive) {
+				BuffsFactory.inspiringCallSaves.deactivate(character);
+				BuffsFactory.inspiringCallSaves.activate(character);
+			}
+			
+			
+			
+			
+		},function(character){
+			this.isActive = false;
+			if (BuffsFactory.inspiringCallAttack.isActive) {
+				BuffsFactory.inspiringCallAttack.deactivate(character);
+				BuffsFactory.inspiringCallAttack.activate(character);
+			}
+			if (BuffsFactory.inspiringCallSaves.isActive) {
+				BuffsFactory.inspiringCallSaves.deactivate(character);
+				BuffsFactory.inspiringCallSaves.activate(character);
+			}
 		}),
 
 };

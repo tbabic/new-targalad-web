@@ -10,6 +10,7 @@ function Save(type, isHigh, attribute, character) {
 	this.isHigh = isHigh;
 	this.type = type;
 	this.attribute = attribute;
+	this.value = 0;
 	
 	this.bonusProcessor = new BonusProcessor();
 	
@@ -23,15 +24,21 @@ function Save(type, isHigh, attribute, character) {
 	};
 	
 	this.getValue = function(){
-		return this.getBaseValue() + this.bonusProcessor.getValue();
+		this.value = this.getBaseValue() + this.bonusProcessor.getValue();
+		return this.value;
 	};
 	
 	addModelListener(type, (e, bonusEffect) => {
 		this.bonusProcessor.processBonusEffect(bonusEffect);
+		this.getValue();
 	});
 	
 	addModelListener("SAVES", (e, bonusEffect) => {
 		this.bonusProcessor.processBonusEffect(bonusEffect);
+		this.getValue();
+		
 	});
+	
+	this.value = this.getValue();
 	
 }
