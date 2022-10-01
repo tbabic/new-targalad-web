@@ -184,10 +184,6 @@ function createWhirlwind(level) {
 		vindred.addAbility(FeatFactory.endurance(vindred));
 	}
 	
-	if (vindred.level >= 7) {
-		vindred.addAbility(FeatFactory.ironWill(vindred));
-	}
-	
 	if (vindred.level >= 8) {
 		vindred.addAbility(FeatFactory.diehard(vindred));
 		vindred.attributes.strength.value++;
