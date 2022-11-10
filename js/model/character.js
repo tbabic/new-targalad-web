@@ -559,4 +559,55 @@ function Character(characterClass, attributes, level, equipment) {
 		}
 		return descriptionAbilities;
 	};
+	
+	this.refreshBlockers = 0;
+	
+	this.blockRefresh = function() {
+		this.refreshBlockers++;
+	}
+	
+	this.deBlockRefresh = function() {
+		this.refreshBlockers--;
+	}
+	
+	this.refresh = function() {		
+		if (this.refreshBlockers > 0) {
+			return;
+		}
+		
+		console.log("refresh");
+		this.attributes.strength.getValue();
+		this.attributes.dexterity.getValue();
+		this.attributes.constitution.getValue();
+		this.attributes.intelligence.getValue();
+		this.attributes.wisdom.getValue();
+		this.attributes.charisma.getValue();
+		
+		this.saves.fort.getValue();
+		this.saves.reflex.getValue();
+		this.saves.will.getValue();
+		
+		this.offense.getAttacks().forEach((attack) => {
+			attack.getToHit();
+			attack.getDmg();
+		});
+		
+		this.offense.getCmb();
+		this.offense.getCmbWeapon();
+		
+		this.defense.getArmorClass();
+		this.defense.getTouchAc();
+		this.defense.getFlatFootedAc();
+		
+		this.defense.getCmd();
+	};
+	
+	addModelListener("REFRESH", (e) => {
+		this.blockRefresh();
+		setTimeout(() => {
+			this.deBlockRefresh();
+			this.refresh();
+		},0);
+		
+	});
 }

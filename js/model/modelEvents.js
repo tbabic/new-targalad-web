@@ -36,5 +36,6 @@ function triggerModelChange(id, parameters, listener ){
 	}
 	var listenOn = "model:" +id + ":" + listener;
 	listenOn = listenOn.split(" ").join("_");
-	modelElement.trigger(listenOn, parameterList);	
+	modelElement.trigger(listenOn, parameterList);
+	modelElement.trigger("model:REFRESH:changed");	
 }

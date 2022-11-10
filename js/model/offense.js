@@ -152,6 +152,13 @@ function Offense(character) {
 		for (var source in this.attacks) {
 			attacks.push(this.attacks[source]);
 		}
+		attacks.sort((a, b) => {
+			let diff = b.getToHit() - a.getToHit();
+			if (diff == 0) {
+				b.getDmg() - a.getDmg();
+			}
+			return diff;
+		});
 		return attacks;
 	};
 	
