@@ -143,6 +143,10 @@ function createWhirlwind(level) {
 	vindred.addItem(new Item('Cloak of Resistance +1', 'shoulders', new Bonus('SAVES', BonusType.RESISTANCE, 1, "Cloak of Resistance +1"), 0));
 	vindred.addItem(new Item('Headband of Charisma +0', 'headband', new Bonus('CHARISMA', BonusType.CHARISMA, 0, "Headband of Charisma +0"), 0));
 	
+	vindred.addItem(new Item('Headband of Charisma +0', 'headband', new Bonus('CHARISMA', BonusType.CHARISMA, 0, "Headband of Charisma +0"), 0));
+	
+	vindred.addItem(new Item('Dusty rose prism', 'inventory', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.INSIGHT, 1, "Dusty rose prism"), 0));
+	
 	loadEquipmentFromStorage(vindred);
 	
 	vindred.addAbility(FeatFactory.dodge(vindred));
