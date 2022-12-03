@@ -509,7 +509,7 @@ function createAzax(level) {
 	var azax = new Character('hunter', attributes, +level, 'equipment');
 	
 	
-	azax.addItem(new Armor('Studded Leather', ArmorType.STUDDED_LEATHER, undefined, 3, 4, 0, 0, 20, 20));
+	azax.addItem(new Armor('Studded Leather +1', ArmorType.STUDDED_LEATHER, undefined, 3, 4, 0, 1, 20, 20));
 	azax.addItem(new Weapon('Masterwork Scimitar', WeaponType.SCIMITAR, "MASTERWORK", 4));
 	azax.equipment.addSecondWeapon(new Weapon('Kukri', WeaponType.KUKRI, "MASTERWORK", 4));
 	azax.addItem(new Item('Ring of Deflection +1', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 1, "Ring of Deflection +1"), 0));
