@@ -505,7 +505,7 @@ function createAzax(level) {
 	if (level == undefined) {
 		level = 7;
 	}
-	var attributes = new Attributes(18, 16, 16, 14, 14, 10);
+	var attributes = new Attributes(18, 16, 18, 13, 14, 11);
 	var azax = new Character('hunter', attributes, +level, 'equipment');
 	
 	
