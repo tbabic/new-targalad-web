@@ -262,7 +262,12 @@ var AbilityFactory = {
 			.name("Flank")
 			.actionType(ActionType.FREE)
 			.activate(function() {
-				this.bonusEffectList = new BonusEffectList(this,new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, 2, "Flank"));
+				let bonusValue = 2;
+				this.bonusEffectList = new BonusEffectList(this,new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, bonusValue, "Flank"));
+				let outflank = this.owner.getAbilityByName("Outflank");
+				if (outflank != undefined && outflank.active) {
+					outflank.activate();
+				}
 				if (owner.getAbilityByName("Dirty Fighter") != undefined) {
 					this.bonusEffectList.add(new Bonus(BonusCategory.DAMAGE, BonusType.UNTYPED, 1, "Dirty Fighter"));
 				}
@@ -272,10 +277,28 @@ var AbilityFactory = {
 				if (this.bonusEffectList !== undefined) {
 					this.bonusEffectList.deactivate();
 				}
+				let outflank = this.owner.getAbilityByName("Outflank");
+				if (outflank != undefined && outflank.active) {
+					outflank.deactivate();
+					outflank.activate();
+				}
 			})
 			.owner(owner)
 			.get();
-	}
+	},
+	weaponSets : function(owner, mainHand, offHand) {
+		return getAbilityBuilder()
+			.name("Weapon set")
+			.actionType(ActionType.FREE)
+			.activate(function() {
+				
+			})
+			.deactivate(function() {
+				
+			})
+			.owner(owner)
+			.get();
+	},
 };
 
 

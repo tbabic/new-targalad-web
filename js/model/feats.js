@@ -426,6 +426,79 @@ var FeatFactory = {
 			.get();
 	},
 	
+	twoWeaponFighting : function(owner) {
+		return getAbilityBuilder()
+			.name("Two-Weapon Fighting")
+			.actionType(ActionType.FREE)
+			.activate(function() {
+				
+				
+				let offhand = owner.equipment.shield;
+				if (offhand == undefined || !(offhand instanceof Weapon)) {
+					return;
+				}
+				let penalty = -2;
+				if (offhand.category != WeaponCategory.MELEE_LIGHT) {
+					penalty = -4;
+				};
+				
+				this.bonusEffectList = new BonusEffectList(this);
+				this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, penalty, this.name));
+				this.bonusEffectList.activate();
+				
+				this.extraAttackBonus = new ExtraAttackBonus(this.name, "offHand");
+				let twoWeaponRend = this.owner.getAbilityByName("Two-Weapon Rend");
+				if (twoWeaponRend != undefined) {
+					this.extraAttackBonus.attrDmgMul = 1.0;
+				}
+				this.extraAttackBonus.attrToHit = owner.offense.attrToHit;
+				triggerModelChange("EXTRA_ATTACK", this.extraAttackBonus);
+				
+			})
+			.deactivate(function() {
+				if (this.bonusEffectList !== undefined) {
+					this.bonusEffectList.deactivate();
+				}
+				
+				if (this.extraAttackBonus !== undefined) {
+					this.owner.offense.removeAttack(this.name);
+					delete this.extraAttackBonus;
+				}
+			})
+			.owner(owner)
+			.get();
+	},
+	
+	twoWeaponRend : function(owner) {
+		return getAbilityBuilder()
+			.name("Two-Weapon Rend")
+			.actionType(ActionType.PASSIVE)
+			.owner(owner)
+			.get();
+	},
+	
+	outflank : function(owner) {
+		return getAbilityBuilder()
+			.name("Outflank")
+			.actionType(ActionType.FREE)
+			.activate(function() {
+				let flank = this.owner.getAbilityByName("Flank");
+				if (flank != undefined && flank.active) {
+					this.bonusEffectList = new BonusEffectList(this);
+					this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, 2, "Outflank"));
+					this.bonusEffectList.activate()
+				}
+				
+			})
+			.deactivate(function() {
+				if (this.bonusEffectList !== undefined) {
+					this.bonusEffectList.deactivate();
+				}
+			})
+			.owner(owner)
+			.get();
+	},
+	
 	
 };
 

@@ -14,28 +14,12 @@ function Hunter(character) {
 	
 	
 	if (character.level >= 1) {
-		this.classAbilities.push(MagusAbilities.spellCombat(character));
-		this.classAbilities.push(MagusAbilities.arcanePool(character));
-	}
-	if (character.level >= 2) {
-		this.classAbilities.push(MagusAbilities.spellStrike(character));
-	}
-	if (character.level >= 4) {
-		this.classAbilities.push(MagusAbilities.spellRecall(character));
-	}
-	if (character.level >= 7) {
-		this.classAbilities.push(MagusAbilities.knowledgePool(character));
+		this.classAbilities.push(HunterAbilities.animalFocus(this.character));
 	}
 	
-	
-	
-	this.addArcana = function(arcana) {
-		this.arcanas.push(arcana);
-		character.addAbility(arcana);
-	};
 	
 	this.getAllAbilities = function() {
-		return this.arcanas.concat(this.classAbilities);
+		return this.classAbilities;
 	};
 	
 	this.classSkills = [SkillsEnum.CLIMB, SkillsEnum.CRAFT_ALCHEMY, SkillsEnum.CRAFT_ARMOR, SkillsEnum.CRAFT_WEAPON, 
@@ -106,41 +90,83 @@ function Hunter(character) {
 
 var HunterAbilities = {
 		
-	
+	animalFocus : function(owner) {
+		return getAbilityBuilder()
+			.name("Animal Focus")
+			.actionType(ActionType.SWIFT)
+			.activationOptions(function () {
+				
+				let options = [];
+				options.push(new AbilityOption("Bull (Str)", "boolean", "[0,1]" ));
+				options.push(new AbilityOption("Bear (Con)", "boolean", "[0,1]" ));
+				options.push(new AbilityOption("Tiger (Dex)", "boolean", "[0,1]" ));
+				
+				return options;
+				
+			})
+			.validateActivation(function(activationOptions) {
+				if (activationOptions == undefined) {
+					return false;
+				}
+				if (!Array.isArray(activationOptions)) {
+					return true;
+				}
+				
+				let activated = 0;
+				activationOptions.forEach(option => {
+					if (option.value == 1) {
+						activated ++;
+					}
+				})
+				return activated == 1;
+			})
+			.activate(function(...activationOptions) {
+				if (activationOptions === undefined) {
+					return;
+				}
+				let selected;
+				activationOptions.forEach(option => {
+					if (option.value == 1) {
+						selected = option;
+					}
+				});
+				if (selected == undefined) {
+					return;
+				}
+				let bonusCategory;
+				if (selected.name == "Bull (Str)") {
+					bonusCategory = "STRENGTH";
+				}
+				if (selected.name == "Bear (Con)") {
+					bonusCategory = "CONSTITUTION";
+				}
+				if (selected.name == "Tiger (Dex)") {
+					bonusCategory = "DEXTERITY";
+				}
+				
+				
+				this.bonusEffectList = new BonusEffectList(this);
+				let bonus = new Bonus(bonusCategory, BonusType.ENHANCEMENT, 2, this.name);
+				this.bonusEffectList.add(bonus);
+				this.bonusEffectList.activate();
+				
+			})
+			.deactivate( function() {
+				if (this.bonusEffectList !== undefined) {
+					this.bonusEffectList.deactivate();
+					delete this.bonusEffectList;
+				}
+				
+			})
+			.owner(owner)
+			.get();
+	},
 	
 		
 };
 
 
-//
-//var MagusAbilities = {
-//	spellCombat : function(owner) {
-//		return new Ability("Spell combat", ActionType.FREE, owner, [], function(owner, extraConcentration) {
-//			if (extraConcentration === undefined) {
-//				extraConcentration = 0;
-//			}
-//			var bonusList = [new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, -2-extraConcentration, "Spell Combat")];
-//			var improved = 0;
-//			if (owner.level >= 8) {
-//				improved = 2;
-//			}
-//			bonusList.push(new Bonus([BonusCategory.CONCENTRATION,BonusCategory.DEFENSIVE_CASTING], BonusType.CIRCUMSTANCE, improved+extraConcentration, "Spell Combat"));
-//			this.bonusList = new BonusEffectList(this, bonusList);
-//			this.bonusList.activate();
-//		}, function(){
-//			this.bonusList.deactivate();
-//		});
-//	},
-//	spellStrike : function(owner) {
-//		return new Ability("Spellstrike", ActionType.PASSIVE, owner);
-//	},
-//	spellRecall : function(owner) {
-//		return new Ability("Spell recall", ActionType.PASSIVE, owner);
-//	},
-//	knowledgePool : function(owner) {
-//		return new Ability("Knowledge pool", ActionType.PASSIVE, owner);
-//	}
-//};
+
 
 
 

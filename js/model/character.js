@@ -511,15 +511,24 @@ function createAzax(level) {
 	
 	azax.addItem(new Armor('Studded Leather', ArmorType.STUDDED_LEATHER, undefined, 3, 4, 0, 0, 20, 20));
 	azax.addItem(new Weapon('Masterwork Scimitar', WeaponType.SCIMITAR, "MASTERWORK", 4));
+	azax.equipment.addSecondWeapon(new Weapon('Kukri', WeaponType.KUKRI, "MASTERWORK", 4));
 	azax.addItem(new Item('Ring of Deflection +1', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 1, "Ring of Deflection +1"), 0));
-	azax.addItem(new Item('Amulet of Natural Armor +0', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 1, "Amulet of Natural Armor +0"), 0));
+	//azax.addItem(new Item('Amulet of Natural Armor +0', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 1, "Amulet of Natural Armor +0"), 0));
 	
-	
-	
+
+	if (azax.level >= 1) {
+		azax.addAbility(FeatFactory.twoWeaponFighting(azax));
+	}
 	
 	if (azax.level >= 3) {
-		
+		azax.addAbility(FeatFactory.outflank(azax));
 	}
+	
+	if (azax.level >= 7) {
+		//azax.addAbility(FeatFactory.twoWeaponRend(azax));
+	}
+	
+	
 	
 	azax.skillSet.getSkill(SkillsEnum.ACROBATICS).addRank(3);
 	azax.skillSet.getSkill(SkillsEnum.APPRAISE).addRank(0);
@@ -755,6 +764,8 @@ function Character(characterClass, attributes, level, equipment) {
 			attack.getToHit();
 			attack.getDmg();
 		});
+		this.offense.attackOfOpportunity.getToHit();
+		this.offense.attackOfOpportunity.getDmg();
 		
 		this.offense.getCmb();
 		this.offense.getCmbWeapon();

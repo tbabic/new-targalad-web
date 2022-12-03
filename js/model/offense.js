@@ -5,9 +5,14 @@ function Attack(offense, extraAttackBonus) {
 	this.weaponSlot = (extraAttackBonus.weaponSlot !== undefined) ? extraAttackBonus.weaponSlot : "mainHand";
 	this.attrToHit = "STRENGTH";
 	this.attrDmg = "STRENGTH";
+	this.attrDmgMul = (extraAttackBonus.attrDmgMul !== undefined) ? extraAttackBonus.attrDmgMul : 1.0;
 	this.source = extraAttackBonus.source;
 	this.dmg = 0;
 	this.toHit = 0;
+	this.offHand = false;
+	if (this.weaponSlot == "offHand") {
+		this.offHand = true;
+	}
 	
 	this.getWeapon = function() {
 		return this.offense.character.equipment.weapon;
@@ -25,6 +30,7 @@ function Attack(offense, extraAttackBonus) {
 		this.attrToHit = offense.character.attributes.getAttribute(extraAttackBonus.attrToHit);
 	}
 	
+
 	if(extraAttackBonus.attrToHit === undefined) {
 		this.attrDmg = "STRENGTH";
 	}
@@ -32,6 +38,22 @@ function Attack(offense, extraAttackBonus) {
 		this.attrDmg = extraAttackBonus.attrDmg;
 	} else {
 		this.attrDmg = offense.character.attributes.getAttribute(extraAttackBonus.attrDmg);
+	}
+	
+	
+	if (this.weaponSlot == "offHand") {
+		for (bonusType in this.offense.toHitBonusProcessor.list) {
+			bonusTypeGroup = this.toHitBonusProcessor.list[bonusType];
+			if (bonusType == "ENHANCEMENT") {
+				for (source in bonusTypeGroup.sourceList) {
+					if (source == this.offense.mainHand.id) {
+						this.toHitBonusProcessor.remove(source, bonusTypeGroup.sourceList[source]);
+					}
+
+				}
+				
+			}
+		}
 	}
 	
 	this.getToHit = function() {
@@ -42,6 +64,12 @@ function Attack(offense, extraAttackBonus) {
 		let dmgModifier = this.attrDmg.getModifier();
 		if (this.attrDmg.type == "STRENGTH" && this.getWeapon().category == WeaponCategory.MELEE_TWO_HANDED) {
 			dmgModifier = Math.floor(1.5*dmgModifier);
+		}
+		if (this.offHand) {
+			let twoWeaponRend = this.offense.character.getAbilityByName("Two-Weapon Rend");
+			if (twoWeaponRend == undefined) {
+				dmgModifier = Math.floor(0.5*dmgModifier);
+			}
 		}
 		return this.dmgBonusProcessor.getValue() + dmgModifier;
 	};
@@ -84,6 +112,7 @@ function ExtraAttackBonus(source, weaponSlot, toHitBonus, dmgBonus, attrToHit, a
 	this.dmgBonus = dmgBonus;
 	this.attrToHit = "STRENGTH";
 	this.attrDmg = "STRENGTH";
+	this.attrDmgMul = 1.0;
 }
 
 function Offense(character) {
@@ -103,6 +132,7 @@ function Offense(character) {
 	this.mainHand = character.equipment.weapon;
 	this.offHand = undefined;
 	this.attackOfOpportunity = undefined;
+	this.twoWeaponFighting = false;
 	
 	
 	if (character.equipment.shield instanceof Weapon) {
@@ -112,6 +142,8 @@ function Offense(character) {
 	this.getBab = function() {
 		return this.character.getBab();
 	};
+	
+	
 	
 	this.addAttack = function(extraAttackBonus) {
 		if (this.attacks.hasOwnProperty(extraAttackBonus.source)) {

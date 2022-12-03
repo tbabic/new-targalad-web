@@ -79,7 +79,7 @@ function Equipment(character) {
 			this.shield.unequip();
 		}
 		this.shield = shield;
-		item.equip();
+		shield.equip();
 	};
 	
 	this.addRing = function(item) {
