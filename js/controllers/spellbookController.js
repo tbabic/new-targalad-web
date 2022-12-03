@@ -2,6 +2,9 @@ console.log("spellbookController");
 
 function serializeSpellBook() {
 	var spellbook = myCharacter.getSpellBook();
+	if (spellbook == null) {
+		return;
+	}
 	var serialize = {
 			spells : {},
 			memorized : {}
@@ -15,6 +18,9 @@ function serializeSpellBook() {
 
 function deserializeSpellBook() {
 	let spellbook = myCharacter.getSpellBook();
+	if (spellbook == null) {
+		return;
+	}
 	if (window.localStorage.getItem("spellbook") === undefined || window.localStorage.getItem("spellbook") === null) {
 		return;
 	}

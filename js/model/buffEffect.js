@@ -15,6 +15,14 @@ BuffsFactory = {
 			this.bonusEffectList.deactivate();
 		}),
 		
+		battleCry : new BuffEffect("Battle Cry", function() {
+			this.bonusEffectList = new BonusEffectList(this);
+			this.bonusEffectList.add(new Bonus([BonusCategory.TO_HIT], BonusType.MORALE, 1, this.name));
+			this.bonusEffectList.activate();
+		}, function(){
+			this.bonusEffectList.deactivate();
+		}),
+		
 		aid : new BuffEffect("Aid", function() {
 			this.bonusEffectList = new BonusEffectList(this);
 			this.bonusEffectList.add(new Bonus([BonusCategory.TO_HIT], BonusType.MORALE, 1, this.name));

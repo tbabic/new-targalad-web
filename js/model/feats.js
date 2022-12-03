@@ -345,5 +345,87 @@ var FeatFactory = {
 			.owner(owner)
 			.get();
 	},
+	rapidShot : function(owner) {
+		return getAbilityBuilder()
+			.name("Rapid Shot")
+			.actionType(ActionType.FREE)
+			.activate(function() {
+
+				this.bonusEffectList = new BonusEffectList(this);
+				this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, -2, this.name));
+				this.bonusEffectList.activate();
+				
+				this.extraAttackBonus = new ExtraAttackBonus(this.name, "mainHand");
+				this.extraAttackBonus.attrToHit = owner.offense.attrToHit;
+				triggerModelChange("EXTRA_ATTACK", this.extraAttackBonus);
+			})
+			.deactivate(function() {
+				if (this.bonusEffectList !== undefined) {
+					this.bonusEffectList.deactivate();
+				}
+			
+				if (this.extraAttackBonus !== undefined) {
+					this.owner.offense.removeAttack(this.name);
+					delete this.extraAttackBonus;
+				}
+			})
+			.owner(owner)
+			.get();
+	},
+	
+	pointBlankShot : function(owner) {
+		return getAbilityBuilder()
+			.name("Point Blank Shot")
+			.actionType(ActionType.FREE)
+			.activate(function() {
+
+				this.bonusEffectList = new BonusEffectList(this);
+				this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, 1, this.name));
+				this.bonusEffectList.add(new Bonus(BonusCategory.DAMAGE, BonusType.UNTYPED, 1, this.name));
+				this.bonusEffectList.activate();
+				
+
+			})
+			.deactivate(function() {
+				if (this.bonusEffectList !== undefined) {
+					this.bonusEffectList.deactivate();
+				}
+			
+			})
+			.owner(owner)
+			.get();
+	},
+	
+	masterSniper : function(owner) {
+		return getAbilityBuilder()
+			.name("Master Sniper")
+			.actionType(ActionType.FREE)
+			.activate(function() {
+
+				this.bonusEffectList = new BonusEffectList(this);
+				this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, -2, this.name));
+				this.bonusEffectList.activate();
+				
+				this.extraAttackBonus = new ExtraAttackBonus(this.name, "mainHand");
+				this.extraAttackBonus.attrToHit = owner.offense.attrToHit;
+				triggerModelChange("EXTRA_ATTACK", this.extraAttackBonus);
+				triggerModelChange("DISABLE_ITERATIVES");
+			})
+			.deactivate(function() {
+				if (this.bonusEffectList !== undefined) {
+					this.bonusEffectList.deactivate();
+				}
+			
+				if (this.extraAttackBonus !== undefined) {
+					this.owner.offense.removeAttack(this.name);
+					delete this.extraAttackBonus;
+				}
+				triggerModelChange("ENABLE_ITERATIVES", this.extraAttackBonus);
+			})
+			.owner(owner)
+			.get();
+	},
+	
+	
 };
 

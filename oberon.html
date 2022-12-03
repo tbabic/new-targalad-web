@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="js/popper.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/bootstrap-slider.js"></script>
+<script src="js/bootstrap-toggle.js"></script>
+<script src="https://unpkg.com/vue@2.5.16/dist/vue.js"></script>
+<script src="https://unpkg.com/vue-router@3.0.1/dist/vue-router.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script src="js/http-vue.js"></script>
+<script src="js/papaparse.min.js"></script>
+
+<head>
+	<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="Expires" content="0" />
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css"/>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-slider.css"/>
+	<link rel="stylesheet" type="text/css" href="css/bootstrap-toggle.css"/>
+	<link rel="stylesheet" type="text/css" href="css/main.css"/>
+
+    <title></title>
+    <!-- Main scripts-->
+    
+
+</head>
+<body>
+<div class="container"><div id="app">
+	<nav class="navbar navbar-default">
+	  <div class="container-fluid">
+		<!-- Brand and toggle get grouped for better mobile display -->
+		<div class="navbar-header">
+		  <router-link class="navbar-brand navbar-header-btn" to="/main">Main</router-link>
+		  <router-link class="navbar-brand navbar-header-btn" to="/spells">Spells</router-link>
+		  <router-link class="navbar-brand navbar-header-btn" to="/skills">Skills</router-link>
+		  <router-link class="navbar-brand navbar-header-btn" to="/equipment">Items</router-link>
+<!-- 		  <a class="navbar-brand navbar-header-btn" data-ref-view="characterView" href="#">Main</a> -->
+<!-- 		  <a class="navbar-brand navbar-header-btn" data-ref-view="spellBookView" href="#">Spells</a> -->
+<!-- 		  <a class="navbar-brand navbar-header-btn" data-ref-view="skillsView" href="#">Skills</a> -->
+		  <a class="navbar-brand navbar-header-btn" data-ref-view="settingsView" href="#">Settings</a>
+		  <level-component></level-component>
+		</div>
+	  </div><!-- /.container-fluid -->
+	</nav>
+	
+	<div id ="initLoader">
+		<div class="loader"></div>
+	</div>
+	
+	<div id="viewHolder">
+		
+	
+		
+	</div>
+	
+	<router-view></router-view>
+	
+	
+	
+</div></div>
+<div id="model" style="display: none">
+</div>
+
+</body>
+
+<script src="js/framework/utils.js"></script>
+<script src="js/model/modelEvents.js"></script>
+
+<script src="js/model/bonus.js"></script>
+<script src="js/model/character.js"></script>
+<script src="js/model/attributes.js"></script>
+<script src="js/model/equipment.js"></script>
+<script src="js/model/defense.js"></script>
+<script src="js/model/offense.js"></script>
+<script src="js/model/saves.js"></script>
+<script src="js/model/spellBook.js"></script>
+<script src="js/model/allSpells.js"></script>
+<script src="js/model/skills.js"></script>
+<script src="js/model/abilities.js"></script>
+<script src="js/model/feats.js"></script>
+<script src="js/model/slayer.js"></script>
+<script src="js/model/maneuvers.js"></script>
+<script src="js/model/condition.js"></script>
+<script src="js/model/buffEffect.js"></script>
+
+<script src="js/controllers/initOberon.js"></script>
+
+
+
+
+
+
+<script src="js/controllers/mainController.js"></script>
+<script src="js/controllers/statusEffectsController.js"></script>
+<script src="js/controllers/characterController.js"></script>
+<script src="js/controllers/equipmentController.js"></script>
+<script src="js/controllers/spellbookController.js"></script>
+<script src="js/controllers/skillsController.js"></script>
+<script src="js/controllers/settingsController.js"></script>
+<script src="js/controllers/characterLevelController.js"></script>
+<script>
+
+var routes = [
+	{ 
+		path: '*', redirect: '/main'
+	},
+	{
+		path: '/main', component: characterComponent 
+	},
+	{
+		path: '/spells', component: spellbookComponent
+	},
+	{
+		path: '/skills', component: skillsComponent
+	},
+	{
+		path: '/equipment', component: equipmentComponent
+	}
+];
+	
+var router = new VueRouter({
+	  routes // short for `routes: routes`
+	});
+	
+	
+
+var app = new Vue({
+	router
+	}).$mount('#app');
+$("#initLoader").hide();
+
+
+
+</script>
+
+</html>
+
+
+
+<!--
+<script type="text/javascript">
+	
+	function init() {
+	
+	}
+    window.onload = init();
+	
+</script>
+-->

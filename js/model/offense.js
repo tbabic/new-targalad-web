@@ -8,6 +8,7 @@ function Attack(offense, extraAttackBonus) {
 	this.source = extraAttackBonus.source;
 	this.dmg = 0;
 	this.toHit = 0;
+	this.iteratives = true;
 	
 	this.getWeapon = function() {
 		return this.offense.character.equipment.weapon;
@@ -181,6 +182,14 @@ function Offense(character) {
 	
 	addModelListener("WEAPON", "ADDED", (e, weapon) => {
 		this.mainHand = character.equipment.weapon;
+		this.attrToHit = this.character.attributes.getAttribute("DEXTERITY")
+		this.attackOfOpportunity.attrToHit = this.attrToHit;
+		if (weapon.category == WeaponCategory.RANGED_TWO_HANDED || weapon.category == WeaponCategory.RANGED_ONE_HANDED) {
+			for (key in this.attacks) {
+				this.attacks[key].attrToHit = this.attrToHit;
+			}
+		}
+		
 	});
 	
 	addModelListener("WEAPON", "REMOVED", (e, weapon) => {
@@ -206,6 +215,32 @@ function Offense(character) {
 	
 	addModelListener("EXTRA_ATTACK", (e, extraAttackBonus) => {
 		this.addAttack(extraAttackBonus);
+	});
+	
+	addModelListener("DISABLE_ITERATIVES", (e) => {
+		let bab = this.getBab();
+		let babPenalty = 5;
+		while (babPenalty < bab) {
+			this.removeAttack("BAB-"+babPenalty);
+			babPenalty += 5;
+		}
+
+		
+	});
+	
+	addModelListener("ENABLE_ITERATIVES", (e) => {
+		let bab = this.getBab();
+		let extraAttackBonus = new ExtraAttackBonus("BAB", "mainHand");
+	
+		let babPenalty = 5;
+		while (babPenalty < bab) {
+			
+			var source = "BAB-"+babPenalty;
+			extraAttackBonus.source = source;
+			var attack = this.addAttack(extraAttackBonus);
+			attack.addBonus(source, new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, -babPenalty, source));
+			babPenalty += 5;
+		}
 	});
 	
 }

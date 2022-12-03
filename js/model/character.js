@@ -426,6 +426,148 @@ function createTargalad(level) {
 	myCharacter = targalad;
 }
 
+function createOberon(level) {
+	if (level == undefined) {
+		level = 7;
+	}
+	var attributes = new Attributes(11, 18, 16, 14, 10, 10);
+	var oberon = new Character('slayer', attributes, +level, 'equipment');
+	
+	
+	oberon.addItem(new Armor('Chainshirt +1', ArmorType.CHAINSHIRT, undefined, 4, 4, 0, 1, 20, 20));
+	oberon.addItem(new Weapon('Composite Longbow +1', WeaponType.LONGBOW, 1, 4));
+	oberon.addItem(new Item('Ring of Deflection +2', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 1, "Ring of Deflection +1"), 0));
+	oberon.addItem(new Item('Amulet of Natural Armor +0', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 1, "Amulet of Natural Armor +0"), 0));
+	
+	oberon.removeAbility("Flank");
+	oberon.removeAbility("Charge");
+	
+	if (oberon.level >= 3) {
+		oberon.addAbility(FeatFactory.pointBlankShot(oberon));
+	}
+	
+	if (oberon.level >= 3) {
+		oberon.addAbility(FeatFactory.rapidShot(oberon));
+	}
+	
+	if (oberon.level >= 5) {
+		oberon.addAbility(FeatFactory.masterSniper(oberon));
+	}
+	
+	oberon.skillSet.getSkill(SkillsEnum.ACROBATICS).addRank(3);
+	oberon.skillSet.getSkill(SkillsEnum.APPRAISE).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.BLUFF).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.CLIMB).addRank(1);
+	oberon.skillSet.getSkill(SkillsEnum.CRAFT_ALCHEMY).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.CRAFT_ARMOR).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.CRAFT_WEAPON).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.DIPLOMACY).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.DISABLE_DEVICE).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.DISGUISE).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.ESCAPE_ARTIST).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.FLY).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.HANDLE_ANIMAL).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.HEAL).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.INTIMIDATE).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.KNOWLEDGE_ARCANA).addRank(1);
+	oberon.skillSet.getSkill(SkillsEnum.KNOWLEDGE_DUNGEONEERING).addRank(1);
+	oberon.skillSet.getSkill(SkillsEnum.KNOWLEDGE_ENGINEERING).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.KNOWLEDGE_GEOGRAPHY).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.KNOWLEDGE_HISTORY).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.KNOWLEDGE_LOCAL).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.KNOWLEDGE_NATURE).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.KNOWLEDGE_NOBILITY).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.KNOWLEDGE_PLANES).addRank(1);
+	oberon.skillSet.getSkill(SkillsEnum.KNOWLEDGE_RELIGION).addRank(1);
+	oberon.skillSet.getSkill(SkillsEnum.KNOWLEDGE_MARTIAL).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.LINGUISTICS).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.PERCEPTION).addRank(2);
+	oberon.skillSet.getSkill(SkillsEnum.PERFORM_DANCE).addRank(2);
+	oberon.skillSet.getSkill(SkillsEnum.PERFORM_SING).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.PERFORM_ORATORY).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.PROFESSION).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.RIDE).addRank(1);
+	oberon.skillSet.getSkill(SkillsEnum.SENSE_MOTIVE).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.SLEIGHT_OF_HAND).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.SPELLCRAFT).addRank(3);
+	oberon.skillSet.getSkill(SkillsEnum.STEALTH).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.SURVIVAL).addRank(0);
+	oberon.skillSet.getSkill(SkillsEnum.SWIM).addRank(1);
+	oberon.skillSet.getSkill(SkillsEnum.USE_MAGIC_DEVICE).addRank(1);
+	
+	console.log(oberon);
+	
+	
+	myCharacter = oberon;
+}
+
+function createAzax(level) {
+	if (level == undefined) {
+		level = 7;
+	}
+	var attributes = new Attributes(18, 16, 16, 14, 14, 10);
+	var azax = new Character('hunter', attributes, +level, 'equipment');
+	
+	
+	azax.addItem(new Armor('Studded Leather', ArmorType.STUDDED_LEATHER, undefined, 3, 4, 0, 0, 20, 20));
+	azax.addItem(new Weapon('Masterwork Scimitar', WeaponType.SCIMITAR, "MASTERWORK", 4));
+	azax.addItem(new Item('Ring of Deflection +1', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 1, "Ring of Deflection +1"), 0));
+	azax.addItem(new Item('Amulet of Natural Armor +0', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 1, "Amulet of Natural Armor +0"), 0));
+	
+	
+	
+	
+	if (azax.level >= 3) {
+		
+	}
+	
+	azax.skillSet.getSkill(SkillsEnum.ACROBATICS).addRank(3);
+	azax.skillSet.getSkill(SkillsEnum.APPRAISE).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.BLUFF).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.CLIMB).addRank(1);
+	azax.skillSet.getSkill(SkillsEnum.CRAFT_ALCHEMY).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.CRAFT_ARMOR).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.CRAFT_WEAPON).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.DIPLOMACY).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.DISABLE_DEVICE).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.DISGUISE).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.ESCAPE_ARTIST).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.FLY).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.HANDLE_ANIMAL).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.HEAL).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.INTIMIDATE).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.KNOWLEDGE_ARCANA).addRank(1);
+	azax.skillSet.getSkill(SkillsEnum.KNOWLEDGE_DUNGEONEERING).addRank(1);
+	azax.skillSet.getSkill(SkillsEnum.KNOWLEDGE_ENGINEERING).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.KNOWLEDGE_GEOGRAPHY).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.KNOWLEDGE_HISTORY).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.KNOWLEDGE_LOCAL).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.KNOWLEDGE_NATURE).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.KNOWLEDGE_NOBILITY).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.KNOWLEDGE_PLANES).addRank(1);
+	azax.skillSet.getSkill(SkillsEnum.KNOWLEDGE_RELIGION).addRank(1);
+	azax.skillSet.getSkill(SkillsEnum.KNOWLEDGE_MARTIAL).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.LINGUISTICS).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.PERCEPTION).addRank(2);
+	azax.skillSet.getSkill(SkillsEnum.PERFORM_DANCE).addRank(2);
+	azax.skillSet.getSkill(SkillsEnum.PERFORM_SING).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.PERFORM_ORATORY).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.PROFESSION).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.RIDE).addRank(1);
+	azax.skillSet.getSkill(SkillsEnum.SENSE_MOTIVE).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.SLEIGHT_OF_HAND).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.SPELLCRAFT).addRank(3);
+	azax.skillSet.getSkill(SkillsEnum.STEALTH).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.SURVIVAL).addRank(0);
+	azax.skillSet.getSkill(SkillsEnum.SWIM).addRank(1);
+	azax.skillSet.getSkill(SkillsEnum.USE_MAGIC_DEVICE).addRank(1);
+	
+	console.log(azax);
+	
+	
+	myCharacter = azax;
+}
+
 function Character(characterClass, attributes, level, equipment) {
 	//properties
 	this.attributes = attributes;
@@ -465,11 +607,29 @@ function Character(characterClass, attributes, level, equipment) {
 		
 	};
 	
+	this.removeAbility = function(abilityName) {
+		let index = this.nonPassiveAbilities.findIndex(ability => ability.name == abilityName);
+		if (index >= 0) {
+			this.nonPassiveAbilities.splice(index, 1);
+		}
+		index = this.passiveAbilities.findIndex(ability => ability.name == abilityName);
+		if (index >= 0) {
+			this.passiveAbilities.splice(index, 1);
+		}
+		
+	};
+	
 	if (characterClass == 'magus') {
 		this.characterClass = new Magus(this);
 	}
 	if (characterClass == 'bloodrager') {
 		this.characterClass = new Bloodrager(this);
+	}
+	if (characterClass == 'hunter') {
+		this.characterClass = new Hunter(this);
+	}
+	if (characterClass == 'slayer') {
+		this.characterClass = new Slayer(this);
 	}
 	this.saves = this.characterClass.saves;
 	this.getBab = function() {
