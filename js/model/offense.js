@@ -8,7 +8,6 @@ function Attack(offense, extraAttackBonus) {
 	this.source = extraAttackBonus.source;
 	this.dmg = 0;
 	this.toHit = 0;
-	this.iteratives = true;
 	
 	this.getWeapon = function() {
 		return this.offense.character.equipment.weapon;
@@ -182,9 +181,10 @@ function Offense(character) {
 	
 	addModelListener("WEAPON", "ADDED", (e, weapon) => {
 		this.mainHand = character.equipment.weapon;
-		this.attrToHit = this.character.attributes.getAttribute("DEXTERITY")
-		this.attackOfOpportunity.attrToHit = this.attrToHit;
 		if (weapon.category == WeaponCategory.RANGED_TWO_HANDED || weapon.category == WeaponCategory.RANGED_ONE_HANDED) {
+			this.attrToHit = this.character.attributes.getAttribute("DEXTERITY")
+			this.attackOfOpportunity.attrToHit = this.attrToHit;
+		
 			for (key in this.attacks) {
 				this.attacks[key].attrToHit = this.attrToHit;
 			}
