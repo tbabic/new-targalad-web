@@ -4,6 +4,7 @@ function Hunter(character) {
 	this.spellbook = new SpellBook(this.character, 210, 3);
 	this.memorizedSpells = new MemorizedSpells(this.character);
 	
+	this.character.animalCompanion = "whirlwind"
 	
 	this.getBab = function(level) {
 		return Math.floor(level * 0.75);

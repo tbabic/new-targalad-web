@@ -529,7 +529,7 @@ function createAzax(level) {
 	}
 	
 	
-	
+	azax.animalCompanion = "animal-companion-griffin";
 	azax.skillSet.getSkill(SkillsEnum.ACROBATICS).addRank(3);
 	azax.skillSet.getSkill(SkillsEnum.APPRAISE).addRank(0);
 	azax.skillSet.getSkill(SkillsEnum.BLUFF).addRank(0);
@@ -616,6 +616,14 @@ function Character(characterClass, attributes, level, equipment) {
 		
 	};
 	
+	this.getHD = function() {
+		if (this.hd == null) {
+			return this.level;
+		} else {
+			return this.hd;
+		}
+	}
+	
 	this.removeAbility = function(abilityName) {
 		let index = this.nonPassiveAbilities.findIndex(ability => ability.name == abilityName);
 		if (index >= 0) {
@@ -639,6 +647,9 @@ function Character(characterClass, attributes, level, equipment) {
 	}
 	if (characterClass == 'slayer') {
 		this.characterClass = new Slayer(this);
+	}
+	if (characterClass == 'animal-companion') {
+		this.characterClass = new AnimalCompanion(this);
 	}
 	this.saves = this.characterClass.saves;
 	this.getBab = function() {

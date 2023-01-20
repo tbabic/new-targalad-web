@@ -149,6 +149,13 @@
 			</div>
 		</div>
 	</div>
+	
+	<div v-if="character.animalCompanion" class="animal-companion row">
+		<div class="">
+			<iframe v-bind:src="character.animalCompanion + '.html'" title="animal-companion"></iframe>	
+		</div>
+		
+	</div>
 </div>
 
 

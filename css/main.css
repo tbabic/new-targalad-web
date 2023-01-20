@@ -394,3 +394,37 @@ button.dropdown-item:hover {
 .ability-description {
 	white-space: pre-line;
 }
+
+.animal-companion iframe {
+	border:none;
+	width: 100vw;
+	height: 100vh;
+	position: relative;
+	
+	
+	
+}
+
+@media (min-width: 576px) {
+	.animal-companion iframe {
+    	left: calc((540px - 100vw)/2);
+	}
+}
+
+@media (min-width: 768px) {
+	.animal-companion iframe {
+    	left: calc((720px - 100vw)/2);
+	}
+}
+
+@media (min-width: 992px) {
+	.animal-companion iframe {
+    	left: calc((960px - 100vw)/2);
+	}
+}
+
+@media (min-width: 1200px) {
+	.animal-companion iframe {
+    	left: calc((1140px - 100vw)/2);
+	}
+}
