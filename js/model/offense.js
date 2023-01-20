@@ -181,18 +181,18 @@ function Offense(character) {
 	this.attackOfOpportunity = new Attack(this, extraAttackBonus);
 	
 	this.addAttacksLimit = function(numberOfAttacks, limitingAbility) {
-		this.attacksLimits[limitingAbility] = numberOfAttacks;
+		Vue.set(this.attacksLimits,limitingAbility,numberOfAttacks);
 	};
 	
 	this.removeAttacksLimit = function(limitingAbility) {
-		delete this.attacksLimits[limitingAbility];
+		Vue.delete(this.attacksLimits, limitingAbility);
 	};
 	
 	
 	this.getAttacksLimit = function() {
 		let limit = 100;
 		for (let key in this.attacksLimits) {
-			limit = Math.min(limit, this.attacksLimit[key]);
+			limit = Math.min(limit, this.attacksLimits[key]);
 		}
 		return limit;
 	};
@@ -209,7 +209,8 @@ function Offense(character) {
 			}
 			return diff;
 		});
-		return attacks;
+		limit = this.getAttacksLimit(attacks);
+		return attacks.slice(0, limit);
 	};
 	
 	this.getAttacksSorted = function() {
