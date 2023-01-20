@@ -102,7 +102,7 @@ function createAnimalCompanionGriffin(level) {
 	
 	
 	pfdChar.addAbility(FeatFactory.powerAttack(pfdChar));
-	pfdChar.addAbility(FeatFactory.lightningReflexes(pfdChar));
+	
 	pfdChar.addAbility(FeatFactory.outflank(pfdChar));
 	pfdChar.addAbility(HunterAbilities.animalFocus(pfdChar));
 
