@@ -162,13 +162,13 @@ var AnimalCompanionAbilities = {
 				.actionType(ActionType.PASSIVE)
 				.activate(function() {
 					let number = this.numberOfAttacks;
-					let penalty = -5;
+					let penalty = 0;
 					if (this.owner.getAbilityByName("Multiattack") != null) {
 						penalty = -2;
 					}
 					for (i = 1; i <= number; i++) {
 						
-						this.extraAttackBonus = new ExtraAttackBonus(this.name + " " +i, "offHand", new Bonus([BonusCategory.TO_HIT], BonusType.PENALTY, penalty, this.name));
+						this.extraAttackBonus = new ExtraAttackBonus(this.name + " " +i, "mainHand");
 						triggerModelChange("EXTRA_ATTACK", this.extraAttackBonus);
 					}
 				})
