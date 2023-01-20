@@ -511,6 +511,15 @@ var FeatFactory = {
 			.get();
 	},
 	
+	cornugonSmash : function(owner) {
+		return getAbilityBuilder()
+			.name("Cornugon Smash")
+			.actionType(ActionType.PASSIVE)
+			.description("Benefit: When you damage an opponent with a Power Attack, you may make an immediate Intimidate check as a free action to attempt to demoralize your opponent. The DC of this check is equal to 10 + the target’s Hit Dice + the target’s Wisdom modifier.")
+			.owner(owner)
+			.get();
+	},
+	
 	
 };
 

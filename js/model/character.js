@@ -305,6 +305,10 @@ function createSpot(level) {
 	if (vindred.level >= 6) {
 		vindred.addAbility(FeatFactory.ironWill(vindred));
 	}
+	
+	if (vindred.level >= 7) {
+		vindred.addAbility(FeatFactory.cornugonSmash(vindred));
+	}
 
 	
 	
