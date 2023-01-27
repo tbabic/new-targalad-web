@@ -92,7 +92,7 @@ BuffsFactory = {
 		barkskin : new BuffEffect("Barkskin", function(character) {
 			let value = 2;
 			let level = character.level;
-			if (character.masterLevel != level) {
+			if (character.masterLevel != null) {
 				level = character.masterLevel;
 			}
 			let bonusValue = Math.floor( (level -3) / 3);
