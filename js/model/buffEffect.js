@@ -252,7 +252,7 @@ BuffsFactory = {
 			if (character.masterLevel != undefined && character.masterLevel != level) {
 				level = character.masterLevel;
 			}
-			bonusValue = 1+1+Math.floor(level / 4);
+			bonusValue = 3+1+Math.floor(level / 4);
 			if (BuffsFactory.inspiringCallBonus.isActive) {
 				bonusValue++;
 			}
@@ -271,7 +271,7 @@ BuffsFactory = {
 			if (character.masterLevel != undefined && character.masterLevel != level) {
 				level = character.masterLevel;
 			}
-			bonusValue = 1+1+Math.floor(level/ 4);
+			bonusValue = 3+1+Math.floor(level/ 4);
 			if (BuffsFactory.inspiringCallBonus.isActive) {
 				bonusValue++;
 			}
