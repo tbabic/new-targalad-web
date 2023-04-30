@@ -226,7 +226,7 @@ BuffsFactory = {
 		}),
 		
 		inspiringCallAttack : new BuffEffect("Inspiring Call (Att)", function(character) {
-			bonusValue = 1+1+Math.floor(character.level / 4);
+			var bonusValue = 3+1+Math.floor(character.level / 4);
 			if (BuffsFactory.inspiringCallBonus.isActive) {
 				bonusValue++;
 			}
