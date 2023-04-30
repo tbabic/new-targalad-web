@@ -249,7 +249,7 @@ BuffsFactory = {
 		
 		inspiringCallAttack : new BuffEffect("Inspiring Call (Att)", function(character) {
 			let level = character.level;
-			if (character.masterLevel != level) {
+			if (character.masterLevel != undefined && character.masterLevel != level) {
 				level = character.masterLevel;
 			}
 			bonusValue = 1+1+Math.floor(level / 4);
@@ -268,7 +268,7 @@ BuffsFactory = {
 		
 		inspiringCallSaves : new BuffEffect("Inspiring Call (Svs)", function(character) {
 			let level = character.level;
-			if (character.masterLevel != level) {
+			if (character.masterLevel != undefined && character.masterLevel != level) {
 				level = character.masterLevel;
 			}
 			bonusValue = 1+1+Math.floor(level/ 4);
