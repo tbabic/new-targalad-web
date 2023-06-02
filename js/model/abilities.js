@@ -253,6 +253,14 @@ var AbilityFactory = {
 			.actionType(ActionType.STANDARD)
 			.properties(new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, 2, "Charge"))
 			.properties(new Bonus(BonusCategory.ARMOR_CLASS, BonusType.PENALTY, -2, "Charge"))
+			.activate(function() {
+				if (owner.getAbilityByName("Pounce") == undefined) {
+					owner.offense.addAttacksLimit(1, this.name);
+				}
+			})
+			.deactivate(function() {
+				owner.offense.removeAttacksLimit(this.name);
+			})
 			.owner(owner)
 			.get();
 	},

@@ -23,6 +23,24 @@ BuffsFactory = {
 			this.bonusEffectList.deactivate();
 		}),
 		
+		inspireCourage : new BuffEffect("Inspire Courage", function(character) {
+			let bonusValue = 1;
+			if (character.level >= 5) {
+				bonusValue = 2;
+			}
+			if (character.level >= 11) {
+				bonusValue = 3;
+			}
+			if (character.level >= 17) {
+				bonusValue = 4;
+			}
+			this.bonusEffectList = new BonusEffectList(this);
+			this.bonusEffectList.add(new Bonus(['DAMAGE', 'TO_HIT'], BonusType.COMPETENCE, bonusValue, this.name));
+			this.bonusEffectList.activate();
+		}, function(){
+			this.bonusEffectList.deactivate();
+		}),
+		
 		aid : new BuffEffect("Aid", function() {
 			this.bonusEffectList = new BonusEffectList(this);
 			this.bonusEffectList.add(new Bonus([BonusCategory.TO_HIT], BonusType.MORALE, 1, this.name));
@@ -73,7 +91,11 @@ BuffsFactory = {
 		
 		barkskin : new BuffEffect("Barkskin", function(character) {
 			let value = 2;
-			let bonusValue = Math.floor( (character.level -3) / 3);
+			let level = character.level;
+			if (character.masterLevel != null) {
+				level = character.masterLevel;
+			}
+			let bonusValue = Math.floor( (level -3) / 3);
 			this.bonusEffectList = new BonusEffectList(this);
 			this.bonusEffectList.add(new Bonus([BonusCategory.ARMOR_CLASS], BonusType.NATURAL_ARMOR, value + bonusValue, this.name));
 			this.bonusEffectList.activate();
@@ -226,7 +248,11 @@ BuffsFactory = {
 		}),
 		
 		inspiringCallAttack : new BuffEffect("Inspiring Call (Att)", function(character) {
-			var bonusValue = 3+1+Math.floor(character.level / 4);
+			let level = character.level;
+			if (character.masterLevel != undefined && character.masterLevel != level) {
+				level = character.masterLevel;
+			}
+			bonusValue = 3+1+Math.floor(level / 4);
 			if (BuffsFactory.inspiringCallBonus.isActive) {
 				bonusValue++;
 			}
@@ -241,7 +267,11 @@ BuffsFactory = {
 		}),
 		
 		inspiringCallSaves : new BuffEffect("Inspiring Call (Svs)", function(character) {
-			bonusValue = 1+1+Math.floor(character.level / 4);
+			let level = character.level;
+			if (character.masterLevel != undefined && character.masterLevel != level) {
+				level = character.masterLevel;
+			}
+			bonusValue = 3+1+Math.floor(level/ 4);
 			if (BuffsFactory.inspiringCallBonus.isActive) {
 				bonusValue++;
 			}

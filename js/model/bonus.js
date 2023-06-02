@@ -169,7 +169,7 @@ function BonusEffectList(source, bonusList) {
 	_remove = function(bonus) {
 		var index = -1;
 		for (var i = 0; i<_list.length; i++) {
-			if(_list[i].equals(bonus)) {
+			if(_list[i].bonus.equals(bonus)) {
 				index = i;
 			}
 		}
@@ -200,6 +200,8 @@ function BonusEffectList(source, bonusList) {
 		removeAndDeactivate : function(bonus) {
 			bonus.deactivate(_source);
 			_apply("deactivate", _list);
+			this.remove(bonus);
+			
 		},
 		
 		list : function() {

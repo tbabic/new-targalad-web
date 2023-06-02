@@ -327,6 +327,18 @@ var FeatFactory = {
 			.owner(owner)
 			.get();
 	},
+	lightningReflexes : function(owner) {
+		return getAbilityBuilder()
+			.name("Lightning Reflexes")
+			.actionType(ActionType.PASSIVE)
+			.activate(function() {
+				this.bonusEffectList = new BonusEffectList(this, new Bonus("REFLEX", BonusType.UNTYPED, 2, this.name));
+				this.bonusEffectList.activate();
+				
+			})
+			.owner(owner)
+			.get();
+	},
 	zealous : function(owner) {
 		return getAbilityBuilder()
 			.name("Zealous")
@@ -409,7 +421,7 @@ var FeatFactory = {
 				this.extraAttackBonus = new ExtraAttackBonus(this.name, "mainHand");
 				this.extraAttackBonus.attrToHit = owner.offense.attrToHit;
 				triggerModelChange("EXTRA_ATTACK", this.extraAttackBonus);
-				triggerModelChange("DISABLE_ITERATIVES");
+				owner.offense.addAttacksLimit(2, this.name);
 			})
 			.deactivate(function() {
 				if (this.bonusEffectList !== undefined) {
@@ -420,7 +432,7 @@ var FeatFactory = {
 					this.owner.offense.removeAttack(this.name);
 					delete this.extraAttackBonus;
 				}
-				triggerModelChange("ENABLE_ITERATIVES", this.extraAttackBonus);
+				owner.offense.removeAttacksLimit(this.name);
 			})
 			.owner(owner)
 			.get();
@@ -495,6 +507,15 @@ var FeatFactory = {
 					this.bonusEffectList.deactivate();
 				}
 			})
+			.owner(owner)
+			.get();
+	},
+	
+	cornugonSmash : function(owner) {
+		return getAbilityBuilder()
+			.name("Cornugon Smash")
+			.actionType(ActionType.PASSIVE)
+			.description("Benefit: When you damage an opponent with a Power Attack, you may make an immediate Intimidate check as a free action to attempt to demoralize your opponent. The DC of this check is equal to 10 + the target’s Hit Dice + the target’s Wisdom modifier.")
 			.owner(owner)
 			.get();
 	},

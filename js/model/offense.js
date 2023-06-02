@@ -121,6 +121,7 @@ function Offense(character) {
 	this.character = character;
 	this.attacks = {};
 	
+	this.attacksLimits = {}
 	
 	this.toHitBonusProcessor = new BonusProcessor();
 	this.dmgBonusProcessor = new BonusProcessor();
@@ -179,6 +180,23 @@ function Offense(character) {
 	
 	this.attackOfOpportunity = new Attack(this, extraAttackBonus);
 	
+	this.addAttacksLimit = function(numberOfAttacks, limitingAbility) {
+		Vue.set(this.attacksLimits,limitingAbility,numberOfAttacks);
+	};
+	
+	this.removeAttacksLimit = function(limitingAbility) {
+		Vue.delete(this.attacksLimits, limitingAbility);
+	};
+	
+	
+	this.getAttacksLimit = function() {
+		let limit = 100;
+		for (let key in this.attacksLimits) {
+			limit = Math.min(limit, this.attacksLimits[key]);
+		}
+		return limit;
+	};
+	
 	this.getAttacks = function() {
 		var attacks = [];
 		for (var source in this.attacks) {
@@ -191,7 +209,8 @@ function Offense(character) {
 			}
 			return diff;
 		});
-		return attacks;
+		limit = this.getAttacksLimit(attacks);
+		return attacks.slice(0, limit);
 	};
 	
 	this.getAttacksSorted = function() {
@@ -199,7 +218,9 @@ function Offense(character) {
 		attacks.sort(function(attack1, attack2) {
 			return attack2.getToHit() - attack1.getToHit();
 		});
-		return attacks;
+		
+		limit = this.getAttacksLimit(attacks);
+		return attacks.slice(0, limit);
 	};
 	
 	this.getCmb = function() {
