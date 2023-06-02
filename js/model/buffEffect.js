@@ -110,6 +110,7 @@ BuffsFactory = {
 			this.bonusEffectList.activate();
 			
 			this.extraAttackBonus = new ExtraAttackBonus(this.name, "mainHand");
+			this.extraAttackBonus.attrToHit = character.offense.attrToHit;
 			triggerModelChange("EXTRA_ATTACK", this.extraAttackBonus);
 			
 		}, function(character){
