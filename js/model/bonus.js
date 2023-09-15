@@ -155,6 +155,20 @@ function BonusEffectList(source, bonusList) {
 		}
 	};
 	
+	_addAndActivate = function(bonusList) {
+		if (bonusList === undefined) {
+			return;
+		}
+		var list = (Array.isArray(bonusList)) ? bonusList : [bonusList];
+		for (var i = 0; i < list.length; i++) {
+			if (list[i] instanceof Bonus) {
+				var bonusEffect = list[i].toBonusEffect(_source)
+				_list.push(bonusEffect);
+				bonusEffect.activate();
+			}
+		}
+	};
+	
 	_add(bonusList);
 	
 	_apply = function(callback, _list) {
@@ -178,6 +192,19 @@ function BonusEffectList(source, bonusList) {
 		}
 	};
 	
+	_removeAndDeactivate = function(bonus) {
+		var index = -1;
+		for (var i = 0; i<_list.length; i++) {
+			if(_list[i].bonus.equals(bonus)) {
+				index = i;
+			}
+		}
+		if (index != -1) {
+			_list[index].deactivate();
+			_list.splice(index, 1);
+		}
+	};
+	
 	return {
 		activate : function() {
 			_apply("activate", _list);
@@ -191,18 +218,9 @@ function BonusEffectList(source, bonusList) {
 		
 		remove : _remove,
 		
-		addAndActivate : function(bonus) {
-			//_apply("deactivate");
-			_add(bonus);
-			_apply("activate",_list);
-		},
+		addAndActivate : _addAndActivate,
 		
-		removeAndDeactivate : function(bonus) {
-			bonus.deactivate(_source);
-			_apply("deactivate", _list);
-			this.remove(bonus);
-			
-		},
+		removeAndDeactivate : _removeAndDeactivate,
 		
 		list : function() {
 			return _list;

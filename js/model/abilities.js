@@ -106,8 +106,8 @@ function Ability(constr) {
 	};
 	
 	if (this.actionType == ActionType.PASSIVE && this.owner !== undefined) {
-		this.active = true;
-		this.activate();		
+		//this.active = true;
+		//this.activate();		
 	}
 	
 	this.setOwner = function(owner) {

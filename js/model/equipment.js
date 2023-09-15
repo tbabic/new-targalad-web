@@ -406,7 +406,7 @@ function Weapon(name, type, enhancement, weight, properties, special) {
 		this.properties.activate(this);
 		this.weaponBonus.activate(this);
 		if (this.special != undefined) {
-			this.special.activate(this, owner);
+			this.special.onEquip(this, owner);
 		}
 		
 	};
@@ -416,7 +416,7 @@ function Weapon(name, type, enhancement, weight, properties, special) {
 		this.weaponBonus.deactivate();
 		this.properties.deactivate();
 		if (this.special != undefined) {
-			this.special.deactivate(this, owner);
+			this.special.onUnequip(this, owner);
 		}
 		
 	};
@@ -426,18 +426,24 @@ function Weapon(name, type, enhancement, weight, properties, special) {
 var SpecialProperties = {
 	FURIOUS : {
 	    name : "FURIOUS",
-		activate : function(weapon, owner) {
+		onEquip : function(weapon, owner) {
 			this.bloodrage = owner.getAbilityByName("Bloodrage");
 			bonusValue = 2; 
 			this.bonus = new Bonus([BonusCategory.TO_HIT, BonusCategory.DAMAGE],  "ENHANCEMENT STACKING", bonusValue, 'Furious');
-			this.bloodrage.properties.add(this.bonus);
+			if (this.bloodrage.active) {
+				this.bloodrage.properties.addAndActivate(this.bonus);
+			}
+			else {
+				this.bloodrage.properties.add(this.bonus);
+			}
 		},
-		deactivate : function() {
+		
+		onUnequip : function(weapon, owner) {
 			if (this.bloodrage.properties != undefined) {
 				this.bloodrage.properties.removeAndDeactivate(this.bonus);
 			}
-			
-		}
+		},
+
 	}
 }
 
