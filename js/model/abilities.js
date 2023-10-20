@@ -293,7 +293,7 @@ var AbilityFactory = {
 			})
 			.owner(owner)
 			.get();
-	},
+	},	
 	weaponSets : function(owner, mainHand, offHand) {
 		return getAbilityBuilder()
 			.name("Weapon set")

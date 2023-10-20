@@ -520,6 +520,70 @@ var FeatFactory = {
 			.get();
 	},
 	
+	bane : function(owner) {
+		return getAbilityBuilder()
+			.name("Bane Baldric")
+			.actionType(ActionType.FREE)
+			.activate(function() {
+
+				
+				this.bonusHit = new BonusEffect(this.name ,new Bonus(BonusCategory.TO_HIT, "ENHANCEMENT_INCREASE", 2, this.name));
+				this.bonusHit.isActive = true;
+				this.bonusDmg = new BonusEffect(this.name ,new Bonus(BonusCategory.DAMAGE, "ENHANCEMENT_INCREASE", 2, this.name));
+				this.bonusDmg.isActive = true;
+				
+				for (index in owner.offense.attacks) {
+					let attack = owner.offense.attacks[index];
+					if (attack.offHand) {
+						continue;
+					}
+					attack.toHitBonusProcessor.processBonusEffect(this.bonusHit);
+					attack.toHit = attack.getToHit();
+					attack.dmgBonusProcessor.processBonusEffect(this.bonusDmg);
+					attack.dmg = attack.getDmg();
+				}
+				
+				
+				
+				owner.offense.attackOfOpportunity.toHitBonusProcessor.processBonusEffect(this.bonusHit);
+				owner.offense.attackOfOpportunity.toHit = owner.offense.attackOfOpportunity.getToHit();
+				owner.offense.attackOfOpportunity.dmgBonusProcessor.processBonusEffect(this.bonusDmg);
+				owner.offense.attackOfOpportunity.dmg = owner.offense.attackOfOpportunity.getDmg();
+
+			})
+			.deactivate(function() {
+				if (this.bonusHit !== undefined) {
+					this.bonusHit.deactivate();
+				}
+				
+				if (this.bonusDmg !== undefined) {
+					this.bonusDmg.deactivate();
+				}
+				
+			
+			})
+			.owner(owner)
+			.get();
+	},
+	
+	deliquescentGloves : function(owner) {
+		return getAbilityBuilder()
+			.name("Deliquescent Gloves")
+			.actionType(ActionType.FREE)
+			.activate(function() {
+
+				
+				
+
+			})
+			.deactivate(function() {
+				
+			
+			})
+			.owner(owner)
+			.get();
+	}
+	
 	
 };
 
