@@ -528,6 +528,8 @@ function createAzax(level) {
 		azax.addAbility(FeatFactory.outflank(azax));
 	}
 	
+	azax.addAbility(FeatFactory.bane(azax));
+	
 	if (azax.level >= 7) {
 		//azax.addAbility(FeatFactory.twoWeaponRend(azax));
 	}
