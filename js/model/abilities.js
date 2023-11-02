@@ -41,6 +41,11 @@ function AbilityBuilder() {
 			return this;
 		},
 		
+		conditional : function(value) {
+			abilityConstr.conditionalCallback = value;
+			return this;
+		},
+		
 		get : function(owner) {
 			if (owner !== undefined) {
 				owner(owner);
@@ -64,6 +69,7 @@ function Ability(constr) {
 		this.actionType = constr.actionType;
 		this.activateCallback = constr.activateCallback;
 		this.deactivateCallback = constr.deactivateCallback;
+		this.conditionalCallback = constr.conditionalCallback; 
 		this.owner = constr.owner;
 		this.activationOptions.add(constr.activationOptions);
 		if (constr.validateActivation !== undefined) {
@@ -93,6 +99,8 @@ function Ability(constr) {
 		if (this.owner !== undefined && this.activateCallback instanceof Function) {
 			this.activateCallback.apply(this, params);
 		}
+		triggerModelChange("ABILITY"+this.id, this, "ACTIVATED");
+		
 		return true;
 	};
 	
@@ -103,11 +111,16 @@ function Ability(constr) {
 			console.log("deactivating ability " + this.name);		
 			this.deactivateCallback.apply(this, params);
 		}
+		triggerModelChange("ABILITY"+this.id, this, "DEACTIVATED");
 	};
 	
 	if (this.actionType == ActionType.PASSIVE && this.owner !== undefined) {
 		//this.active = true;
 		//this.activate();		
+	}
+	
+	this.available = function() {
+		return this.conditionalCallback.apply(this);
 	}
 	
 	this.setOwner = function(owner) {
@@ -123,14 +136,6 @@ function Ability(constr) {
 		}
 		return true;
 	};
-	
-	addModelListener("ABILITY"+this.id, "ACTIVATED", (e) => {
-		this.activate();
-	});
-	
-	addModelListener("ABILITY"+this.id, "DEACTIVATED", (e) => {
-		this.deactivate();
-	});	
 }
 
 

@@ -25,22 +25,8 @@ function createVindred(level) {
 	var attributes = new Attributes(19, 14, 15, 11, 11, 14);
 	var vindred = new Character('bloodrager', attributes, +level, 'equipment');
 	
-	furiousProperty  = {
-	    name : "FURIOUS",
-		activate : function(weapon) {
-			let bloodrage = vindred.getAbilityByName("Bloodrage");
-			bonusValue = 2; 
-			this.bonus = new Bonus([BonusCategory.TO_HIT, BonusCategory.DAMAGE],  "ENHANCEMENT STACKING", bonusValue, 'Furious');
-			bloodrage.properties.add(this.bonus);
-		},
-		deactivate : function() {
-			let bloodrage = vindred.getAbilityByName("Bloodrage");
-			bloodrage.properties.removeAndDeactivate(this.bonus);
-		}
-	}
-	
 	vindred.addItem(new Armor('Chainshirt +1', ArmorType.CHAINSHIRT, undefined, 4, 4, 0, 1, 20, 25, new Bonus(BonusCategory.ARMOR_CLASS, BonusType.ENHANCEMENT, 2, "Chainshirt +2")));
-	vindred.addItem(new Weapon('Greatsword', WeaponType.GREATSWORD, +2, 4, undefined, furiousProperty));
+	vindred.addItem(new Weapon('Greatsword', WeaponType.GREATSWORD, 4, [WeaponProperties.ENHANCEMENT_2, WeaponProperties.FURIOUS]));
 	
 	vindred.addItem(new Item('Cracked ioun stone', 'inventory', new Bonus(BonusCategory.TO_HIT, BonusType.COMPETENCE, 1, "Cracked ioun stone"), 0));
 	vindred.addItem(new Item('Wayfinder (51)', 'inventory', new Bonus('REFLEX', BonusType.RESISTANCE, 1, "Wayfinder"), 0));
@@ -118,23 +104,8 @@ function createWhirlwind(level) {
 	var attributes = new Attributes(18, 14, 14, 10, 12, 13);
 	var vindred = new Character('bloodrager', attributes, +level, 'equipment');
 	
-	furiousProperty  = {
-	    name : "furious",
-		activate : function(weapon) {
-			let bloodrage = vindred.getAbilityByName("Bloodrage");
-			bonusValue = 2; 
-			this.bonus = new Bonus([BonusCategory.TO_HIT, BonusCategory.DAMAGE],  "ENHANCEMENT STACKING", bonusValue, 'Furious');
-			bloodrage.properties.add(this.bonus);
-		},
-		deactivate : function() {
-			bloodrage.bonusEffectList.removeAndDeactivate(this.bonus);
-		}
-	}
-	
 	vindred.addItem(new Armor('Hide armor', ArmorType.HIDE, undefined, 4, 3, 0, 1, 20, 25, new Bonus(BonusCategory.ARMOR_CLASS, BonusType.ENHANCEMENT, 0, "Hide armor")));
-	vindred.addItem(new Weapon('Greatsword', WeaponType.BARDICHE, +0, 0, undefined, undefined));
-	//vindred.addItem(new Weapon('Greatsword', WeaponType.BARDICHE, +0, 0, undefined, furiousProperty));
-	
+	vindred.addItem(new Weapon('Greatsword', WeaponType.BARDICHE,10, [WeaponProperties.ENHANCEMENT_2, WeaponProperties.FURIOUS]));
 	
 	
 	vindred.addItem(new Item('Ring of Deflection +0', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 0, "Ring of Deflection +0"), 0));
@@ -267,21 +238,8 @@ function createSpot(level) {
 	var attributes = new Attributes(18, 13, 14, 11, 13, 11);
 	var vindred = new Character('bloodrager', attributes, +level, 'equipment');
 	
-	furiousProperty  = {
-	    name : "furious",
-		activate : function(weapon) {
-			let bloodrage = vindred.getAbilityByName("Bloodrage");
-			bonusValue = 2; 
-			this.bonus = new Bonus([BonusCategory.TO_HIT, BonusCategory.DAMAGE],  "ENHANCEMENT STACKING", bonusValue, 'Furious');
-			bloodrage.properties.add(this.bonus);
-		},
-		deactivate : function() {
-			bloodrage.bonusEffectList.removeAndDeactivate(this.bonus);
-		}
-	}
-	
 	vindred.addItem(new Armor('Breastplate Masterwork', ArmorType.BREASTPLATE, undefined, 6, 3, 0, 3, 20, 25, new Bonus(BonusCategory.ARMOR_CLASS, BonusType.ENHANCEMENT, 0, "Breastplate")));
-	vindred.addItem(new Weapon('Greataxe +2', WeaponType.GREATAXE, +2, 4, undefined, undefined));
+	vindred.addItem(new Weapon('Greataxe +2', WeaponType.GREATAXE, 4, [WeaponProperties.ENHANCEMENT_2, WeaponProperties.FURIOUS]));
 	//vindred.addItem(new Weapon('Greatsword', WeaponType.BARDICHE, +0, 0, undefined, furiousProperty));
 	
 	
@@ -369,7 +327,7 @@ function createTargalad(level) {
 	
 	
 	targalad.addItem(new Armor('Mithral Chainshirt', ArmorType.CHAINSHIRT, undefined, 4, 6, 0, 0, 20, 20));
-	targalad.addItem(new Weapon('BlackBlade Scimitar', WeaponType.SCIMITAR, +2, 4));
+	targalad.addItem(new Weapon('BlackBlade Scimitar', WeaponType.SCIMITAR, 4, WeaponProperties.ENHANCEMENT_2));
 	targalad.addItem(new Item('Ring of Deflection +2', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 2, "Ring of Deflection +2"), 0));
 	targalad.addItem(new Item('Amulet of Natural Armor +1', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 1, "Amulet of Natural Armor +1"), 0));
 	
@@ -439,7 +397,7 @@ function createOberon(level) {
 	
 	
 	oberon.addItem(new Armor('Chainshirt +1', ArmorType.CHAINSHIRT, undefined, 4, 4, 0, 1, 20, 20));
-	oberon.addItem(new Weapon('Composite Longbow +1', WeaponType.LONGBOW, 1, 4));
+	oberon.addItem(new Weapon('Composite Longbow +1', WeaponType.LONGBOW, 4, WeaponProperties.ENHANCEMENT_1));
 	oberon.addItem(new Item('Ring of Deflection +2', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 1, "Ring of Deflection +1"), 0));
 	oberon.addItem(new Item('Amulet of Natural Armor +0', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 1, "Amulet of Natural Armor +0"), 0));
 	
@@ -514,12 +472,13 @@ function createAzax(level) {
 	
 	
 	azax.addItem(new Armor('Studded Leather +1', ArmorType.STUDDED_LEATHER, undefined, 3, 4, 0, 1, 20, 20));
-	azax.addItem(new Weapon('Masterwork Scimitar', WeaponType.SCIMITAR, "MASTERWORK", 4));
-	azax.equipment.addSecondWeapon(new Weapon('Kukri', WeaponType.KUKRI, "MASTERWORK", 4));
+	azax.addItem(new Weapon('Masterwork Scimitar', WeaponType.SCIMITAR, 4, WeaponProperties.MASTERWORK));
+	azax.equipment.addSecondWeapon(new Weapon('Masterwork Kukri', WeaponType.KUKRI, 4, WeaponProperties.MASTERWORK));
 	azax.addItem(new Item('Ring of Deflection +1', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 1, "Ring of Deflection +1"), 0));
 	//azax.addItem(new Item('Amulet of Natural Armor +0', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 1, "Amulet of Natural Armor +0"), 0));
 	
-
+	loadEquipmentFromStorage(azax);
+	
 	if (azax.level >= 1) {
 		azax.addAbility(FeatFactory.twoWeaponFighting(azax));
 	}

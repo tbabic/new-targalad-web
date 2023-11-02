@@ -21,7 +21,7 @@ function removeModelListener(id, listener ) {
 	}
 	var listenOn = "model:" +id + ":" + listener;
 	listenOn = listenOn.split(" ").join("_");
-	modelElement.off(listenOn, parameterList);	
+	modelElement.off(listenOn);	
 
 }
 

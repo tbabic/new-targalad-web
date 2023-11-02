@@ -119,31 +119,39 @@ var HunterAbilities = {
 						activated ++;
 					}
 				})
+				if (owner.masterLevel >= 8 || (owner.masterLevel == null && this.owner.level >= 8)) {
+					return activated >= 1 && activated <= 2
+				}
+				
 				return activated == 1;
 			})
 			.activate(function(...activationOptions) {
 				if (activationOptions === undefined) {
 					return;
 				}
-				let selected;
+				let selected = [];
 				activationOptions.forEach(option => {
 					if (option.value == 1) {
-						selected = option;
+						selected.push(option);
 					}
 				});
-				if (selected == undefined) {
+				if (selected == []) {
 					return;
 				}
-				let bonusCategory;
-				if (selected.name == "Bull (Str)") {
-					bonusCategory = "STRENGTH";
-				}
-				if (selected.name == "Bear (Con)") {
-					bonusCategory = "CONSTITUTION";
-				}
-				if (selected.name == "Tiger (Dex)") {
-					bonusCategory = "DEXTERITY";
-				}
+				let bonusCategory = selected.map( s => {
+					if (s.name == "Bull (Str)") {
+						return "STRENGTH";
+					}
+					if (s.name == "Bear (Con)") {
+						return "CONSTITUTION";
+					}
+					if (s.name == "Tiger (Dex)") {
+						return  "DEXTERITY";
+					}
+				});
+				
+				
+				
 				
 				
 				this.bonusEffectList = new BonusEffectList(this);

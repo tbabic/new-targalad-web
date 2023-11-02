@@ -48,7 +48,9 @@ BonusCategory = {
 	
 };
 
-
+function ConditionalBonus(categories, type, name, duration, condition) {
+	
+}
 
 function Bonus(categories, type, value, name, duration) {
 	this.categories = (Array.isArray(categories)) ? categories : [categories];
@@ -87,6 +89,13 @@ function Bonus(categories, type, value, name, duration) {
 			this.value === other.value &&
 			this.name === other.name;
 	};
+	
+	this.getValue = function() {
+		if (value instanceof Function) {
+			return value.apply();
+		}
+		return value;
+	}
 }
 
 
@@ -237,12 +246,13 @@ function BonusTypeGroup(type, isStacking) {
 	this.vsSomething = {};
 	
 	this.add = function(source, bonus) {
-		if(bonus.value == 0) {
+		bonusValue = bonus.getValue();
+		if(bonusValue == 0) {
 			return;
 		}
 		
 		let existingValue = this.getBySource(source);
-		if (existingValue != 0 && existingValue > bonus.value ) {
+		if (existingValue != 0 && existingValue > bonusValue ) {
 			return;
 		}
 		
@@ -267,7 +277,7 @@ function BonusTypeGroup(type, isStacking) {
 	
 	this.get = function(vsSomething) {
 		if (this.cachedValue !== undefined && vsSomething === undefined) {
-			return this.cachedValue;
+			//return this.cachedValue;
 		}
 		var max = 0;
 		var sum = 0;
@@ -276,10 +286,11 @@ function BonusTypeGroup(type, isStacking) {
 			if (bonus.vsSomething !== vsSomething) {
 				continue;
 			}
-			if (bonus.value > max) {
-				max = +bonus.value;
+			bonusValue = bonus.getValue();
+			if (bonusValue > max) {
+				max = +bonusValue;
 			}
-			sum += +bonus.value;
+			sum += +bonusValue;
 		}
 		var value;
 		if (this.isStacking) {
@@ -312,9 +323,13 @@ function BonusTypeGroup(type, isStacking) {
 
 
 
-function BonusProcessor() {
+function BonusProcessor(useCache) {
 	var _list = {};
 	var cachedValue;
+	var _useCache = true;
+	if (useCache != null) {
+		_useCache = useCache;
+	}
 	
 	return {
 		add : function(source, bonus) {
@@ -340,7 +355,7 @@ function BonusProcessor() {
 		},
 		
 		getValue : function() {
-			if (this.cachedValue !== undefined) {
+			if (this.cachedValue !== undefined && useCache) {
 				return this.cachedValue;
 			}
 			var value = 0;

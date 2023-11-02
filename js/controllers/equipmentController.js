@@ -25,6 +25,19 @@ var equipmentComponent = httpVue.component("equipment-component", {
 			weaponSelector : {
 				type : "",
 				typeList : []
+			},
+			
+			shieldSelector : {
+				type : "weapon",
+				typeList : ["weapon"],
+				weapon : {
+					type : "",
+					typeList : []
+				},
+				shield : {
+					armorBonus : "",
+				}
+				
 			}
 		}
 	},
@@ -37,16 +50,21 @@ var equipmentComponent = httpVue.component("equipment-component", {
 			
 			if (slot.name == "weapon") {
 				item = this.mapWeapon();
+			} else if (slot.name == "shield") {
+				item = this.mapOffhand();
 			} else if (slot.name == "armor") {
 				item = this.mapArmor();
 			} else {
 				item = this.mapItem();
 			}
 			
+			
 			if (slot.name == "leftRing") {
 				this.character.equipment.addLeftRing(item);
 			} else if (slot.name == "rightRing") {
 				this.character.equipment.addRightRing(item);
+			} else if (slot.name == "shield") {
+				item = this.character.equipment.addShield(item);
 			} else {
 				this.character.addItem(item);
 			}
@@ -60,29 +78,32 @@ var equipmentComponent = httpVue.component("equipment-component", {
 			let name = "";
 			let enhancement = 0;
 			let properties = [];
-			let special = undefined;
+			let special = "";
 			let masterwork = false;
+			let weaponProperties = [];
 			
 			this.itemSelector.propertiesPickerList.forEach(prop => {
 				if(prop.name == "NONE") {
 					return;
 				}
-				if (prop.name == "MASTERWORK") {
-					if (enhancement == 0) {
-						masterwork = true;
-					}
-					
-					return;
-				}
+				
 				if (prop.name == "ENHANCEMENT") {
 					masterwork = false;
 					enhancement = prop.option;
+					weaponProperties.push(WeaponProperties["ENHANCEMENT_"+enhancement]);
 					return;
 				}
 				
-				if (SpecialProperties[prop.name] != undefined) {
-					special = SpecialProperties[prop.name];
-				}					
+				else if (prop.name == "MASTERWORK" && enhancement == 0) {
+					masterwork = true;
+
+				}
+				
+				else {
+					special += prop.name + " "
+				}
+				
+				weaponProperties.push(WeaponProperties[prop.name]);			
 			});
 			
 			if (masterwork && enhancement == 0) {
@@ -94,12 +115,19 @@ var equipmentComponent = httpVue.component("equipment-component", {
 				name = prettifyString(this.weaponSelector.type);
 			}
 			
-			if (special != undefined) {
-				name = prettifyString(special.name) + " " + name;
+			if (special != "") {
+				name = prettifyString(special) + name;
 			}
 			
-			item = new Weapon(name, this.weaponSelector.type, enhancement, 0, properties, special);
+			item = new Weapon(name, this.weaponSelector.type, 0, weaponProperties);
 			return item;
+		},
+		
+		mapOffhand() {
+			if (this.shieldSelector.type == "weapon") {
+				return this.mapWeapon();
+			}
+			
 		},
 		
 		mapArmor() {
@@ -197,6 +225,10 @@ var equipmentComponent = httpVue.component("equipment-component", {
 				this.weaponSelector.type = slot.item.type;
 			}
 			
+			if (slot.type == "shield" && this.shieldSelector.type == "weapon") {
+				this.weaponSelector.type = slot.item.type;
+			}
+			
 			if (slot.type == "armor") {
 				this.armorSelector.type = slot.item.type;
 				this.armorSelector.category = slot.item.category.toLowerCase();
@@ -205,7 +237,26 @@ var equipmentComponent = httpVue.component("equipment-component", {
 				this.armorSelector.armorCheckPenalty = slot.item.armorCheckPenalty;
 			}
 			
-			if (slot.type == "weapon" || slot.type == "armor") {
+			if ( slot.type == "shield" || slot.type == "weapon") {
+				if(slot.item instanceof Weapon) {
+					slot.item.weaponProperties.forEach(p => {
+						if (p.name.includes("ENHANCEMENT")) {
+							this.itemSelector.propertiesPickerList.push({
+								name:"ENHANCEMENT",
+								option: p.value
+							});
+						} else {
+							this.itemSelector.propertiesPickerList.push({
+								name: p.name,
+								option: ""
+							});
+						}
+						
+					});
+				}
+			}
+			
+			else if ( slot.type == "armor") {
 				if (slot.item.enhancement > 0) {
 					this.itemSelector.propertiesPickerList.push({
 						name:"ENHANCEMENT",
@@ -232,10 +283,7 @@ var equipmentComponent = httpVue.component("equipment-component", {
 						return prop.bonus.categories.includes(p.name) || prop.bonus.type == p.name; 
 					});
 					
-					if (slot.item instanceof Weapon && prop.bonus.name == "MASTERWORK WEAPON") {
-						filtered = properties.filter(p => p.name == "MASTERWORK");
-					}
-					
+						
 					
 					if (filtered != undefined && filtered.length > 0) {
 						let option = "";
@@ -333,6 +381,8 @@ var equipmentComponent = httpVue.component("equipment-component", {
 			});
 		}
 		
+		this.shieldSelector.weapon.typeList = weaponTypes;
+		
 		let armorTypes = this.armorSelector.typeList;
 		for (let type in ArmorType.properties) {
 			let visibleName = type.replace("_", " ").toLowerCase();
@@ -398,7 +448,7 @@ var Slot = function(name,visibleName, type, item ) {
 
 var slotList =  [new Slot("armor"),
 			new Slot("weapon"), 
-			//new Slot("shield"),
+			new Slot("shield", "Offhand"),
 			new Slot("head"),
 			new Slot("headband"),
 			new Slot("eyes"),
@@ -441,7 +491,7 @@ var propertyCreator = function(propertyName, start, end, step) {
 var itemProperties = {
 	weapon : propertyCreator("NONE").concat(propertyCreator("MASTERWORK")).concat(propertyCreator("FURIOUS")).concat(propertyCreator("ENHANCEMENT", 1, 5)),
 	armor : propertyCreator("NONE").concat(propertyCreator("ENHANCEMENT", 1, 5)),
-	shield : propertyCreator("NONE").concat(propertyCreator("ENHANCEMENT", 1, 5)),
+	shield : propertyCreator("NONE").concat(propertyCreator("MASTERWORK")).concat(propertyCreator("FURIOUS")).concat(propertyCreator("ENHANCEMENT", 1, 5)),
 	other : propertyCreator("NONE").concat(propertyCreator("DEFLECTION", 1, 5)).concat(propertyCreator("RESISTANCE", 1, 5)).concat(propertyCreator("NATURAL_ARMOR", 1,5))
 			.concat(propertyCreator("STRENGTH", 2, 6, 2)).concat(propertyCreator("DEXTERITY", 2, 6, 2)).concat(propertyCreator("CONSTITUTION", 2, 6, 2))
 			.concat(propertyCreator("WISDOM", 2, 6, 2)).concat(propertyCreator("INTELLIGENCE", 2, 6, 2)).concat(propertyCreator("CHARISMA", 2, 6, 2))

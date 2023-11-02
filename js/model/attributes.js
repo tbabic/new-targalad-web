@@ -45,12 +45,7 @@ function Attribute(type, value) {
 	};
 	
 	addModelListener(this.type, (e, bonusEffect) => {
-		this.bonusProcessor.processBonusEffect(bonusEffect);
-		let bonusEffectList = new BonusEffectList("TEMP");
-		bonusEffectList.add(new Bonus([BonusCategory.TO_HIT], BonusType.UNTYPED, 1, "TEMP"));
-		bonusEffectList.activate();
-		bonusEffectList.deactivate();
-		
+		this.bonusProcessor.processBonusEffect(bonusEffect);		
 	});
 	
 }

@@ -15,6 +15,9 @@ function Attack(offense, extraAttackBonus) {
 	}
 	
 	this.getWeapon = function() {
+		if (this.offHand) {
+			return this.offense.character.equipment.shield
+		}
 		return this.offense.character.equipment.weapon;
 	};
 	
@@ -56,6 +59,10 @@ function Attack(offense, extraAttackBonus) {
 		}
 	}
 	
+	
+	
+	
+	
 	this.getToHit = function() {
 		return +this.toHitBonusProcessor.getValue() + +this.attrToHit.getModifier();
 	};
@@ -96,13 +103,30 @@ function Attack(offense, extraAttackBonus) {
 		this.toHit = this.getToHit();
 	});
 	
+	addModelListener("WEAPON_TO_HIT", (e, bonusEffect) => {
+		if (bonusEffect.source == this.getWeapon()) {
+			this.toHitBonusProcessor.processBonusEffect(bonusEffect);
+			this.toHit = this.getToHit();
+		}
+		
+	});
+	
 	addModelListener("DAMAGE", (e, bonusEffect) => {
 		this.dmgBonusProcessor.processBonusEffect(bonusEffect);
 		this.dmg = this.getDmg();
 	});
 	
+	addModelListener("WEAPON_DAMAGE", (e, bonusEffect) => {
+		if (bonusEffect.source == this.getWeapon()) {
+			this.dmgBonusProcessor.processBonusEffect(bonusEffect);
+			this.dmg = this.getDmg();
+		}
+	});
+	
 	this.dmg = this.getDmg();
 	this.toHit = this.getToHit();
+	
+	this.getWeapon().reactivate();
 }
 
 function ExtraAttackBonus(source, weaponSlot, toHitBonus, dmgBonus, attrToHit, attrDmg) {
@@ -257,6 +281,19 @@ function Offense(character) {
 		}
 	});
 	
+	addModelListener("WEAPON_TO_HIT", (e, bonusEffect) => {
+		if (this.character.equipment.weapon == bonusEffect.source) {
+			this.cmbWeaponBonusProcessor.processBonusEffect(bonusEffect);
+		}
+		
+	});
+	
+	addModelListener("WEAPON_DAMAGE", (e, bonusEffect) => {
+		if (this.character.equipment.weapon == bonusEffect.source) {
+			this.cmbWeaponBonusProcessor.processBonusEffect(bonusEffect);
+		}
+	});
+	
 	addModelListener("CMB", (e, bonusEffect) => {
 		this.cmbWeaponBonusProcessor.processBonusEffect(bonusEffect);
 		this.cmbBonusProcessor.processBonusEffect(bonusEffect);
@@ -265,6 +302,8 @@ function Offense(character) {
 	addModelListener("DAMAGE", (e, bonusEffect) => {
 		this.dmgBonusProcessor.processBonusEffect(bonusEffect);
 	});
+	
+	
 	
 	addModelListener("EXTRA_ATTACK", (e, extraAttackBonus) => {
 		this.addAttack(extraAttackBonus);

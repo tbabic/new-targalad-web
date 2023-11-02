@@ -24,27 +24,23 @@
 				</div>
 				<div class="modal-body">
 				
-					<div  class="row property-picker">
-						<div class="col-4">
-							Properties:
-						</div>
-						
-						<div class="col">
-							<div v-for="propertyPicker in itemSelector.propertiesPickerList" class="row selector">
-								<div class="col">
-									<select v-model="propertyPicker.name" v-on:change="refreshSelector">
-										<option v-for="p in selectorActiveProperties">{{ p.name }}</option>
-									</select>
-									<select v-if="hasOptions(propertyPicker.name)"  v-model="propertyPicker.option">
-										<option v-for="o in selectedPropertyOptions(propertyPicker.name)" v-bind:value="o.value">{{ o.name }}</option>
-									</select>
-								</div>
+				
+					<div v-if="itemSelector.slot.name == 'shield'" class="selector">
+						<div class="row">
+							<div class="col-4">
+								Offhand item:
+							</div>
+							<div class="col">
+								<select  v-model="shieldSelector.type">
+									<option v-for="shieldType in shieldSelector.typeList" v-bind:value="shieldSelector.type">{{ shieldType }}</option>
+								</select>
 							</div>
 						</div>
+						
 					</div>
 		
 						
-					<div v-if="itemSelector.slot.name == 'weapon'" class="row selector">
+					<div v-if="itemSelector.slot.name == 'weapon' || (itemSelector.slot.name == 'shield' && shieldSelector.type == 'weapon')" class="row selector">
 						<div class="col-4">
 							Type:
 						</div>
@@ -54,6 +50,8 @@
 							</select>
 						</div>
 					</div>
+					
+					
 					
 					<div v-if="itemSelector.slot.name == 'armor'">
 						<div class="row selector">
@@ -106,6 +104,24 @@
 						
 					</div>
 
+					<div  class="row property-picker">
+						<div class="col-4">
+							Properties:
+						</div>
+						
+						<div class="col">
+							<div v-for="propertyPicker in itemSelector.propertiesPickerList" class="row selector">
+								<div class="col">
+									<select v-model="propertyPicker.name" v-on:change="refreshSelector">
+										<option v-for="p in selectorActiveProperties">{{ p.name }}</option>
+									</select>
+									<select v-if="hasOptions(propertyPicker.name)"  v-model="propertyPicker.option">
+										<option v-for="o in selectedPropertyOptions(propertyPicker.name)" v-bind:value="o.value">{{ o.name }}</option>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-primary" data-dismiss="modal" v-on:click="equipItem">Confirm</button>

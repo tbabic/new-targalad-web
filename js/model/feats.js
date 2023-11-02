@@ -243,7 +243,7 @@ var FeatFactory = {
 			.actionType(ActionType.FREE)
 			.activate(function() {
 				if (this.fist == undefined) {
-					this.fist = new Weapon('Fist', WeaponType.UNARMED, +0, 0, undefined, undefined)
+					this.fist = new Weapon('Fist', WeaponType.UNARMED, +0)
 				}
 				
 				if (owner.equipment.weapon.type != WeaponType.UNARMED) {

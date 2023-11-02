@@ -1,7 +1,7 @@
 function Equipment(character) {
 	this.character = character;
 	this.armor = undefined;
-	this.weapon = new Weapon("hands", WeaponType.UNARMED, 0, 0);
+	this.weapon = new Weapon("hands", WeaponType.UNARMED, 0);
 	this.shield = undefined;
 	
 	this.head = undefined;
@@ -377,74 +377,117 @@ var WeaponType = {
 
 
 
-function Weapon(name, type, enhancement, weight, properties, special) {
-	Item.call(this, name, "weapon", properties, weight);
+function Weapon(name, type, weight, weaponProperties, characterProperties) {
+	Item.call(this, name, "weapon", characterProperties, weight);
 	this.type = type;
 	this.category = WeaponType.properties[type].category;
-	
-	this.weaponBonus = new BonusEffectList(this);
-	
-	if (enhancement == "MASTERWORK") {
-		this.weaponBonus.add(new Bonus([BonusCategory.TO_HIT], BonusType.ENHANCEMENT, 1, "MASTERWORK WEAPON"));
-	} else {
-		this.weaponBonus.add(new Bonus([BonusCategory.TO_HIT, BonusCategory.DAMAGE], BonusType.ENHANCEMENT, +enhancement, "Weapon bonus"));
-	}
-	
-	this.enhancement = enhancement;
+		
 	this.dmgDie = WeaponType.properties[type].dmgDie;
-	this.special = special;
-	
-	Item.call(this, name, "weapon", properties, weight);
-	if (enhancement != 0) {
-		this.addProperty(this.weaponBonus);
+	this.weaponProperties = [];
+	if (weaponProperties != null) {
+		this.weaponProperties = [weaponProperties].flat();
 	}
 	
-	
+	Item.call(this, name, "weapon", characterProperties, weight);
 	
 	this.equip = function(owner) {
 		triggerModelChange("WEAPON", this, "ADDED");
-		this.properties.activate(this);
-		this.weaponBonus.activate(this);
-		if (this.special != undefined) {
-			this.special.onEquip(this, owner);
-		}
-		
+		this.weaponProperties.forEach(p => p.activate(this, owner));
+
 	};
 	
 	this.unequip = function(owner) {
 		triggerModelChange("WEAPON", this, "REMOVED");
-		this.weaponBonus.deactivate();
-		this.properties.deactivate();
-		if (this.special != undefined) {
-			this.special.onUnequip(this, owner);
-		}
-		
+		this.weaponProperties.forEach(p => p.deactivate());
 	};
+	
+	this.reactivate = function(owner) {
+		this.weaponProperties.forEach(p => p.deactivate());
+		this.weaponProperties.forEach(p => p.activate(this, owner));
+	}
+		
+		
 
 };
 
-var SpecialProperties = {
-	FURIOUS : {
-	    name : "FURIOUS",
-		onEquip : function(weapon, owner) {
-			this.bloodrage = owner.getAbilityByName("Bloodrage");
-			bonusValue = 2; 
-			this.bonus = new Bonus([BonusCategory.TO_HIT, BonusCategory.DAMAGE],  "ENHANCEMENT STACKING", bonusValue, 'Furious');
-			if (this.bloodrage.active) {
-				this.bloodrage.properties.addAndActivate(this.bonus);
-			}
-			else {
-				this.bloodrage.properties.add(this.bonus);
-			}
+function WeaponProperty(name, evaluate, params) {
+	this.name = name;
+	this.evaluate = evaluate;
+	this.params = params;
+	
+	this.getBonus = function(){
+		this.evaluate(params);
+	}
+}
+
+function WeaponEnhancement(value) {
+	this.name = "ENHANCEMENT_" + value;
+	this.value = +value;
+	
+	this.activate = function(weapon, owner) {
+		this.bonusEffect = new BonusEffect(weapon, new Bonus(["WEAPON_TO_HIT", "WEAPON_DAMAGE"], BonusType.ENHANCEMENT, this.value, 'Weapon Enhancement'));
+		this.bonusEffect.activate();
+	}
+	
+	this.deactivate = function() {
+		this.bonusEffect.deactivate();
+	}
+	
+	
+}
+
+var WeaponProperties = {
+	
+	MASTERWORK : {
+		name : "MASTERWORK",
+		activate : function(weapon, owner) {
+			this.bonusEffect = new BonusEffect(weapon, new Bonus(["WEAPON_TO_HIT"], BonusType.ENHANCEMENT, 1, 'Masterwork Weapon'));
+			this.bonusEffect.activate();
 		},
 		
-		onUnequip : function(weapon, owner) {
-			if (this.bloodrage.properties != undefined) {
-				this.bloodrage.properties.removeAndDeactivate(this.bonus);
+		deactivate : function() {
+			this.bonusEffect.deactivate();
+		}
+	},
+	
+	FURIOUS : {
+		name : "FURIOUS",
+		activate : function(weapon, owner) {
+			let bloodrage = owner.getAbilityByName("Bloodrage");
+			let bonusValue = 2;
+			this.bonusEffect = new BonusEffect(weapon, new Bonus(["WEAPON_TO_HIT", "WEAPON_DAMAGE"],"ENHANCEMENT STACKING", bonusValue, 'Furious'));
+			this.eventId = "ABILITY"+bloodrage.id;
+			addModelListener(this.eventId, "ACTIVATED", (e) => {
+				console.log("furious activated");
+				this.bonusEffect.activate();
+			});
+			
+			addModelListener(this.eventId, "DEACTIVATED", (e) => {
+				console.log("furious deactivated");
+				this.bonusEffect.deactivate();
+			});
+			
+			if (bloodrage.active) {
+				this.bonusEffect.activate();
 			}
-		},
 
-	}
+		},
+		
+		deactivate : function() {
+			this.bonusEffect.deactivate();
+			
+			removeModelListener(this.eventId, "ACTIVATED");
+			removeModelListener(this.eventId, "DEACTIVATED");
+		}
+	},
+	
+	ENHANCEMENT_1 : new WeaponEnhancement(1),
+	ENHANCEMENT_2 : new WeaponEnhancement(2),
+	ENHANCEMENT_3 : new WeaponEnhancement(3),
+	ENHANCEMENT_4 : new WeaponEnhancement(4),
+	ENHANCEMENT_5 : new WeaponEnhancement(5),
+	
+	
 }
 
 
@@ -474,12 +517,12 @@ var copyItemToStore = function(item) {
 	
 	if (item instanceof Weapon) {
 		itemStore.type = item.type;
-		itemStore.enhancement = item.enhancement;
 		itemStore.category = item.category;
-		if (item.special != undefined) {
-			itemStore.special = item.special.name;
-		}
 		
+		if (item.weaponProperties != null)
+		{
+			itemStore.weaponProperties = item.weaponProperties.map(p => p.name);
+		}
 	}
 	
 	if (item instanceof Armor) {
@@ -503,11 +546,17 @@ copyItemFromStore = function(itemStore) {
 	});
 	
 	if (itemStore.slot == "weapon") {
-		let special = undefined;
-		if (itemStore.special != undefined) {
-			special = SpecialProperties[itemStore.special];
+		let weaponProperties = null;
+		if (itemStore.weaponProperties != undefined) {
+			
+			weaponProperties = itemStore.weaponProperties.map(p => WeaponProperties[p]);
 		}
-		return new Weapon(itemStore.name, itemStore.type, itemStore.enhancement, 0, properties, special)
+		
+		if (itemStore.enhancement != null && itemStore.enhancement != 0) {
+			weaponProperties.push(WeaponProperties["ENHANCMENT"+itemStore.enhancement]);
+		}
+		
+		return new Weapon(itemStore.name, itemStore.type, 0, weaponProperties, properties)
 	}
 	if (itemStore.slot == "armor") {
 		return new Armor(itemStore.name, itemStore.type, itemStore.category, itemStore.armorBonus, itemStore.maxDexBonus, 
@@ -564,7 +613,10 @@ var loadEquipmentFromStorage = function(character) {
 			character.equipment.addLeftRing(item);
 		} else if (slot == "leftRing") {
 			character.equipment.addRightRing(item);
-		} else {
+		} else if (slot == "shield") {
+			character.equipment.addShield(item);
+		}
+		else {
 			character.addItem(item);
 		}
 	}
