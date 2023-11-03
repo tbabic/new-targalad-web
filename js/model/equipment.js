@@ -577,12 +577,15 @@ copyItemFromStore = function(itemStore) {
 		return undefined;
 	}
 	
-	let properties = itemStore.properties.map(p => {
-		return new Bonus(p.categories, p.type, p.value, p.name)
-	});
+	let properties = undefined;
+	if (itemStore.properties != null) {
+		properties = itemStore.properties.map(p => {
+			return new Bonus(p.categories, p.type, p.value, p.name)
+		});
+	}
 	
 	if (itemStore.slot == "weapon") {
-		let weaponProperties = null;
+		let weaponProperties = [];
 		if (itemStore.weaponProperties != undefined) {
 			
 			weaponProperties = itemStore.weaponProperties.map(p => WeaponProperties[p]);
