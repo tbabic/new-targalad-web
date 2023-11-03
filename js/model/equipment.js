@@ -422,6 +422,20 @@ function WeaponProperty(name, evaluate, params) {
 	}
 }
 
+function WeaponEnergy(energyType) {
+	this.energyType = energyType;
+	
+	this.activate = function(weapon, owner) {
+		this.weapon = weapon;
+		triggerModelChange("WEAPON_DAMAGE_DICE",[weapon, new DiceInfo(this.name, this.energyType, "d6")], "ADDED");
+	},
+	
+	this.deactivate = function() {
+		this.bonusEffect.deactivate();
+		triggerModelChange("WEAPON_DAMAGE_DICE",[this.weapon, this.name], "REMOVED");
+	}
+}
+
 function WeaponEnhancement(value) {
 	this.name = "ENHANCEMENT_" + value;
 	this.value = +value;
@@ -497,6 +511,11 @@ var WeaponProperties = {
 			removeModelListener(this.eventId, "DEACTIVATED");
 		}
 	},
+	
+	CORROSIVE : new WeaponEnergy("ACID"),
+	FLAMING : new WeaponEnergy("FIRE"),
+	FROST : new WeaponEnergy("COLD"),
+	SHOCK : new WeaponEnergy("LIGHTNING"),
 	
 	ENHANCEMENT_1 : new WeaponEnhancement(1),
 	ENHANCEMENT_2 : new WeaponEnhancement(2),

@@ -397,7 +397,7 @@ function createOberon(level) {
 	
 	
 	oberon.addItem(new Armor('Chainshirt +1', ArmorType.CHAINSHIRT, undefined, 4, 4, 0, 1, 20, 20));
-	oberon.addItem(new Weapon('Composite Longbow +1', WeaponType.LONGBOW, 4, WeaponProperties.ENHANCEMENT_1));
+	oberon.addItem(new Weapon('Flaming Composite Longbow +1', WeaponType.LONGBOW, 4, [WeaponProperties.ENHANCEMENT_1, WeaponProperties.FLAMING]));
 	oberon.addItem(new Item('Ring of Deflection +2', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 1, "Ring of Deflection +1"), 0));
 	oberon.addItem(new Item('Amulet of Natural Armor +0', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 1, "Amulet of Natural Armor +0"), 0));
 	

@@ -419,6 +419,18 @@ button.dropdown-item:hover {
 	color: green;
 }
 
+.damage-type-FIRE {
+	color: red;
+}
+
+.damage-type-COLD {
+	color: blue;
+}
+
+.damage-type-LIGHTNING {
+	color: purple;
+}
+
 @media (min-width: 576px) {
 	.animal-companion iframe {
     	left: calc((540px - 100vw)/2);
