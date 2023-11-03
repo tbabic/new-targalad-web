@@ -55,7 +55,7 @@ var Utils = {
 		}
 		return destination;
 		
-	}
+	},
 	
 };
 

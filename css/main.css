@@ -405,6 +405,20 @@ button.dropdown-item:hover {
 	
 }
 
+.damage-type-PHYSICAL {
+	
+}
+
+.damage-type-PRECISION {
+	text-decoration: underline;
+	font-style: italic;
+}
+
+
+.damage-type-ACID {
+	color: green;
+}
+
 @media (min-width: 576px) {
 	.animal-companion iframe {
     	left: calc((540px - 100vw)/2);

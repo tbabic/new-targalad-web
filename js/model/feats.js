@@ -494,19 +494,39 @@ var FeatFactory = {
 			.name("Outflank")
 			.actionType(ActionType.FREE)
 			.activate(function() {
+				this.preciseStrike = null;
 				let flank = this.owner.getAbilityByName("Flank");
 				if (flank != undefined && flank.active) {
 					this.bonusEffectList = new BonusEffectList(this);
 					this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, 2, "Outflank"));
 					this.bonusEffectList.activate()
+					
+					this.preciseStrike = this.owner.getAbilityByName("Precise Strike");
+					if(this.preciseStrike != null) {
+						triggerModelChange("DAMAGE_DICE",new DiceInfo(this.name, "PRECISION", "d6"), "ADDED");
+					}
+					
 				}
+				
+				
 				
 			})
 			.deactivate(function() {
 				if (this.bonusEffectList !== undefined) {
 					this.bonusEffectList.deactivate();
 				}
+				if(this.preciseStrike != null) {
+					triggerModelChange("DAMAGE_DICE",this.name, "REMOVED");
+				}
 			})
+			.owner(owner)
+			.get();
+	},
+	
+	preciseStrike : function(owner) {
+		return getAbilityBuilder()
+			.name("Precise Strike")
+			.actionType(ActionType.PASSIVE)
 			.owner(owner)
 			.get();
 	},
@@ -526,38 +546,21 @@ var FeatFactory = {
 			.actionType(ActionType.FREE)
 			.activate(function() {
 
+				let weapon = owner.equipment.weapon;
 				
-				this.bonusHit = new BonusEffect(this.name ,new Bonus(BonusCategory.TO_HIT, "ENHANCEMENT_INCREASE", 2, this.name));
-				this.bonusHit.isActive = true;
-				this.bonusDmg = new BonusEffect(this.name ,new Bonus(BonusCategory.DAMAGE, "ENHANCEMENT_INCREASE", 2, this.name));
-				this.bonusDmg.isActive = true;
+				this.bane = WeaponProperties.BANE;
 				
-				for (index in owner.offense.attacks) {
-					let attack = owner.offense.attacks[index];
-					if (attack.offHand) {
-						continue;
-					}
-					attack.toHitBonusProcessor.processBonusEffect(this.bonusHit);
-					attack.toHit = attack.getToHit();
-					attack.dmgBonusProcessor.processBonusEffect(this.bonusDmg);
-					attack.dmg = attack.getDmg();
-				}
+				weapon.weaponProperties.push(this.bane);
+				this.bane.activate(weapon, this.owner);
 				
-				
-				
-				owner.offense.attackOfOpportunity.toHitBonusProcessor.processBonusEffect(this.bonusHit);
-				owner.offense.attackOfOpportunity.toHit = owner.offense.attackOfOpportunity.getToHit();
-				owner.offense.attackOfOpportunity.dmgBonusProcessor.processBonusEffect(this.bonusDmg);
-				owner.offense.attackOfOpportunity.dmg = owner.offense.attackOfOpportunity.getDmg();
 
 			})
 			.deactivate(function() {
-				if (this.bonusHit !== undefined) {
-					this.bonusHit.deactivate();
-				}
-				
-				if (this.bonusDmg !== undefined) {
-					this.bonusDmg.deactivate();
+				let weapon = owner.equipment.weapon;
+				this.bane.deactivate();
+				let found  = weapon.weaponProperties.findIndex(this.bane);
+				if (found != -1) {
+					weapon.weaponProperties.splice(found,1);
 				}
 				
 			
@@ -566,19 +569,14 @@ var FeatFactory = {
 			.get();
 	},
 	
+	
+	
 	deliquescentGloves : function(owner) {
 		return getAbilityBuilder()
 			.name("Deliquescent Gloves")
-			.actionType(ActionType.FREE)
+			.actionType(ActionType.PASSIVE)
 			.activate(function() {
-
-				
-				
-
-			})
-			.deactivate(function() {
-				
-			
+				triggerModelChange("DAMAGE_DICE",new DiceInfo(this.name, "ACID", "d6"), "ADDED");
 			})
 			.owner(owner)
 			.get();

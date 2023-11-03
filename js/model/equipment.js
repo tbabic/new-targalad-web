@@ -393,12 +393,14 @@ function Weapon(name, type, weight, weaponProperties, characterProperties) {
 	this.equip = function(owner) {
 		triggerModelChange("WEAPON", this, "ADDED");
 		this.weaponProperties.forEach(p => p.activate(this, owner));
+		triggerModelChange("WEAPON_DAMAGE_DICE", [this, new DiceInfo("WEAPON", "PHYSICAL", this.dmgDie)], "ADDED");
 
 	};
 	
 	this.unequip = function(owner) {
 		triggerModelChange("WEAPON", this, "REMOVED");
 		this.weaponProperties.forEach(p => p.deactivate());
+		triggerModelChange("WEAPON_DAMAGE_DICE",[this, "WEAPON"], "REMOVED");
 	};
 	
 	this.reactivate = function(owner) {
@@ -450,12 +452,27 @@ var WeaponProperties = {
 		}
 	},
 	
+	BANE : {
+		name : "BANE",
+		activate : function(weapon, owner) {
+			this.bonusEffect = new BonusEffect(weapon, new Bonus(["WEAPON_TO_HIT", "WEAPON_DAMAGE"], "ENHANCEMENT_INCREASE", 2, 'Bane Weapon'));
+			this.bonusEffect.activate();
+			this.weapon = weapon;
+			triggerModelChange("WEAPON_DAMAGE_DICE",[weapon, new DiceInfo("BANE", "PHYSICAL", "2d6")], "ADDED");
+		},
+		
+		deactivate : function() {
+			this.bonusEffect.deactivate();
+			triggerModelChange("WEAPON_DAMAGE_DICE",[this.weapon, "BANE"], "REMOVED");
+		}
+	},
+	
 	FURIOUS : {
 		name : "FURIOUS",
 		activate : function(weapon, owner) {
 			let bloodrage = owner.getAbilityByName("Bloodrage");
 			let bonusValue = 2;
-			this.bonusEffect = new BonusEffect(weapon, new Bonus(["WEAPON_TO_HIT", "WEAPON_DAMAGE"],"ENHANCEMENT STACKING", bonusValue, 'Furious'));
+			this.bonusEffect = new BonusEffect(weapon, new Bonus(["WEAPON_TO_HIT", "WEAPON_DAMAGE"],"ENHANCEMENT_STACKING", bonusValue, 'Furious'));
 			this.eventId = "ABILITY"+bloodrage.id;
 			addModelListener(this.eventId, "ACTIVATED", (e) => {
 				console.log("furious activated");
@@ -485,9 +502,7 @@ var WeaponProperties = {
 	ENHANCEMENT_2 : new WeaponEnhancement(2),
 	ENHANCEMENT_3 : new WeaponEnhancement(3),
 	ENHANCEMENT_4 : new WeaponEnhancement(4),
-	ENHANCEMENT_5 : new WeaponEnhancement(5),
-	
-	
+	ENHANCEMENT_5 : new WeaponEnhancement(5)
 }
 
 

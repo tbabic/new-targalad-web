@@ -104,6 +104,7 @@ function createAnimalCompanionGriffin(level) {
 	pfdChar.addAbility(FeatFactory.powerAttack(pfdChar));
 	
 	pfdChar.addAbility(FeatFactory.outflank(pfdChar));
+	pfdChar.addAbility(FeatFactory.preciseStrike(pfdChar));
 	pfdChar.addAbility(HunterAbilities.animalFocus(pfdChar));
 
 	loadEquipmentFromStorage(pfdChar);

@@ -10,6 +10,9 @@ function Attack(offense, extraAttackBonus) {
 	this.dmg = 0;
 	this.toHit = 0;
 	this.offHand = false;
+	
+	
+	
 	if (this.weaponSlot == "offHand") {
 		this.offHand = true;
 	}
@@ -123,10 +126,37 @@ function Attack(offense, extraAttackBonus) {
 		}
 	});
 	
+	addModelListener("DAMAGE_DICE", "ADDED", (e, diceInfo) => {
+		this.diceManager.addDice(diceInfo);
+	});
+	
+	addModelListener("WEAPON_DAMAGE_DICE", "ADDED", (e, weapon, diceInfo) => {
+		if (this.getWeapon() == weapon) {
+			this.diceManager.addDice(diceInfo);
+		}
+		
+	});
+	
+	addModelListener("DAMAGE_DICE", "REMOVED", (e, source) => {
+		this.diceManager.removeDice(source);
+	});
+	
+	addModelListener("WEAPON_DAMAGE_DICE", "REMOVED", (e, weapon, source) => {
+		if (this.getWeapon() == weapon) {
+			this.diceManager.removeDice(source);
+		}
+	});
+	
 	this.dmg = this.getDmg();
 	this.toHit = this.getToHit();
 	
+	
+	this.diceManager = new DiceManager();
+	this.diceManager.addDice(new DiceInfo("WEAPON", "PHYSICAL", this.getWeapon().dmgDie));
+	
 	this.getWeapon().reactivate();
+	
+	
 }
 
 function ExtraAttackBonus(source, weaponSlot, toHitBonus, dmgBonus, attrToHit, attrDmg) {

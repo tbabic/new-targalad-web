@@ -487,8 +487,11 @@ function createAzax(level) {
 		azax.addAbility(FeatFactory.outflank(azax));
 	}
 	
-	azax.addAbility(FeatFactory.bane(azax));
 	
+	azax.addAbility(FeatFactory.preciseStrike(azax));
+	
+	azax.addAbility(FeatFactory.bane(azax));
+	azax.addAbility(FeatFactory.deliquescentGloves(azax));
 	if (azax.level >= 7) {
 		//azax.addAbility(FeatFactory.twoWeaponRend(azax));
 	}
