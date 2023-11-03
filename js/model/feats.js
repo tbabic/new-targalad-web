@@ -244,6 +244,22 @@ var FeatFactory = {
 			.activate(function() {
 				if (this.fist == undefined) {
 					this.fist = new Weapon('Fist', WeaponType.UNARMED, +0)
+					if (this.owner.level <= 5) {
+						this.fist.dmgDie = "d6";
+					}
+					else if (this.owner.level <= 9) {
+						this.fist.dmgDie = "d8";
+					}
+					else if (this.owner.level <= 13) {
+						this.fist.dmgDie = "d10";
+					}
+					else if (this.owner.level <= 17) {
+						this.fist.dmgDie = "2d6";
+					}
+					else {
+						this.fist.dmgDie = "2d8";
+					}
+					
 				}
 				
 				if (owner.equipment.weapon.type != WeaponType.UNARMED) {
