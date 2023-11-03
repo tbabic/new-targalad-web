@@ -472,11 +472,11 @@ function createAzax(level) {
 	
 	
 	azax.addItem(new Armor('Studded Leather +1', ArmorType.STUDDED_LEATHER, undefined, 3, 4, 0, 1, 20, 20));
-	azax.addItem(new Weapon('Masterwork Scimitar', WeaponType.SCIMITAR, 4, WeaponProperties.MASTERWORK));
+	azax.addItem(new Weapon('Masterwork Scimitar', WeaponType.SCIMITAR, 4, WeaponProperties.ENHANCEMENT_1));
 	azax.equipment.addSecondWeapon(new Weapon('Masterwork Kukri', WeaponType.KUKRI, 4, WeaponProperties.MASTERWORK));
 	azax.addItem(new Item('Ring of Deflection +1', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 1, "Ring of Deflection +1"), 0));
 	//azax.addItem(new Item('Amulet of Natural Armor +0', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 1, "Amulet of Natural Armor +0"), 0));
-	
+	azax.addItem(new Item('Belt of Giant Strength +2', 'belt', new Bonus('STRENGTH', BonusType.ENHANCEMENT, 2, "Belt of Giant Strength +2"), 0));
 	loadEquipmentFromStorage(azax);
 	
 	if (azax.level >= 1) {
