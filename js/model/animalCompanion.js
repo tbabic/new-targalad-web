@@ -60,6 +60,8 @@ function createAnimalCompanionGriffin(level) {
 	let pfdChar = new Character('animal-companion', attributes, +hd, 'equipment');
 	pfdChar.masterLevel = level;
 	
+	pfdChar.addItem(new Weapon('Natural attack', WeaponType.NATURAL_ATTACK, 0));
+	
 	let companionAbility =  getAbilityBuilder()
 			.name("animal-companion")
 			.actionType(ActionType.PASSIVE)
@@ -118,7 +120,7 @@ function createAnimalCompanionGriffin(level) {
 }
 
 var AnimalCompanionAbilities = {
-		
+			
 	progressionBonuses : function(owner) {
 			return getAbilityBuilder()
 				.name("animal-progression")

@@ -465,7 +465,7 @@ function createOberon(level) {
 
 function createAzax(level) {
 	if (level == undefined) {
-		level = 7;
+		level = 8;
 	}
 	var attributes = new Attributes(18, 16, 18, 13, 14, 11);
 	var azax = new Character('hunter', attributes, +level, 'equipment');

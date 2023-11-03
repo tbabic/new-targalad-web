@@ -300,6 +300,7 @@ var WeaponCategory = {
 var WeaponType = {
 	TOUCH : "TOUCH",
 	UNARMED : "UNARMED",
+	NATURAL_ATTACK : "NATURAL_ATTACK",
 	
 	DAGGER : "DAGGER",
 	LIGHT_MACE: "LIGHT_MACE",
@@ -338,6 +339,7 @@ var WeaponType = {
 	properties : {
 		TOUCH : {category : WeaponCategory.MELEE_LIGHT, dmgDie : "", threat : 20, multiplier : 2},
 		UNARMED : {category : WeaponCategory.MELEE_LIGHT, dmgDie : "d3", threat : 20, multiplier : 2},
+		NATURAL_ATTACK : {category : WeaponCategory.MELEE_LIGHT, dmgDie : "d6", threat : 20, multiplier : 2},
 		
 		DAGGER : {category : WeaponCategory.MELEE_LIGHT, dmgDie : "d4", threat : 19, multiplier : 2},
 		LIGHT_MACE : {category : WeaponCategory.MELEE_LIGHT, dmgDie : "d6", threat : 20, multiplier : 2},
