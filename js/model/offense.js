@@ -154,7 +154,7 @@ function Attack(offense, extraAttackBonus) {
 	this.diceManager = new DiceManager();
 	this.diceManager.addDice(new DiceInfo("WEAPON", "PHYSICAL", this.getWeapon().dmgDie));
 	
-	this.getWeapon().reactivate();
+	this.getWeapon().reactivate(this.offense.character);
 	
 	
 }
