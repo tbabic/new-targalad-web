@@ -249,7 +249,7 @@ function createSpot(level) {
 	vindred.addItem(new Item('Ring of Deflection +1', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 1, "Ring of Deflection +1"), 0));
 	
 	
-	
+	vindred.addItem(new Item('Dusty rose prism', 'inventory', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.INSIGHT, 1, "Dusty rose prism"), 0));
 	loadEquipmentFromStorage(vindred);
 	
 	if (vindred.level >= 3) {
