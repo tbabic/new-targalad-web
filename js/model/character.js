@@ -464,18 +464,12 @@ function createOberon(level) {
 }
 
 function createAzax(level) {
-	if (level == undefined) {
-		level = 8;
-	}
-	var strength = 18;
-	if (level >= 9) {
-		strength = 19;
-	}
-	var attributes = new Attributes(strength, 16, 18, 13, 14, 11);
+
+	var attributes = new Attributes(18, 16, 18, 13, 14, 11);
 	var azax = new Character('hunter', attributes, +level, 'equipment');
 	
 	
-	azax.addItem(new Armor('Studded Leather +1', ArmorType.STUDDED_LEATHER, undefined, 3, 4, 0, 1, 20, 20));
+	azax.addItem(new Armor('Studded Leather +1', ArmorType.STUDDED_LEATHER, undefined, 3+1, 5, 0, 0, 20, 20));
 	azax.addItem(new Weapon('Masterwork Scimitar', WeaponType.SCIMITAR, 4, WeaponProperties.ENHANCEMENT_1));
 	azax.equipment.addSecondWeapon(new Weapon('Masterwork Kukri', WeaponType.KUKRI, 4, WeaponProperties.MASTERWORK));
 	azax.addItem(new Item('Ring of Deflection +1', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 1, "Ring of Deflection +1"), 0));

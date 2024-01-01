@@ -102,6 +102,10 @@ function createAnimalCompanionGriffin(level) {
 		pfdChar.addAbility(advancementAbility);
 	}
 	
+	if (hd >= 8) {
+		attributes.strength.value++;
+	}
+	
 	
 	pfdChar.addAbility(FeatFactory.powerAttack(pfdChar));
 	
