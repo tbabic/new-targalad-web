@@ -119,7 +119,7 @@ var HunterAbilities = {
 						activated ++;
 					}
 				})
-				if (owner.masterLevel >= 8 || (owner.masterLevel == null && this.owner.level >= 8)) {
+				if (owner.masterLevel >= 8 || (owner.masterLevel == null && owner.level >= 8)) {
 					return activated >= 1 && activated <= 2
 				}
 				

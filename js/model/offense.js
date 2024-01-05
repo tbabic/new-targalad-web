@@ -72,7 +72,9 @@ function Attack(offense, extraAttackBonus) {
 	
 	this.getDmg = function() {
 		let dmgModifier = this.attrDmg.getModifier();
-		if (this.attrDmg.type == "STRENGTH" && this.getWeapon().category == WeaponCategory.MELEE_TWO_HANDED) {
+		if (this.attrDmg.type == "STRENGTH" && 
+			(this.getWeapon().category == WeaponCategory.MELEE_TWO_HANDED || 
+				(this.offense.character.fightingStyle == "TWO-HANDED" && WeaponCategory.MELEE_ONE_HANDED ) )) {
 			dmgModifier = Math.floor(1.5*dmgModifier);
 		}
 		if (this.offHand) {
@@ -119,6 +121,22 @@ function Attack(offense, extraAttackBonus) {
 		this.dmg = this.getDmg();
 	});
 	
+	addModelListener("DAMAGE_MAINHAND", (e, bonusEffect) => {
+		if(this.offHand) {
+			return;
+		}
+		this.dmgBonusProcessor.processBonusEffect(bonusEffect);
+		this.dmg = this.getDmg();
+	});
+	
+	addModelListener("DAMAGE_OFFHAND", (e, bonusEffect) => {
+		if(!this.offHand) {
+			return;
+		}
+		this.dmgBonusProcessor.processBonusEffect(bonusEffect);
+		this.dmg = this.getDmg();
+	});
+	
 	addModelListener("WEAPON_DAMAGE", (e, bonusEffect) => {
 		if (bonusEffect.source == this.getWeapon()) {
 			this.dmgBonusProcessor.processBonusEffect(bonusEffect);
@@ -154,6 +172,11 @@ function Attack(offense, extraAttackBonus) {
 	this.diceManager = new DiceManager();
 	this.diceManager.addDice(new DiceInfo("WEAPON", "PHYSICAL", this.getWeapon().dmgDie));
 	
+	for (let i = 0; i < this.offense.diceManager.dice.length; i++) {
+		let dice = this.offense.diceManager.dice[i].copy();
+		this.diceManager.addDice(dice);
+	}
+	
 	this.getWeapon().reactivate(this.offense.character);
 	
 	
@@ -188,7 +211,7 @@ function Offense(character) {
 	this.offHand = undefined;
 	this.attackOfOpportunity = undefined;
 	this.twoWeaponFighting = false;
-	
+	this.diceManager = new DiceManager();
 	
 	if (character.equipment.shield instanceof Weapon) {
 		this.offhand = character.equipment.shield;
@@ -364,6 +387,18 @@ function Offense(character) {
 			babPenalty += 5;
 		}
 	});
+	
+	
+	
+	
+	addModelListener("DAMAGE_DICE", "ADDED", (e, diceInfo) => {
+		this.diceManager.addDice(diceInfo);
+	});
+	
+	addModelListener("DAMAGE_DICE", "REMOVED", (e, source) => {
+		this.diceManager.removeDice(source);
+	});
+	
 	
 }
 

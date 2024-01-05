@@ -166,34 +166,69 @@ var FeatFactory = {
 			.name("Power Attack")
 			.actionType(ActionType.FREE)
 			.activate(function() {
-				var modifier = 1 + Math.floor(owner.getBab()/4);
-				var toHitPenalty = -modifier;
-				var dmgBonus = 2*modifier;
 				
-				if(owner.equipment.weapon.category == WeaponCategory.MELEE_TWO_HANDED) {
-					dmgBonus = Math.floor(dmgBonus*1.5);
+				this.apply = function() { 
+					var modifier = 1 + Math.floor(owner.getBab()/4);
+					var toHitPenalty = -modifier;
+					var dmgBonus = 2*modifier;
+					var twoWeaponFighting = owner.getAbilityByName("Two-Weapon Fighting");
+					var twoHandedFighting = 
+						(owner.fightingStyle || owner.equipment.weapon.category == WeaponCategory.MELEE_TWO_HANDED)
+						&& (twoWeaponFighting == null || !twoWeaponFighting.active);
+					
+					
+					if(owner.equipment.shield != null && twoWeaponFighting.active) {
+						this.bonusEffectList = new BonusEffectList(this, new Bonus("DAMAGE_MAINHAND", BonusType.UNTYPED, dmgBonus, this.name));
+						this.bonusEffectList.add(new Bonus("DAMAGE_OFFHAND", BonusType.UNTYPED, dmgBonus/2, this.name));
+					}
+					else {
+						if (twoHandedFighting) {
+							dmgBonus = Math.floor(dmgBonus * 1.5);
+						}
+						this.bonusEffectList = new BonusEffectList(this, new Bonus(BonusCategory.DAMAGE, BonusType.UNTYPED, dmgBonus, this.name));
+					}
+					
+					this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, toHitPenalty, this.name));
+					this.bonusEffectList.activate();		
+					if (owner.getAbilityByName("Furious Focus") != undefined) {
+						this.furiousFocusBonus = new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, modifier, this.name);
+						owner.offense.getAttacks()[0].addBonus(this.name, this.furiousFocusBonus);
+					}
 				}
 				
-				this.bonusEffectList = new BonusEffectList(this, new Bonus(BonusCategory.DAMAGE, BonusType.UNTYPED, dmgBonus, this.name));
-				this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, toHitPenalty, this.name));
-				this.bonusEffectList.activate();		
-				if (owner.getAbilityByName("Furious Focus") != undefined) {
-					this.furiousFocusBonus = new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, modifier, this.name);
-					owner.offense.getAttacks()[0].addBonus(this.name, this.furiousFocusBonus);
+				this.unApply = function() {
+					if (this.bonusEffectList !== undefined) {
+						this.bonusEffectList.deactivate();
+					}
+					if (this.furiousFocusBonus != undefined) {
+						this.furiousFocusBonus.deactivate(this.name);
+					}
 				}
+				
+				this.apply();
+				
+				if (this.triggersAdded) {
+					return;
+				}
+				
+				this.triggersAdded = true;
+				addModelListener("FIGHTING_STYLE", "CHANGED", (e, style) => {
+					this.unApply();
+					this.apply();
+				});
+				
+				
+				
 				
 			})
 			.deactivate(function() {
-				if (this.bonusEffectList !== undefined) {
-					this.bonusEffectList.deactivate();
-				}
-				if (this.furiousFocusBonus != undefined) {
-					this.furiousFocusBonus.deactivate(this.name);
-				}
+				this.unApply();
 			})
 			.owner(owner)
 			.get();
 	},
+	
+
 	
 	furiousFocus : function(owner) {
 		return getAbilityBuilder()
@@ -460,38 +495,72 @@ var FeatFactory = {
 			.actionType(ActionType.FREE)
 			.activate(function() {
 				
+				this.listeners = true;
 				
-				let offhand = owner.equipment.shield;
-				if (offhand == undefined || !(offhand instanceof Weapon)) {
-					return;
+				this.apply = function() { 
+					
+					this.applied = true;
+					
+					let offhand = owner.equipment.shield;
+					if (offhand == undefined || !(offhand instanceof Weapon)) {
+						return;
+					}
+					let penalty = -2;
+					if (offhand.category != WeaponCategory.MELEE_LIGHT) {
+						penalty = -4;
+					};
+					
+					this.bonusEffectList = new BonusEffectList(this);
+					this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, penalty, this.name));
+					this.bonusEffectList.activate();
+					
+					this.extraAttackBonus = new ExtraAttackBonus(this.name, "offHand");
+					let twoWeaponRend = this.owner.getAbilityByName("Two-Weapon Rend");
+					if (twoWeaponRend != undefined) {
+						this.extraAttackBonus.attrDmgMul = 1.0;
+					}
+					this.extraAttackBonus.attrToHit = owner.offense.attrToHit;
+					triggerModelChange("EXTRA_ATTACK", this.extraAttackBonus);
+					
+					let powerAttack =  this.owner.getAbilityByName("Power Attack");
+					if (powerAttack != null && powerAttack.active) {
+						powerAttack.deactivate();
+						powerAttack.activate();
+					}
+					
+					
+					
 				}
-				let penalty = -2;
-				if (offhand.category != WeaponCategory.MELEE_LIGHT) {
-					penalty = -4;
-				};
 				
-				this.bonusEffectList = new BonusEffectList(this);
-				this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, penalty, this.name));
-				this.bonusEffectList.activate();
-				
-				this.extraAttackBonus = new ExtraAttackBonus(this.name, "offHand");
-				let twoWeaponRend = this.owner.getAbilityByName("Two-Weapon Rend");
-				if (twoWeaponRend != undefined) {
-					this.extraAttackBonus.attrDmgMul = 1.0;
+				this.unApply = function() {
+					
+					this.applied = false;
+					
+					if (this.bonusEffectList != null) {
+						this.bonusEffectList.deactivate();
+					}
+					
+					if (this.extraAttackBonus != null) {
+						this.owner.offense.removeAttack(this.name);
+						delete this.extraAttackBonus;
+					}
+					this.bonusEffectList = null;
 				}
-				this.extraAttackBonus.attrToHit = owner.offense.attrToHit;
-				triggerModelChange("EXTRA_ATTACK", this.extraAttackBonus);
+				
+				if (!this.listeners) {
+					addModelListener("FIGHTING_STYLE", "CHANGED", (e, style) => {
+						this.unApply();
+						this.apply();
+					});
+				}
+				
+				
+				
+				this.apply();
 				
 			})
 			.deactivate(function() {
-				if (this.bonusEffectList !== undefined) {
-					this.bonusEffectList.deactivate();
-				}
-				
-				if (this.extraAttackBonus !== undefined) {
-					this.owner.offense.removeAttack(this.name);
-					delete this.extraAttackBonus;
-				}
+				this.unApply();
 			})
 			.owner(owner)
 			.get();
@@ -542,7 +611,7 @@ var FeatFactory = {
 	preciseStrike : function(owner) {
 		return getAbilityBuilder()
 			.name("Precise Strike")
-			.actionType(ActionType.PASSIVE)
+			.actionType(ActionType.TEAMWORK)
 			.owner(owner)
 			.get();
 	},
@@ -574,7 +643,7 @@ var FeatFactory = {
 			.deactivate(function() {
 				let weapon = owner.equipment.weapon;
 				this.bane.deactivate();
-				let found  = weapon.weaponProperties.findIndex(this.bane);
+				let found  = weapon.weaponProperties.indexOf(this.bane);
 				if (found != -1) {
 					weapon.weaponProperties.splice(found,1);
 				}
@@ -596,8 +665,71 @@ var FeatFactory = {
 			})
 			.owner(owner)
 			.get();
-	}
+	},
 	
+	teamwork : function(owner) {
+		return getAbilityBuilder()
+			.name("Teamwork")
+			.actionType(ActionType.FREE)
+			.activationOptions(function () {
+
+				let options = [];
+				for (let i = 0; i < owner.teamworkAbilities.length; i++) {
+					ability = owner.teamworkAbilities[i];
+					let option = new AbilityOption(ability.name, "boolean", "[0,1]" );
+					option.ability = ability;
+					options.push(option);
+				}
+				
+				return options;
+				
+			})
+			.validateActivation(function(activationOptions) {
+				return true;
+			})
+			.activate(function(...activationOptions) {
+				if (activationOptions === undefined) {
+					return;
+				}
+				this.selected = activationOptions;
+				for(let i = 0; i< this.selected.length; i++) {
+					this.selected[i].activate();
+					
+				}
+			})
+			.deactivate( function() {
+				for(let i = 0; i< this.selected.length; i++) {
+					this.selected[i].deactivate();
+					
+				}
+				
+			})
+			.owner(owner)
+			.get();
+	},
+	
+	
+	twoHandedStyle : function(owner) {
+		return getAbilityBuilder()
+			.name("Two Handed")
+			.actionType(ActionType.FREE)
+			.activate(function() {
+				Vue.set(owner, "fightingStyle", "TWO-HANDED");
+				triggerModelChange("FIGHTING_STYLE","TWO-HANDED", "CHANGED");
+				owner.offense.getAttacks().forEach(a => {
+					a.getDmg();
+				})
+			})
+			.deactivate( function() {
+				Vue.delete(owner, "fightingStyle");
+				triggerModelChange("FIGHTING_STYLE","ONE-HANDED", "CHANGED");
+				owner.offense.getAttacks().forEach(a => {
+					a.getDmg();
+				})
+			})
+			.owner(owner)
+			.get();
+		}
 	
 };
 

@@ -78,6 +78,7 @@ function createAnimalCompanionGriffin(level) {
 	
 	pfdChar.addAbility(companionAbility);
 	pfdChar.addAbility(AnimalCompanionAbilities.progressionBonuses(pfdChar));
+	pfdChar.addAbility(FeatFactory.teamwork(pfdChar));
 	naturalAttacks = AnimalCompanionAbilities.naturalAttacks(pfdChar);
 	naturalAttacks.numberOfAttacks = 2;
 	pfdChar.addAbility(naturalAttacks);

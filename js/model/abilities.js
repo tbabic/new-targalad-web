@@ -85,7 +85,7 @@ function Ability(constr) {
 	
 	this.activate = function(...params){
 		
-		let isValid = this.validateActivation(...params);
+		let isValid =  this.activationOptions.validate(params);
 		if (!isValid) {
 			return false;
 		}
@@ -302,7 +302,7 @@ var AbilityFactory = {
 	weaponSets : function(owner, mainHand, offHand) {
 		return getAbilityBuilder()
 			.name("Weapon set")
-			.actionType(ActionType.FREE)
+			.actionType(ActionType.PASSIVE)
 			.activate(function() {
 				
 			})

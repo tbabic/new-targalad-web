@@ -15,7 +15,8 @@ ActionType = {
 	MOVE : "MOVE",
 	STANDARD : "STANDARD",
 	FULL_ROUND : "FULL_ROUND",
-	MODAL : "MODAL"
+	MODAL : "MODAL",
+	TEAMWORK: "TEAMWORK"
 };
 
 function createVindred(level) {
@@ -470,15 +471,22 @@ function createAzax(level) {
 	
 	
 	azax.addItem(new Armor('Studded Leather +1', ArmorType.STUDDED_LEATHER, undefined, 3+1, 5, 0, 0, 20, 20));
-	azax.addItem(new Weapon('Masterwork Scimitar', WeaponType.SCIMITAR, 4, WeaponProperties.ENHANCEMENT_1));
+	azax.addItem(new Weapon('Simitar +1 Keen', WeaponType.SCIMITAR, 4, WeaponProperties.ENHANCEMENT_1));
 	azax.equipment.addSecondWeapon(new Weapon('Masterwork Kukri', WeaponType.KUKRI, 4, WeaponProperties.MASTERWORK));
 	azax.addItem(new Item('Ring of Deflection +1', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 1, "Ring of Deflection +1"), 0));
 	//azax.addItem(new Item('Amulet of Natural Armor +0', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 1, "Amulet of Natural Armor +0"), 0));
 	azax.addItem(new Item('Belt of Giant Strength +2', 'belt', new Bonus('STRENGTH', BonusType.ENHANCEMENT, 2, "Belt of Giant Strength +2"), 0));
 	loadEquipmentFromStorage(azax);
 	
+	
+	
 	if (azax.level >= 1) {
 		azax.addAbility(FeatFactory.twoWeaponFighting(azax));
+		azax.addAbility(FeatFactory.twoHandedStyle(azax));
+	}
+	
+	if (azax.level >= 1) {
+		//azax.addAbility(FeatFactory.teamwork(azax));
 	}
 	
 	if (azax.level >= 3) {
@@ -492,6 +500,9 @@ function createAzax(level) {
 	azax.addAbility(FeatFactory.deliquescentGloves(azax));
 	if (azax.level >= 7) {
 		//azax.addAbility(FeatFactory.twoWeaponRend(azax));
+	}
+	if (azax.level >= 9) {
+		azax.addAbility(FeatFactory.powerAttack(azax));
 	}
 	
 	
@@ -554,6 +565,7 @@ function Character(characterClass, attributes, level, equipment) {
 	
 	this.nonPassiveAbilities = [];
 	this.passiveAbilities = [];
+	this.teamworkAbilities = [];
 	this.conditionEffects = {};
 	
 	
@@ -576,11 +588,15 @@ function Character(characterClass, attributes, level, equipment) {
 		ability.setOwner(this);
 		if (ability.actionType == ActionType.PASSIVE) {
 			this.passiveAbilities.push(ability);
-		} else {
+		} else if (ability.actionType == ActionType.TEAMWORK) {
+			this.teamworkAbilities.push(ability);
+		} 
+		else {
 			this.nonPassiveAbilities.push(ability);
 		}
 		
 	};
+	
 	
 	this.getHD = function() {
 		if (this.hd == null) {

@@ -47,6 +47,10 @@ function DiceInfo(source, type, diceString) {
 			&& this.type == diceInfo.type
 			&& this.dice.isEqual(diceInfo.dice);
 	}
+	
+	this.copy = function() {
+		return new DiceInfo(this.source, this.type, this.dice.toString());
+	}
 }
 
 
