@@ -173,6 +173,10 @@ function createWhirlwind(level) {
 	if (vindred.level >= 9) {
 		vindred.addAbility(FeatFactory.stalwart(vindred));
 	}
+
+	if (vindred.level >= 10) {
+		vindred.attributes.strength.value++;
+	}
 	
 	if (vindred.level >= 11) {
 		vindred.addAbility(FeatFactory.improvedStalwart(vindred));
