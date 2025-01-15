@@ -237,7 +237,10 @@ var AbilityFactory = {
 				if (owner.getAbilityByName("Cautious Warrior") != undefined) {
 					acBonusValue++;
 				}
-				
+				let stalwart = owner.getAbilityByName("Stalwart");
+				if (stalwart != null && stalwart.active) {
+					acBonusValue = 0;
+				}
 				this.bonusEffectList = new BonusEffectList(this, [
 					new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DODGE, acBonusValue, this.name), 
 					new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, acPenalty, this.name)]);

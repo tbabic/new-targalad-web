@@ -327,6 +327,24 @@ var FeatFactory = {
 			.name("Stalwart")
 			.actionType(ActionType.FREE)
 			.owner(owner)
+			.activate(function() {
+				var fightingDefensively = owner.getAbilityByName("Fighting defensively");
+				if (fightingDefensively != null && fightingDefensively.active == true)
+				{
+					fightingDefensively.deactivate();
+					fightingDefensively.activate();
+				}
+				
+			})
+			.deactivate(function() {
+				var fightingDefensively = owner.getAbilityByName("Fighting defensively");
+				if (fightingDefensively != null && fightingDefensively.active == true)
+				{
+					fightingDefensively.deactivate();
+					fightingDefensively.activate();
+				}
+				
+			})
 			.get();
 	},
 	
@@ -361,7 +379,7 @@ var FeatFactory = {
 		return getAbilityBuilder()
 			.name("Bodyguard")
 			.actionType(ActionType.PASSIVE)
-			.description("Benefit: When an adjacent ally is attacked, you may use an attack of opportunity to attempt the aid another action to improve your ally’s AC. You may not use the aid another action to improve your ally’s attack roll with this attack.")
+			.description("Benefit: When an adjacent ally is attacked, you may use an attack of opportunity to attempt the aid another action to improve your allyï¿½s AC. You may not use the aid another action to improve your allyï¿½s attack roll with this attack.")
 			.owner(owner)
 			.get();
 	},
@@ -620,7 +638,7 @@ var FeatFactory = {
 		return getAbilityBuilder()
 			.name("Cornugon Smash")
 			.actionType(ActionType.PASSIVE)
-			.description("Benefit: When you damage an opponent with a Power Attack, you may make an immediate Intimidate check as a free action to attempt to demoralize your opponent. The DC of this check is equal to 10 + the target’s Hit Dice + the target’s Wisdom modifier.")
+			.description("Benefit: When you damage an opponent with a Power Attack, you may make an immediate Intimidate check as a free action to attempt to demoralize your opponent. The DC of this check is equal to 10 + the targetï¿½s Hit Dice + the targetï¿½s Wisdom modifier.")
 			.owner(owner)
 			.get();
 	},
