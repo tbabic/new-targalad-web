@@ -34,8 +34,12 @@ BuffsFactory = {
 			if (character.level >= 17) {
 				bonusValue = 4;
 			}
-			// items;
-			bonusValue++;
+			if (character.level ==12)
+			{
+				
+			    // items;
+			    bonusValue++;
+			}
 			this.bonusEffectList = new BonusEffectList(this);
 			this.bonusEffectList.add(new Bonus(['DAMAGE', 'TO_HIT'], BonusType.COMPETENCE, bonusValue, this.name));
 			this.bonusEffectList.activate();
