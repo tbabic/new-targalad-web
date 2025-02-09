@@ -36,6 +36,25 @@ var abilityComponent = httpVue.component("ability-component", {
 			console.log("trigger ability options");
 			showAbilityOptions(this.ability);
 		}
+	},
+	
+	mounted : function () {
+		
+		let abilities = AbilityStorage.get();
+		if(this.ability.name in abilities)
+		{
+			let options = abilities[this.ability.name];
+			if (options === undefined || options.length == 0)
+			{
+				activateAbility(this.ability);
+			}
+			else
+			{
+				activateAbility(this.ability, abilities[this.ability.name]);
+			}
+			
+		}
+		
 	}
 })
 

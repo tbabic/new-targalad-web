@@ -182,4 +182,44 @@ for (let prop in ConditionsFactory ) {
 	allConditions.push(ConditionsFactory[prop]);
 }
 
+var ConditionStorage = {
+	
+	add : function(condition){
+		let list = this.get();
+		let index = list.indexOf(condition.name);
+		if(index == -1)
+		{
+			list.push(condition.name);
+		}
+		let newStoreString = JSON.stringify(list);
+		window.localStorage.setItem(this.getStoringId(), newStoreString);
+	},
+	remove : function(condition)
+	{
+		let list = this.get();
+		let index = list.indexOf(condition.name);
+		if(index >= 0)
+		{
+			list.splice(index, 1);
+		}
+		
+		let newStoreString = JSON.stringify(list);
+		window.localStorage.setItem(this.getStoringId(), newStoreString);
+	},
+	
+	get : function()
+	{
+		let storeString = window.localStorage.getItem(this.getStoringId());
+		let list = [];
+		if (storeString != null) {
+			list = JSON.parse(storeString);
+		}
+		return list;
+	},
+	
+	getStoringId : function() {
+		return "conditions"+window.location.pathname;
+	},
+}
+
 

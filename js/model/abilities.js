@@ -100,6 +100,10 @@ function Ability(constr) {
 			this.activateCallback.apply(this, params);
 		}
 		triggerModelChange("ABILITY"+this.id, this, "ACTIVATED");
+		if(this.actionType != ActionType.PASSIVE)
+		{
+			AbilityStorage.add(this, params);
+		}
 		
 		return true;
 	};
@@ -112,6 +116,7 @@ function Ability(constr) {
 			this.deactivateCallback.apply(this, params);
 		}
 		triggerModelChange("ABILITY"+this.id, this, "DEACTIVATED");
+		AbilityStorage.remove(this);
 	};
 	
 	if (this.actionType == ActionType.PASSIVE && this.owner !== undefined) {
@@ -316,5 +321,40 @@ var AbilityFactory = {
 			.get();
 	},
 };
+
+
+var AbilityStorage = {
+	
+	add : function(ability, options){
+		let abilities = this.get();
+		abilities[ability.name] = options;
+		let newStoreString = JSON.stringify(abilities);
+		window.localStorage.setItem(this.getStoringId(), newStoreString);
+	},
+	remove : function(ability)
+	{
+		let abilities = this.get();
+		if(abilities[ability.name] != undefined)
+		{
+			delete abilities[ability.name];
+		}
+		let newStoreString = JSON.stringify(abilities);
+		window.localStorage.setItem(this.getStoringId(), newStoreString);
+	},
+	
+	get : function()
+	{
+		let storeString = window.localStorage.getItem(this.getStoringId());
+		let abilities = {};
+		if (storeString != null) {
+			abilities = JSON.parse(storeString);
+		}
+		return abilities;
+	},
+	
+	getStoringId : function() {
+		return "abilities"+window.location.pathname;
+	},
+}
 
 

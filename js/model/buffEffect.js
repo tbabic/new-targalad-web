@@ -322,5 +322,45 @@ BuffsFactory = {
 
 };
 
+var BuffStorage = {
+	
+	add : function(buff){
+		let list = this.get();
+		let index = list.indexOf(buff.name);
+		if(index == -1)
+		{
+			list.push(buff.name);
+		}
+		let newStoreString = JSON.stringify(list);
+		window.localStorage.setItem(this.getStoringId(), newStoreString);
+	},
+	remove : function(buff)
+	{
+		let list = this.get();
+		let index = list.indexOf(buff.name);
+		if(index >= 0)
+		{
+			list.splice(index, 1);
+		}
+		
+		let newStoreString = JSON.stringify(list);
+		window.localStorage.setItem(this.getStoringId(), newStoreString);
+	},
+	
+	get : function()
+	{
+		let storeString = window.localStorage.getItem(this.getStoringId());
+		let list = [];
+		if (storeString != null) {
+			list = JSON.parse(storeString);
+		}
+		return list;
+	},
+	
+	getStoringId : function() {
+		return "buffs"+window.location.pathname;
+	},
+}
+
 
 
