@@ -184,7 +184,7 @@ function createWhirlwind(level) {
 	
 	if (vindred.level >= 12) {
 		//vindred.addAbility(FeatFactory.weaponFocus(vindred, WeaponType.BARDICHE));
-		vindredFeatFactory.strength.value++
+		vindred.attributes.strength.value++;
 	}
 	
 	
