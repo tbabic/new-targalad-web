@@ -183,8 +183,8 @@ function createWhirlwind(level) {
 	}
 	
 	if (vindred.level >= 12) {
-		vindred.addAbility(FeatFactory.weaponFocus(vindred, WeaponType.BARDICHE));
-		vindred.attributes.charisma.value++;
+		//vindred.addAbility(FeatFactory.weaponFocus(vindred, WeaponType.BARDICHE));
+		vindredFeatFactory.strength.value++
 	}
 	
 	
