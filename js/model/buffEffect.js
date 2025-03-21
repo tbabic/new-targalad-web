@@ -126,7 +126,7 @@ BuffsFactory = {
 			delete this.extraAttackBonus;
 		}),
 
-		BlazingRondo : new BuffEffect("Haste", function(character) {
+		BlazingRondo : new BuffEffect("Blazing Rondo", function(character) {
 			this.bonusEffectList = new BonusEffectList(this);
 			let bonusValue = Math.floor( (character.level) / 5);
 			this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, bonusValue, this.name));
