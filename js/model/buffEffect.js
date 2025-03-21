@@ -125,6 +125,24 @@ BuffsFactory = {
 			character.offense.removeAttack(this.name);
 			delete this.extraAttackBonus;
 		}),
+
+		BlazingRondo : new BuffEffect("Haste", function(character) {
+			this.bonusEffectList = new BonusEffectList(this);
+			let bonusValue = Math.floor( (character.level) / 5);
+			this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.UNTYPED, bonusValue, this.name));
+			this.bonusEffectList.add(new Bonus([BonusCategory.ARMOR_CLASS, "REFLEX"], BonusType.DODGE, bonusValue, this.name));
+			this.bonusEffectList.activate();
+			
+			this.extraAttackBonus = new ExtraAttackBonus(this.name, "mainHand");
+			this.extraAttackBonus.attrToHit = character.offense.attrToHit;
+			triggerModelChange("EXTRA_ATTACK", this.extraAttackBonus);
+			
+		}, function(character){
+			this.bonusEffectList.deactivate();
+			
+			character.offense.removeAttack(this.name);
+			delete this.extraAttackBonus;
+		}),
 		
 		heroism : new BuffEffect("Heroism", function() {
 			this.bonusEffectList = new BonusEffectList(this);
