@@ -3,14 +3,21 @@
 		<button class="btn dropdown-toggle dropdown-condition" type="button" data-toggle="dropdown">Choose effect<span class="caret"></span></button>
 		<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 			
-			<button v-for="condition in conditions" v-on:click="activateCondition(condition)"class="dropdown-item condition" >{{condition.name}}</button>
+			<button v-for="condition in conditions" v-on:click="addCondition(condition)"class="dropdown-item condition" >{{condition.name}}</button>
 		</div>
 	</div>
 	
 	<div id="conditionEffectsId">
 			<div v-for="conditionEffect in conditionEffects" class="row condition-row">
 				<div class="col">
-					<button class="btn btn-condition-effect" v-on:click="removeConditionEffect(conditionEffect)">{{conditionEffect.name}}</button>
+					<button class="btn btn-condition-effect" v-on:click="removeConditionEffect(conditionEffect)">
+						
+						<div class="">{{conditionEffect.name}}</div>
+						<div v-for="option in conditionEffect.options" class="">
+						<span v-if="option.value > 0">{{option.name}} -{{option.value}}</span>
+						
+						</div>
+					</button>
 				</div>
 			</div>
 	
@@ -33,4 +40,39 @@
 		</div>
 	
 	</div>
+	
+	<div class="modal fade" id="statusOptionModal" tabindex="-1" role="dialog" aria-labelledby="chooseStatusOption">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel">Choose option</h4>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+					
+				</div>
+				<div v-if="selectedCondition != null" class="modal-body">
+					
+					<div v-for="optionWrapper in conditionOptions"  class="row">
+						<div class="col-4">{{ optionWrapper.option.name }}</div>
+						
+						<div class="col-8">
+							<input type="number" v-model="optionWrapper.value">
+						</div>
+						
+					</div>
+					
+				</div>
+				<div class="modal-footer">
+					<button :disabled="!enableConfirmOptions" id="confirmOptionId" type="button" class="btn btn-primary" data-dismiss="modal" v-on:click="activateCondition(selectedCondition)">Confirm</button>
+					<button v-if="!freshModal" type="button" class="btn btn-danger" data-dismiss="modal" v-on:click="deactivateCondition(selectedCondition)" >Clear</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+
+	
+	
 </div>

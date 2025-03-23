@@ -1,9 +1,10 @@
-function Condition(name, bonusProperties, activate, deactivate) {
+function Condition(name, bonusProperties, activate, deactivate, options) {
 	this.name = name;
 	this.bonusProperties = bonusProperties;
 	this.properties = new BonusEffectList(this, bonusProperties);
 	this.activate = activate;
 	this.deactivate = deactivate;
+	this.options = options;
 	
 	this.apply = function(character) {
 		let conditionEffect = new ConditionEffect(character, this);
@@ -21,12 +22,19 @@ function Condition(name, bonusProperties, activate, deactivate) {
 	
 }
 
+function ConditionOption(name, defaultValue, other) {
+	this.name = name;
+	this.defaultValue = defaultValue;
+	this.value = defaultValue;
+	this.other = other;
+}
+
 
 
 function ConditionEffect(character, condition) {
 	//this.id = idGenerator.generate();
 	this.character = character;
-	Condition.call(this, condition.name, condition.bonusProperties, condition.activate, condition.deactivate); 
+	Condition.call(this, condition.name, condition.bonusProperties, condition.activate, condition.deactivate, condition.options); 
 	
 	this.apply = function() {
 		
@@ -86,26 +94,25 @@ ConditionsFactory = {
 		dazed: new Condition("Dazed", []),
 		dazzled: new Condition("Dazzled", 
 			[new Bonus([BonusCategory.TO_HIT, SkillsEnum.PERCEPTION], BonusType.PENALTY, -1, "Dazzled")]),
-		drained: new Condition("Drained", [], 
+		drained: new Condition("Drained", [],
 			function(character) {
 				let existingCondition = character.getCondition(this.name);
 				if (existingCondition !== undefined) {
-					this.drained = existingCondition.drained;
 					existingCondition.bonusEffectList.deactivate();
-				} else {
-					this.drained = 0;
 				}
 				
-				this.drained++;
+				let drain = this.options[0].value;
 				this.bonusEffectList = new BonusEffectList(this);
-				this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, -this.drained, this.name));
-				this.bonusEffectList.add(new Bonus(BonusCategory.SAVES, BonusType.PENALTY, -this.drained, this.name));
-				this.bonusEffectList.add(new Bonus(BonusCategory.SKILLS, BonusType.PENALTY, -this.drained, this.name));
+				this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, -drain, this.name));
+				this.bonusEffectList.add(new Bonus(BonusCategory.SAVES, BonusType.PENALTY, -drain, this.name));
+				this.bonusEffectList.add(new Bonus(BonusCategory.SKILLS, BonusType.PENALTY, -drain, this.name));
 				this.bonusEffectList.activate();
 			},
 			function(character) {
 				this.bonusEffectList.deactivate();
-			}
+			},
+			[new ConditionOption("Levels", 1)]
+			
 		),
 		entangled: new Condition("Entangled", 
 			[new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, -2, "Entangled"), new Bonus('DEXTERITY', BonusType.PENALTY, -4, "Entangled")]),
@@ -133,48 +140,69 @@ ConditionsFactory = {
 			[new Bonus([BonusCategory.TO_HIT, BonusCategory.DAMAGE, BonusCategory.SAVES, BonusCategory.SKILLS], BonusType.PENALTY, -2, "Sickened")]),
 		staggered: new Condition("Staggered", []),
 		stunned: new Condition("Stunned", []),
-		strengthPenalty : new Condition("Str Penalty", [], 
+		abilityPenalties : new Condition("Ability Penalties", [], 
 			function(character) {
-				ConditionUtils.addAttributeDamage(character, this, "STRENGTH", 1)
+				let existingCondition = character.getCondition(this.name);
+				if (existingCondition !== undefined) {
+					existingCondition.bonusEffectList.deactivate();
+				}
+				
+				
+				this.bonusEffectList = new BonusEffectList(this);
+				
+				for(let i = 0; i < this.options.length; i++)
+				{
+					let attrDamage = this.options[i].value;
+					let attribute = this.options[i].name;
+					this.bonusEffectList.add(new Bonus(attribute, BonusType.PENALTY, -attrDamage, this.name));
+				}
+				
+				this.bonusEffectList.activate();
 			},
 			function(character) {
-				ConditionUtils.removeAttributeDamage(this);
-			}),
-		dexterityPenalty : new Condition("Dex Penalty", [], 
+				this.bonusEffectList.deactivate();
+			},
+			[
+				new ConditionOption("Str", 0, "STRENGTH"),
+				new ConditionOption("Dex", 0, "DEXTERITY"),
+				new ConditionOption("Con", 0, "CONSTITUTION"),
+				new ConditionOption("Int", 0, "INTELLIGENCE"),
+				new ConditionOption("Wis", 0, "WISDOM"),
+				new ConditionOption("Cha", 0, "CHARISMA"),
+			]
+		),
+		otherPenalties : new Condition("Other Penalties", [], 
 			function(character) {
-				ConditionUtils.addAttributeDamage(character, this, "DEXTERITY", 1)
+				let existingCondition = character.getCondition(this.name);
+				if (existingCondition !== undefined) {
+					existingCondition.bonusEffectList.deactivate();
+				}
+				
+				
+				this.bonusEffectList = new BonusEffectList(this);
+				
+				for(let i = 0; i < this.options.length; i++)
+				{
+					let penaltyValue = this.options[i].value;
+					let penaltyName = this.options[i].name;
+					this.bonusEffectList.add(new Bonus(penaltyName, BonusType.PENALTY, -penaltyValue, this.name));
+				}
+				
+				this.bonusEffectList.activate();
 			},
 			function(character) {
-				ConditionUtils.removeAttributeDamage(this);
-			}),
-		constitutionPenalty : new Condition("Con Penalty", [], 
-			function(character) {
-				ConditionUtils.addAttributeDamage(character, this, "CONSTITUTION", 1)
+				this.bonusEffectList.deactivate();
 			},
-			function(character) {
-				ConditionUtils.removeAttributeDamage(this);
-			}),
-		intelligencePenalty : new Condition("Int Penalty", [], 
-			function(character) {
-				ConditionUtils.addAttributeDamage(character, this, "INTELLIGENCE", 1)
-			},
-			function(character) {
-				ConditionUtils.removeAttributeDamage(this);
-			}),
-		wisdomPenalty : new Condition("Wis Penalty", [], 
-			function(character) {
-				ConditionUtils.addAttributeDamage(character, this, "WISDOM", 1)
-			},
-			function(character) {
-				ConditionUtils.removeAttributeDamage(this);
-			}),
-		charismaPenalty : new Condition("Cha Penalty", [], 
-			function(character) {
-				ConditionUtils.addAttributeDamage(character, this, "CHARISMA", 1)
-			},
-			function(character) {
-				ConditionUtils.removeAttributeDamage(this);
-			})
+			[
+				new ConditionOption("To hit", 0, "TO_HIT"),
+				new ConditionOption("Dmg", 0, "DAMAGE"),
+				new ConditionOption("AC", 0, "ARMOR_CLASS"),
+				new ConditionOption("Fort", 0, "FORTITUDE"),
+				new ConditionOption("Ref", 0, "REFLEX"),
+				new ConditionOption("Will", 0, "WILL"),
+			]
+		),
+		
 };
 
 var allConditions = [];
@@ -186,10 +214,21 @@ var ConditionStorage = {
 	
 	add : function(condition){
 		let list = this.get();
-		let index = list.indexOf(condition.name);
+		let index = list.findIndex( el => el.name == condition.name);
 		if(index == -1)
 		{
-			list.push(condition.name);
+			list.push(
+				{
+					name: condition.name,
+					options: condition.options
+				});
+		}
+		else
+		{
+			list[index] = {
+					name: condition.name,
+					options: condition.options
+				};
 		}
 		let newStoreString = JSON.stringify(list);
 		window.localStorage.setItem(this.getStoringId(), newStoreString);
@@ -197,7 +236,7 @@ var ConditionStorage = {
 	remove : function(condition)
 	{
 		let list = this.get();
-		let index = list.indexOf(condition.name);
+		let index = list.findIndex( el => el.name == condition.name);
 		if(index >= 0)
 		{
 			list.splice(index, 1);
