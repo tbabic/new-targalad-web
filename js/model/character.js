@@ -395,16 +395,26 @@ function createTargalad(level) {
 
 function createOberon(level) {
 	if (level == undefined) {
-		level = 7;
+		level = 12;
 	}
 	var attributes = new Attributes(11, 18, 16, 14, 10, 10);
-	var oberon = new Character('slayer', attributes, +level, 'equipment');
+	var oberon = new Character('slayerVampireHunter', attributes, +level, 'equipment');
 	
 	
-	oberon.addItem(new Armor('Chainshirt +1', ArmorType.CHAINSHIRT, undefined, 4, 4, 0, 1, 20, 20));
-	oberon.addItem(new Weapon('Flaming Composite Longbow +1', WeaponType.LONGBOW, 4, [WeaponProperties.ENHANCEMENT_1, WeaponProperties.FLAMING]));
+	oberon.addItem(new Armor('Mithril Chainshirt +1', ArmorType.CHAINSHIRT, undefined, 5, 6, 0, 0, 10, 10));
+	oberon.addItem(new Weapon('Flaming Bane Composite Longbow +1', WeaponType.LONGBOW, 4, [WeaponProperties.ENHANCEMENT_1, WeaponProperties.FLAMING]));
 	oberon.addItem(new Item('Ring of Deflection +2', 'ring', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.DEFLECTION, 1, "Ring of Deflection +1"), 0));
 	oberon.addItem(new Item('Amulet of Natural Armor +0', 'neck', new Bonus(BonusCategory.ARMOR_CLASS, BonusType.NATURAL_ARMOR, 1, "Amulet of Natural Armor +0"), 0));
+	oberon.addItem(new Item('Headband of Intelligence +4', 'headband', new Bonus('INTELLIGENCE', BonusType.ENHANCEMENT, 4, "Headband of Intelligence +4"), 0));
+	oberon.addItem(new Item('Cloak of Resistance +2', 'shoulders', new Bonus('SAVES', BonusType.RESISTANCE, 2, "Cloak of Resistance +2"), 0));
+	oberon.addItem(new Item('Gloves of Dexterity +2', 'hands', new Bonus('DEXTERITY', BonusType.ENHANCEMENT, 2, "Gloves of Dexterity +2"), 0));
+	oberon.addItem(new Item('Belt of Strength +2', 'belt', new Bonus('STRENGTH', BonusType.ENHANCEMENT, 2, "Belt of Strength +2"), 0));
+	oberon.addItem(new Item('Fez of Reduction', 'head', new Bonus('CHARISMA', BonusType.PENALTY, -4, "FEZ of reduction"), 0));
+	oberon.addItem(new Item('Sniper Goggles', 'eyes',null, 0));
+	oberon.addItem(new Item('Lucky Horseshoe', 'slotless',new Bonus('SAVES', BonusType.LUCK, 1, "Lucky Horseshoe"), 0));
+	
+	
+	
 	
 	oberon.removeAbility("Flank");
 	oberon.removeAbility("Charge");
@@ -417,9 +427,29 @@ function createOberon(level) {
 		oberon.addAbility(FeatFactory.rapidShot(oberon));
 	}
 	
+	if (oberon.level >= 4) {
+		oberon.attributes.strength.value++;
+	}
+	
 	if (oberon.level >= 5) {
 		oberon.addAbility(FeatFactory.masterSniper(oberon));
 	}
+	
+	if (oberon.level >= 8) {
+		oberon.attributes.intelligence.value++;
+	}
+	
+	if (oberon.level > 10)
+	{
+		
+	}
+	
+	if (oberon.level >= 12) {
+		oberon.attributes.intelligence.value++;
+	}
+	
+	oberon.addAbility(FeatFactory.bane(oberon));
+	oberon.addAbility(FeatFactory.deadlyAim(oberon));
 	
 	oberon.skillSet.getSkill(SkillsEnum.ACROBATICS).addRank(3);
 	oberon.skillSet.getSkill(SkillsEnum.APPRAISE).addRank(0);
@@ -633,6 +663,9 @@ function Character(characterClass, attributes, level, equipment) {
 	}
 	if (characterClass == 'slayer') {
 		this.characterClass = new Slayer(this);
+	}
+	if (characterClass == 'slayerVampireHunter') {
+		this.characterClass = new SlayerVampireHunter(this);
 	}
 	if (characterClass == 'animal-companion') {
 		this.characterClass = new AnimalCompanion(this);

@@ -15,11 +15,15 @@ function Save(type, isHigh, attribute, character) {
 	this.bonusProcessor = new BonusProcessor();
 	
 	this.getBaseValue = function() {
+		return this.getBaseValueForLevel(this.character.level);
+	};
+	
+	this.getBaseValueForLevel = function(level) {
 		var attrMod = attribute.getModifier();
 		if (isHigh) {
-			return attrMod + 2 + Math.floor(this.character.level / 2);
+			return attrMod + 2 + Math.floor(level / 2);
 		} else {
-			return attrMod + Math.floor(this.character.level / 3);
+			return attrMod + Math.floor(level / 3);
 		}
 	};
 	

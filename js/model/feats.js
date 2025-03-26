@@ -228,6 +228,27 @@ var FeatFactory = {
 			.get();
 	},
 	
+	deadlyAim : function(owner) {
+		return getAbilityBuilder()
+			.name("Deadly aim")
+			.actionType(ActionType.FREE)
+			.activate(function() {
+				
+				let modifier = 1 + Math.floor(owner.getBab()/4);
+				let toHitPenalty = -modifier;
+				let dmgBonus = 2*modifier;
+				this.bonusEffectList = new BonusEffectList(this, new Bonus(BonusCategory.DAMAGE, BonusType.UNTYPED, dmgBonus, this.name));
+				this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, toHitPenalty, this.name));
+				this.bonusEffectList.activate();	
+			
+			})
+			.deactivate(function() {
+				this.bonusEffectList.deactivate();
+			})
+			.owner(owner)
+			.get();
+	},
+	
 
 	
 	furiousFocus : function(owner) {
@@ -465,11 +486,32 @@ var FeatFactory = {
 				this.bonusEffectList.add(new Bonus(BonusCategory.DAMAGE, BonusType.UNTYPED, 1, this.name));
 				this.bonusEffectList.activate();
 				
+				this.sneak = this.owner.getAbilityByName("Sneak Attack");
+				if (this.sneak == null) {
+					return;
+				}
+				
+				let stealth = this.owner.getAbilityByName("Stealth")
+				if(this.owner.equipment.eyes.name == "Sniper Goggles")
+				{
+					
+					if(stealth != undefined && stealth.active)
+					{
+						this.sniperGogglesEffects = new BonusEffectList(this.owner.equipment.eyes);
+						this.sniperGogglesEffects.add(new Bonus(BonusCategory.DAMAGE, BonusType.UNTYPED, this.sneak.sneakDice*2, "Sniper Goggles"));
+						this.sniperGogglesEffects.activate();
+					}
+					
+				}
+				
 
 			})
 			.deactivate(function() {
 				if (this.bonusEffectList !== undefined) {
 					this.bonusEffectList.deactivate();
+				}
+				if (this.sniperGogglesEffects !== undefined) {
+					this.sniperGogglesEffects.deactivate();
 				}
 			
 			})
@@ -480,19 +522,19 @@ var FeatFactory = {
 	masterSniper : function(owner) {
 		return getAbilityBuilder()
 			.name("Master Sniper")
-			.actionType(ActionType.FREE)
+			.actionType(ActionType.PASSIVE)
 			.activate(function() {
 
-				this.bonusEffectList = new BonusEffectList(this);
+				/*this.bonusEffectList = new BonusEffectList(this);
 				this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.PENALTY, -2, this.name));
 				this.bonusEffectList.activate();
 				
 				this.extraAttackBonus = new ExtraAttackBonus(this.name, "mainHand");
 				this.extraAttackBonus.attrToHit = owner.offense.attrToHit;
 				triggerModelChange("EXTRA_ATTACK", this.extraAttackBonus);
-				owner.offense.addAttacksLimit(2, this.name);
+				owner.offense.addAttacksLimit(2, this.name);*/
 			})
-			.deactivate(function() {
+			/*.deactivate(function() {
 				if (this.bonusEffectList !== undefined) {
 					this.bonusEffectList.deactivate();
 				}
@@ -502,7 +544,7 @@ var FeatFactory = {
 					delete this.extraAttackBonus;
 				}
 				owner.offense.removeAttacksLimit(this.name);
-			})
+			})*/
 			.owner(owner)
 			.get();
 	},
@@ -645,7 +687,7 @@ var FeatFactory = {
 	
 	bane : function(owner) {
 		return getAbilityBuilder()
-			.name("Bane Baldric")
+			.name("Bane")
 			.actionType(ActionType.FREE)
 			.activate(function() {
 
@@ -747,7 +789,10 @@ var FeatFactory = {
 			})
 			.owner(owner)
 			.get();
-		}
+	},
+	
+	
+	
 	
 };
 

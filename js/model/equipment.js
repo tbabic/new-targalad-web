@@ -289,6 +289,7 @@ function Armor(name, type, category, armorBonus, maxDexBonus, enhancement, armor
 
 }
 
+
 var WeaponCategory = {
 	MELEE_LIGHT : "MELEE_LIGHT",
 	MELEE_ONE_HANDED : "MELEE_ONE_HANDED",
@@ -377,15 +378,16 @@ var WeaponType = {
 };
 
 
-
+var DiceProgression = ["d1","d2","d3","d4","d6","d8","d10","2d6","2d8","3d6","3d8","4d6","4d8","6d6","6d8","8d6","8d8","12d6","12d8","16d6"];
 
 function Weapon(name, type, weight, weaponProperties, characterProperties) {
 	Item.call(this, name, "weapon", characterProperties, weight);
 	this.type = type;
 	this.category = WeaponType.properties[type].category;
-		
+	
 	this.dmgDie = WeaponType.properties[type].dmgDie;
 	this.weaponProperties = [];
+	this.size = 0;
 	if (weaponProperties != null) {
 		this.weaponProperties = [weaponProperties].flat();
 	}
@@ -408,6 +410,43 @@ function Weapon(name, type, weight, weaponProperties, characterProperties) {
 	this.reactivate = function(owner) {
 		this.weaponProperties.forEach(p => p.deactivate());
 		this.weaponProperties.forEach(p => p.activate(this, owner));
+	}
+	
+	this.enlarge = function(){
+		let index = DiceProgression.indexOf(this.dmgDie);
+		if(index >= 5 && this.size >= 0){
+			index +=2;
+		}
+		else {
+			index++;
+		}
+		if (index > DiceProgression.length)
+		{
+			index = DiceProgression.length -1;
+		}
+		this.dmgDie = DiceProgression[index];
+		this.size++;
+		triggerModelChange("WEAPON_DAMAGE_DICE",[this, "WEAPON"], "REMOVED");
+		triggerModelChange("WEAPON_DAMAGE_DICE", [this, new DiceInfo("WEAPON", "PHYSICAL", this.dmgDie)], "ADDED");
+	}
+	
+	this.reduce = function()
+	{
+		let index = DiceProgression.indexOf(this.dmgDie);
+		if(index >= 4 && this.size <= 0){
+			index --;
+		}
+		else {
+			index -= 2;
+		}
+		if (index < 0)
+		{
+			index = 0;
+		}
+		this.dmgDie = DiceProgression[index];
+		this.size--;
+		triggerModelChange("WEAPON_DAMAGE_DICE",[this, "WEAPON"], "REMOVED");
+		triggerModelChange("WEAPON_DAMAGE_DICE", [this, new DiceInfo("WEAPON", "PHYSICAL", this.dmgDie)], "ADDED");
 	}
 		
 		
@@ -433,7 +472,6 @@ function WeaponEnergy(energyType) {
 	},
 	
 	this.deactivate = function() {
-		this.bonusEffect.deactivate();
 		triggerModelChange("WEAPON_DAMAGE_DICE",[this.weapon, this.name], "REMOVED");
 	}
 }
@@ -453,6 +491,8 @@ function WeaponEnhancement(value) {
 	
 	
 }
+
+
 
 var WeaponProperties = {
 	
@@ -513,6 +553,8 @@ var WeaponProperties = {
 			removeModelListener(this.eventId, "DEACTIVATED");
 		}
 	},
+	
+	
 	
 	CORROSIVE : new WeaponEnergy("ACID"),
 	FLAMING : new WeaponEnergy("FIRE"),

@@ -293,6 +293,11 @@ var AbilityFactory = {
 					this.bonusEffectList.add(new Bonus(BonusCategory.DAMAGE, BonusType.UNTYPED, 1, "Dirty Fighter"));
 				}
 				this.bonusEffectList.activate();
+				this.sneak = owner.getAbilityByName("Sneak Attack");
+				if (sneak != null) {
+					triggerModelChange("DAMAGE_DICE",new DiceInfo("Sneak Attack", "PRECISION", sneak.sneakDice+"d6"), "ADDED");
+				}
+				
 			})
 			.deactivate(function() {
 				if (this.bonusEffectList !== undefined) {
@@ -303,10 +308,14 @@ var AbilityFactory = {
 					outflank.deactivate();
 					outflank.activate();
 				}
+				if(this.sneak != null) {
+					triggerModelChange("DAMAGE_DICE","Sneak Attack", "REMOVED");
+				}
 			})
 			.owner(owner)
 			.get();
-	},	
+	},
+	
 	weaponSets : function(owner, mainHand, offHand) {
 		return getAbilityBuilder()
 			.name("Weapon set")

@@ -206,7 +206,26 @@ BuffsFactory = {
 		}, function(){
 			this.bonusEffectList.deactivate();
 		}),
-
+		
+		reducePerson : new BuffEffect("Reduce person", function(character) {
+			this.bonusEffectList = new BonusEffectList(this);
+			this.bonusEffectList.add(new Bonus('STRENGTH', BonusType.PENALTY, -2, this.name));
+			this.bonusEffectList.add(new Bonus('DEXTERITY', BonusType.SIZE, 2, this.name));
+			this.bonusEffectList.add(new Bonus(BonusCategory.ARMOR_CLASS, BonusType.SIZE, +1, this.name));
+			this.bonusEffectList.add(new Bonus(BonusCategory.TO_HIT, BonusType.SIZE, +1, this.name));
+			this.bonusEffectList.add(new Bonus(BonusCategory.CMB, BonusType.PENALTY, -2, this.name));
+			this.bonusEffectList.add(new Bonus(BonusCategory.CMD, BonusType.PENALTY, -2, this.name));
+			this.weapon = character.equipment.weapon;
+			this.weapon.reduce();
+			this.bonusEffectList.activate();
+			
+			
+		}, function(){
+			this.bonusEffectList.deactivate();
+			this.weapon.enlarge();
+		}),
+		
+		
 		bladeTutorsSpirit : new BuffEffect("Blade Tutors Spirit", function(character) {
 			this.isAbilityActive = true;
 			this.isBonusActive = false;

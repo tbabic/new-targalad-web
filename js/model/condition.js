@@ -153,8 +153,12 @@ ConditionsFactory = {
 				for(let i = 0; i < this.options.length; i++)
 				{
 					let attrDamage = this.options[i].value;
-					let attribute = this.options[i].name;
-					this.bonusEffectList.add(new Bonus(attribute, BonusType.PENALTY, -attrDamage, this.name));
+					let attribute = this.options[i].other;
+					if(attrDamage > 0)
+					{
+						this.bonusEffectList.add(new Bonus(attribute, BonusType.PENALTY, -attrDamage, this.name));
+					}
+					
 				}
 				
 				this.bonusEffectList.activate();
@@ -184,8 +188,11 @@ ConditionsFactory = {
 				for(let i = 0; i < this.options.length; i++)
 				{
 					let penaltyValue = this.options[i].value;
-					let penaltyName = this.options[i].name;
-					this.bonusEffectList.add(new Bonus(penaltyName, BonusType.PENALTY, -penaltyValue, this.name));
+					let penaltyName = this.options[i].other;
+					if(penaltyValue > 0)
+					{
+						this.bonusEffectList.add(new Bonus(penaltyName, BonusType.PENALTY, -attrDamage, this.name));
+					}
 				}
 				
 				this.bonusEffectList.activate();
