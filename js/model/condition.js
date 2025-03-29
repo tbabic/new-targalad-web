@@ -191,7 +191,7 @@ ConditionsFactory = {
 					let penaltyName = this.options[i].other;
 					if(penaltyValue > 0)
 					{
-						this.bonusEffectList.add(new Bonus(penaltyName, BonusType.PENALTY, -attrDamage, this.name));
+						this.bonusEffectList.add(new Bonus(penaltyName, BonusType.PENALTY, -penaltyValue, this.name));
 					}
 				}
 				
