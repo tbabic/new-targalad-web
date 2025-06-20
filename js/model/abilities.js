@@ -294,8 +294,8 @@ var AbilityFactory = {
 				}
 				this.bonusEffectList.activate();
 				this.sneak = owner.getAbilityByName("Sneak Attack");
-				if (sneak != null) {
-					triggerModelChange("DAMAGE_DICE",new DiceInfo("Sneak Attack", "PRECISION", sneak.sneakDice+"d6"), "ADDED");
+				if (this.sneak != null) {
+					triggerModelChange("DAMAGE_DICE",new DiceInfo("Sneak Attack", "PRECISION", this.sneak.sneakDice+"d6"), "ADDED");
 				}
 				
 			})
