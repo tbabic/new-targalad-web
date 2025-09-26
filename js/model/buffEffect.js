@@ -34,7 +34,7 @@ BuffsFactory = {
 			if (character.level >= 17) {
 				bonusValue = 4;
 			}
-			if (character.level ==12)
+			if (true) // dervish sikke
 			{
 				
 			    // items;
